@@ -4,8 +4,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 
 import Home from './pages/home.tsx'
+import Auth from './pages/Auth.tsx'
 
-const router = createBrowserRouter([{ path: '/home', element: <Home /> }])
+const router = createBrowserRouter([
+  { path: '/home', element: <Home /> },
+  { path: '/auth', element: <Auth /> },
+])
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
