@@ -12,7 +12,7 @@ const LogoutButton = styled.button`
 
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 26px;
   line-height: 150%;
   display: flex;
