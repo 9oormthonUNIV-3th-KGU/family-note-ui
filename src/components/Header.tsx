@@ -3,6 +3,7 @@ import logo_horizontal from '../assets/logo_horizontal.png'
 import LogoutBtn from './LogoutBtn'
 
 const HeaderWrap = styled.div`
+  position: relative;
   width: 1440px;
   height: 150px;
   display: flex;
