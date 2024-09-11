@@ -10,8 +10,10 @@ const Container = styled.div`
 
 const FormLabel = styled.label`
   color: #000000;
-  font-family: inter-medium;
+  font-family: Inter;
+  font-style: normal;
   font-size: 24px;
+  font-weight: 500;
   display: block;
   margin-bottom: 8px;
 `
@@ -19,8 +21,10 @@ const LoginForm = styled.input`
   background-color: #ededed;
   border: 2px solid #ededed;
   border-radius: 5px;
-  font-family: inter-light;
+  font-family: Inter;
+  font-style: normal;
   font-size: 20px;
+  font-weight: 300;
   padding: 10px 15px;
   margin-bottom: 30px;
   height: 24px;
@@ -35,8 +39,10 @@ const LoginForm = styled.input`
 const Button = styled.button<{ isPrimary: boolean }>`
   background-color: ${(props) => (props.isPrimary ? '#ffa800' : '#ffffff')};
   color: ${(props) => (props.isPrimary ? '#ffffff' : '#000000')};
-  font-family: ${(props) => (props.isPrimary ? 'inter-bold' : '#inter-medium')};
+  font-family: Inter;
+  font-style: normal;
   font-size: ${(props) => (props.isPrimary ? '30px' : '26px')};
+  font-weight: ${(props) => (props.isPrimary ? '700' : '500')};
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
