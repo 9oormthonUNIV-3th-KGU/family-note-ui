@@ -7,6 +7,12 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
 `
+const FormWrapper = styled.form`
+  width: 417px;
+`
+const Form = styled.div<{ marginBottom: string }>`
+  margin-bottom: ${(props) => props.marginBottom};
+`
 
 const FormLabel = styled.label`
   color: #000000;
@@ -18,25 +24,26 @@ const FormLabel = styled.label`
   margin-bottom: 8px;
 `
 const LoginForm = styled.input`
+  display: inline-block;
   background-color: #ededed;
-  border: 2px solid #ededed;
+  border: none;
   border-radius: 5px;
   font-family: Inter;
   font-style: normal;
   font-size: 20px;
   font-weight: 300;
-  padding: 10px 15px;
-  margin-bottom: 30px;
-  height: 24px;
-  width: 400px;
+  padding: 10px;
+  height: 34px;
+  width: 397px;
 
   &:focus {
     outline: none;
-    border: 2px solid #ffa800;
+    caret-color: #ffa800;
   }
 `
 
 const Button = styled.button<{ isPrimary: boolean }>`
+  display: inline-block;
   background-color: ${(props) => (props.isPrimary ? '#ffa800' : '#ffffff')};
   color: ${(props) => (props.isPrimary ? '#ffffff' : '#000000')};
   font-family: Inter;
@@ -45,10 +52,10 @@ const Button = styled.button<{ isPrimary: boolean }>`
   font-weight: ${(props) => (props.isPrimary ? '700' : '500')};
   border: none;
   border-radius: 5px;
-  padding: 5px 10px;
-  margin-bottom: 15px;
+  padding: 5px;
+  margin-bottom: 20px;
   cursor: pointer;
-  width: 100%;
+  width: 417px;
 `
 
 const Image = styled.img<{
@@ -88,22 +95,22 @@ const Auth = () => {
         <Image
           src="../src/assets/images/right-bottom.svg"
           bottom={'0'}
-          right={'0'}
+          right={'108px'}
         ></Image>
         <div>
           <img src="../src/assets/images/logo.svg"></img>
-          <form>
-            <div>
+          <FormWrapper>
+            <Form marginBottom="35px">
               <FormLabel>닉네임</FormLabel>
               <LoginForm placeholder="30자 이내로 작성해주시길 바랍니다."></LoginForm>
-            </div>
-            <div>
+            </Form>
+            <Form marginBottom="66px">
               <FormLabel>비밀번호</FormLabel>
               <LoginForm></LoginForm>
-            </div>
+            </Form>
             <Button isPrimary={isPrimary}>로그인</Button>
             <Button isPrimary={!isPrimary}>회원가입</Button>
-          </form>
+          </FormWrapper>
         </div>
       </div>
     </Container>
