@@ -1,4 +1,6 @@
 import styled from '@emotion/styled'
+import useAnswerStore from '../stores/useAnswerStore'
+import AnswerModal from './AnswerModal'
 
 const Box = styled.div`
   position: absolute;
@@ -59,14 +61,19 @@ const Answer = styled.p`
 `
 
 function AnswerBox() {
+  const { toggleModal } = useAnswerStore()
+
   return (
-    <Box>
-      <AnswererBox>
-        {/* get answer api 받아서 map 적용하기 */}
-        <Answerer>ID</Answerer>
-        <Answer>내가 입력한 답변 ㅇㅇㅇㅇㅇㅇ</Answer>
-      </AnswererBox>
-    </Box>
+    <>
+      <Box>
+        <AnswererBox onClick={toggleModal}>
+          {/* get answer api 받아서 map 적용하기 */}
+          <Answerer>ID</Answerer>
+          <Answer>이곳을 눌러서 답변을 입력해 주세요.</Answer>
+        </AnswererBox>
+      </Box>
+      <AnswerModal />
+    </>
   )
 }
 
