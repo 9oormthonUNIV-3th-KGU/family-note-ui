@@ -42,7 +42,7 @@ const LoginForm = styled.input`
   }
 `
 
-const Button = styled.button<{ isPrimary: boolean }>`
+const Button = styled.button<{ isPrimary?: boolean }>`
   display: inline-block;
   background-color: ${(props) => (props.isPrimary ? '#ffa800' : '#ffffff')};
   color: ${(props) => (props.isPrimary ? '#ffffff' : '#000000')};
@@ -72,8 +72,6 @@ const Image = styled.img<{
 `
 
 const Auth = () => {
-  const [isPrimary, setIsPrimary] = useState(true)
-
   return (
     <Container>
       <div>
@@ -108,8 +106,8 @@ const Auth = () => {
               <FormLabel>비밀번호</FormLabel>
               <LoginForm></LoginForm>
             </Form>
-            <Button isPrimary={isPrimary}>로그인</Button>
-            <Button isPrimary={!isPrimary}>회원가입</Button>
+            <Button isPrimary>로그인</Button>
+            <Button>회원가입</Button>
           </FormWrapper>
         </div>
       </div>
