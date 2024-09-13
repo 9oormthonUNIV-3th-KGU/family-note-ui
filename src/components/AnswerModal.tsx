@@ -2,8 +2,7 @@ import styled from '@emotion/styled'
 import useAnswerStore from '../stores/useAnswerStore'
 
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) =>
-    isOpen ? 'block' : 'none'}; // 모달의 열림 상태에 따라 표시 여부 결정
+  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   position: fixed;
   width: 1440px;
   height: 1024px;
@@ -186,13 +185,14 @@ const AnswerCount = styled.p`
 `
 
 function AnswerModal() {
-  const { isOpen, toggleModal, answer, setAnswer } = useAnswerStore() // zustand 스토어에서 상태와 액션 가져오기
+  const { isOpen, toggleModal, answer, setAnswer } = useAnswerStore()
 
   return (
     <AnswerModalBackground isOpen={isOpen}>
       <AnswerModalBox>
         <AnswerModalClose
           viewBox="0 0 28 28"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
           onClick={toggleModal}
         >

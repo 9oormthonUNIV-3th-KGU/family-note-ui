@@ -26,7 +26,7 @@ const FamilyBoxLip = styled.svg`
   position: absolute;
   width: 54px;
   height: 21px;
-  left: 281px;
+  left: 278px;
   top: 451px;
   fill: none;
 `
