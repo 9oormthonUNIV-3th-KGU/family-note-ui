@@ -3,21 +3,22 @@ import Background from '../components/Background'
 import Header from '../components/Header'
 import SearchBar from '../components/SearchBar'
 
-const Container = styled.div`
+const Main = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+  height: 100vh - 150px;
 `
 
 const Search = () => {
   return (
     <div>
       <Header></Header>
-      <Container>
+      <Main>
         <Background></Background>
         <SearchBar></SearchBar>
-      </Container>
+      </Main>
     </div>
   )
 }
