@@ -7,6 +7,7 @@ const Image = styled.img<{
   right?: string
 }>`
   position: absolute;
+  z-index: -10;
   top: ${({ top }) => top || 'auto'};
   bottom: ${({ bottom }) => bottom || 'auto'};
   left: ${({ left }) => left || 'auto'};
