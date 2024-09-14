@@ -10,6 +10,7 @@ const Box = styled.div<{ backgroundColor?: string }>`
   top: 0px;
   background: ${({ backgroundColor }) => backgroundColor};
   border-radius: 31px;
+  z-index: 1;
 `
 
 const QuestionInfo = styled.div`

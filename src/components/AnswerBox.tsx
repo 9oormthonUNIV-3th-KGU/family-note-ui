@@ -20,14 +20,10 @@ const Box = styled.div<{
   align-items: center;
   gap: 20px;
   overflow-y: auto;
-  z-index: -1;
   transition: opacity 0.5s, transform 0.5s;
   opacity: ${(props) => (props.animationState === 'none' ? 0 : 1)};
   transform: ${(props) =>
     props.animationState === 'scale-out' ? 'scale(0.5)' : 'scale(1)'};
-
-  visibility: ${(props) =>
-    props.animationState === 'none' ? 'hidden' : 'visible'};
 
   ${(props) =>
     props.animationState === 'scale-up' &&
@@ -48,6 +44,8 @@ const AnswererBox = styled.div`
   width: 539px;
   height: 91px;
   top: 76px;
+
+  cursor: pointer;
 
   &:last-of-type {
     padding-bottom: 22px;
@@ -199,7 +197,6 @@ const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
           </Answer>
         </AnswererBox>
       </Box>
-
       <AnswerModal />
     </>
   )

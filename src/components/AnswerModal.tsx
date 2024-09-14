@@ -10,6 +10,7 @@ const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   top: 0px;
 
   background-color: rgb(0, 0, 0, 0.61);
+  z-index: 2;
 `
 
 const AnswerModalBox = styled.div`
@@ -165,7 +166,7 @@ const AnswerContent = styled.textarea`
 
 const AnswerCount = styled.p`
   position: absolute;
-  width: 45px;
+  width: 100px;
   height: 30px;
   left: 678px;
   top: 298px;
@@ -211,7 +212,7 @@ function AnswerModal() {
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
         ></AnswerContent>
-        <AnswerCount>/ 100</AnswerCount>
+        <AnswerCount>{answer.length} / 100</AnswerCount>
         {/* post Answer api*/}
         <AnswerBtnBox onClick={toggleModal}>
           <AnswerBtn />

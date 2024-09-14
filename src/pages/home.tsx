@@ -8,6 +8,7 @@ import useQuestionStore from '../stores/useQuestionStore'
 
 const QuestionListContainer = styled.div`
   position: absolute;
+  left: 629px;
   display: flex;
   flex-direction: column;
   gap: 20px; /* 각 질문 박스 간의 간격 */
@@ -15,7 +16,6 @@ const QuestionListContainer = styled.div`
 
 const QuestionAnswerBox = styled.div`
   position: relative;
-  left: 629px;
   width: auto;
   height: auto;
 `
