@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import useQuestionStore from '../stores/useQuestionStore'
 
 const GetQuestion = styled.button`
   position: absolute;
@@ -45,9 +46,12 @@ const GetQuestionTxt = styled.p`
 `
 
 function GetQuestionBtn() {
+  const addQuestionBox = useQuestionStore((state) => state.addQuestionBox)
+
   /* get base question api 연동 */
   const getQuestion = () => {
-    console.log('GetQuestionBtn clicked')
+    addQuestionBox()
+    console.log('새 질문이 추가되었습니다.')
   }
 
   return (

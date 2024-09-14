@@ -1,12 +1,13 @@
+import { useEffect } from 'react'
 import styled from '@emotion/styled'
-import useQuestionStore from '../stores/useQuestionStore' // Zustand store import
+import useQuestionStore from '../stores/useQuestionStore'
 
 const Box = styled.div<{ backgroundColor?: string }>`
-  position: absolute;
+  position: relative;
   width: 591px;
   height: 116px;
-  left: 629px;
-  top: 150px;
+  left: 0px;
+  top: 0px;
   background: ${({ backgroundColor }) => backgroundColor};
   border-radius: 31px;
 `
@@ -84,14 +85,66 @@ const QuestionViewBtn = styled.svg`
   cursor: pointer;
 `
 
-function QuestionBox() {
-  const isBoxHighlighted = useQuestionStore((state) => state.isBoxHighlighted)
-  const toggleBoxHighlight = useQuestionStore(
-    (state) => state.toggleBoxHighlight
-  )
-  const toggleAnswerVisibility = useQuestionStore(
-    (state) => state.toggleAnswerVisibility
-  )
+interface QuestionBoxProps {
+  content: string
+  id: number
+}
+
+const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
+  const {
+    isBoxHighlighted,
+    toggleBoxHighlight,
+    toggleAnswerVisibility,
+    animationState,
+    setAnimationState,
+    selectedQuestion,
+    setSelectedQuestion,
+    clearSelectedQuestion,
+  } = useQuestionStore((state) => ({
+    isBoxHighlighted: state.isBoxHighlighted,
+    toggleBoxHighlight: state.toggleBoxHighlight,
+    toggleAnswerVisibility: state.toggleAnswerVisibility,
+    animationState: state.animationState,
+    setAnimationState: state.setAnimationState,
+    selectedQuestion: state.selectedQuestion,
+    setSelectedQuestion: state.setSelectedQuestion,
+    clearSelectedQuestion: state.clearSelectedQuestion,
+  }))
+
+  const handleClick = () => {
+    if (selectedQuestion?.id === id) {
+      clearSelectedQuestion()
+      setTimeout(() => {
+        toggleAnswerVisibility()
+      }, 0)
+    } else {
+      setSelectedQuestion({ id, content })
+      setTimeout(() => {
+        toggleAnswerVisibility()
+      }, 0)
+    }
+  }
+
+  //const handleClick = () => {
+  //  console.log(animationState)
+  //  toggleAnswerVisibility()
+  //}
+
+  //useEffect(() => {
+  //  console.log('Animation state changed:', animationState)
+  //}, [animationState])
+  useEffect(() => {
+    console.log('Animation state changed:', animationState)
+    console.log('Selected Question:', selectedQuestion)
+    if (animationState === 'scale-out') {
+      const timer = setTimeout(() => {
+        toggleBoxHighlight()
+      }, 500) // scale-out 애니메이션 시간이랑 맞추기
+      return () => clearTimeout(timer)
+    } else if (animationState === 'scale-up') {
+      toggleBoxHighlight()
+    }
+  }, [animationState, toggleBoxHighlight])
 
   return (
     <Box
@@ -102,16 +155,11 @@ function QuestionBox() {
       <QuestionInfo>
         <QuestionDate>24.08.27</QuestionDate>
         <QuestionNum>#24</QuestionNum>
-        <QuestionTitle>
-          고양이 VS 강아지 어떤 동물을 더 좋아하나요?
-        </QuestionTitle>
+        <QuestionTitle>{content}</QuestionTitle>
         <QuestionViewBtn
           viewBox="0 0 23 12"
           xmlns="http://www.w3.org/2000/svg"
-          onClick={() => {
-            toggleBoxHighlight()
-            toggleAnswerVisibility()
-          }}
+          onClick={handleClick}
         >
           <path
             d="M2 2L11.5 10"

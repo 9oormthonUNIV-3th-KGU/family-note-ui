@@ -1,21 +1,46 @@
 import styled from '@emotion/styled'
+import { css } from '@emotion/react'
+import useQuestionStore from '../stores/useQuestionStore'
 import useAnswerStore from '../stores/useAnswerStore'
 import AnswerModal from './AnswerModal'
 
-const Box = styled.div`
-  position: absolute;
+const Box = styled.div<{
+  animationState: 'none' | 'scale-up' | 'scale-out'
+  isDisplayed: boolean
+}>`
+  position: relative;
   width: 591px;
   height: 462px;
-  left: 629px;
-  top: 212px;
+  left: 0px;
+  top: -54px;
   background: rgba(255, 206, 48, 0.57);
   border-radius: 26px;
-  display: flex;
+  display: ${(props) => (props.isDisplayed ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   gap: 20px;
   overflow-y: auto;
   z-index: -1;
+  transition: opacity 0.5s, transform 0.5s;
+  opacity: ${(props) => (props.animationState === 'none' ? 0 : 1)};
+  transform: ${(props) =>
+    props.animationState === 'scale-out' ? 'scale(0.5)' : 'scale(1)'};
+
+  visibility: ${(props) =>
+    props.animationState === 'none' ? 'hidden' : 'visible'};
+
+  ${(props) =>
+    props.animationState === 'scale-up' &&
+    css`
+      animation: scale-up-ver-top 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    `}
+
+  ${(props) =>
+    props.animationState === 'scale-out' &&
+    css`
+      animation: scale-out-ver-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+        both;
+    `}
 `
 
 const AnswererBox = styled.div`
@@ -108,16 +133,34 @@ const BlurTxt = styled.p`
   color: #000000;
 `
 
-function AnswerBox() {
+interface AnswerBoxProps {
+  content: string
+  id: number
+}
+
+const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
+  const { animationState, isDisplayed } = useQuestionStore((state) => ({
+    animationState: state.animationState,
+    isDisplayed: state.isDisplayed,
+  }))
   const { toggleModal } = useAnswerStore()
+  //const { animationState } = useQuestionStore((state) => ({
+  //  animationState: state.animationState,
+  //}))
+  //const isAnswerAnimated = useQuestionStore((state) => state.isAnswerAnimated)
 
   return (
     <>
-      <Box>
+      <Box animationState={animationState} isDisplayed={isDisplayed}>
+        {/*css={css`
+          ${isAnswerAnimated
+            ? 'animation: scale-up-ver-top 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both'
+            : ''}
+        `}*/}
         <AnswererBox onClick={toggleModal}>
           {/* get answer api 받아서 map 적용하기 */}
-          <Answerer>ID</Answerer>
-          <Answer>이곳을 눌러서 답변을 입력해 주세요.</Answer>
+          <Answerer>ID, {id}</Answerer>
+          <Answer>{content}에 대한 답변입니다.</Answer>
         </AnswererBox>
         <Blur>
           <BlurSvg
@@ -156,6 +199,7 @@ function AnswerBox() {
           </Answer>
         </AnswererBox>
       </Box>
+
       <AnswerModal />
     </>
   )
