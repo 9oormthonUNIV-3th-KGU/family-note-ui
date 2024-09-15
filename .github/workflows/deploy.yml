@@ -42,8 +42,8 @@ jobs:
       # Deploy Docker container (example deployment command)
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/familynote-web:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/familynote-web:latest
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/familynote-web:latest .
+          docker push ${{ secrets.DOCKERHUB_TOKEN }}/familynote-web:latest
 
   deploy:
     needs: build
