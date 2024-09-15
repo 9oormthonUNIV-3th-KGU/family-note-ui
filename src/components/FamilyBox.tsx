@@ -1,4 +1,8 @@
+import { useEffect } from 'react'
 import styled from '@emotion/styled'
+import { css } from '@emotion/react'
+import { UseFamilyStore } from '../stores/UseFamilyStore'
+import { fetchFamilyData } from '../services/GetFamilyApi'
 
 const Box = styled.div`
   position: absolute;
@@ -6,7 +10,6 @@ const Box = styled.div`
   height: 524px;
   left: 208px;
   top: 150px;
-
   background: #ff5372;
   border-radius: 58px 194px 20px 20px;
 `
@@ -17,7 +20,6 @@ const FamilyBoxEye = styled.div<{ left?: string }>`
   height: 27px;
   left: ${({ left }) => left || '266px'};
   top: 390px;
-
   background: #000000;
   border-radius: 12px;
 `
@@ -38,17 +40,14 @@ const FamilyBoxTitle = styled.p`
   left: 42px;
   top: 74px;
   margin: 0;
-
   font-family: 'Pretendard Variable';
   font-style: normal;
   font-weight: 700;
   font-size: 28px;
   line-height: 150%;
-  /* identical to box height, or 42px */
   display: flex;
   align-items: center;
   letter-spacing: -0.011em;
-
   color: #ffffff;
 `
 
@@ -58,28 +57,44 @@ const FamilyList = styled.p`
   height: 30px;
   left: 42px;
   top: 151px;
-  marign: 0;
-
+  margin: 0;
   font-family: 'Pretendard Variable';
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 150%;
-  /* identical to box height, or 30px */
   display: flex;
   align-items: center;
   letter-spacing: -0.011em;
-
   color: #ffffff;
 `
 
 function FamilyBox() {
+  const { myName, familyMembers, setMyName, setFamilyMembers } =
+    UseFamilyStore()
+
+  useEffect(() => {
+    fetchFamilyData()
+      .then((data) => {
+        setMyName(data.myName)
+        setFamilyMembers(data.familyMembers)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+  }, [setMyName, setFamilyMembers])
+
   return (
     <Box>
-      {/*get 사용자 api*/}
-      <FamilyBoxTitle>닉네임의 가족</FamilyBoxTitle>
-      {/*get 가족 api*/}
-      <FamilyList>mom1234</FamilyList>
+      <FamilyBoxTitle>{myName}의 가족</FamilyBoxTitle>
+      {familyMembers.map((member, index) => (
+        <FamilyList
+          key={member.familyMemberId}
+          css={css({ top: `${151 + index * 47}px` })}
+        >
+          {member.nickName}
+        </FamilyList>
+      ))}
       <FamilyBoxEye />
       <FamilyBoxEye left="325px" />
       <FamilyBoxLip viewBox="0 0 54 21" xmlns="http://www.w3.org/2000/svg">
