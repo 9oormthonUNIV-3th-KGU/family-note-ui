@@ -93,6 +93,7 @@ interface QuestionBoxProps {
 
 const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
   const {
+    questionBoxes,
     isBoxHighlighted,
     toggleBoxHighlight,
     toggleAnswerVisibility,
@@ -101,7 +102,10 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     selectedQuestion,
     setSelectedQuestion,
     clearSelectedQuestion,
+    isDisplayed,
+    setIsDisplayed,
   } = useQuestionStore((state) => ({
+    questionBoxes: state.questionBoxes,
     isBoxHighlighted: state.isBoxHighlighted,
     toggleBoxHighlight: state.toggleBoxHighlight,
     toggleAnswerVisibility: state.toggleAnswerVisibility,
@@ -110,19 +114,28 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     selectedQuestion: state.selectedQuestion,
     setSelectedQuestion: state.setSelectedQuestion,
     clearSelectedQuestion: state.clearSelectedQuestion,
+    isDisplayed: state.isDisplayed,
+    setIsDisplayed: state.setIsDisplayed,
   }))
 
+  const isHighlighted = selectedQuestion?.id === id
+  const currentQuestion = questionBoxes.find((question) => question.id === id)
+
   const handleClick = () => {
-    if (selectedQuestion?.id === id) {
+    if (isHighlighted) {
+      setAnimationState('scale-out')
       clearSelectedQuestion()
       setTimeout(() => {
-        toggleAnswerVisibility()
+        toggleAnswerVisibility(id)
       }, 0)
     } else {
-      setSelectedQuestion({ id, content })
-      setTimeout(() => {
-        toggleAnswerVisibility()
-      }, 0)
+      if (currentQuestion) {
+        setIsDisplayed(true)
+        setSelectedQuestion(currentQuestion) // currentQuestion이 존재할 때만 설정
+        setTimeout(() => {
+          toggleAnswerVisibility(id)
+        }, 0)
+      }
     }
   }
 
@@ -135,22 +148,22 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
   //  console.log('Animation state changed:', animationState)
   //}, [animationState])
   useEffect(() => {
-    console.log('Animation state changed:', animationState)
-    console.log('Selected Question:', selectedQuestion)
-    if (animationState === 'scale-out') {
+    console.log(currentQuestion?.animationState)
+    console.log(isDisplayed) // 이 값이 true인지 확인
+    if (currentQuestion?.animationState === 'scale-out') {
       const timer = setTimeout(() => {
-        toggleBoxHighlight()
-      }, 500) // scale-out 애니메이션 시간이랑 맞추기
+        toggleBoxHighlight() // scale-out 애니메이션 후 로직
+      }, 500)
       return () => clearTimeout(timer)
-    } else if (animationState === 'scale-up') {
-      toggleBoxHighlight()
+    } else if (currentQuestion?.animationState === 'scale-up') {
+      toggleBoxHighlight() // scale-up 애니메이션 후 로직
     }
-  }, [animationState, toggleBoxHighlight])
+  }, [currentQuestion?.animationState, toggleBoxHighlight])
 
   return (
     <Box
       backgroundColor={
-        isBoxHighlighted ? 'rgba(255, 206, 48, 1)' : 'rgba(255, 206, 48, 0.6)'
+        isHighlighted ? 'rgba(255, 206, 48, 1)' : 'rgba(255, 206, 48, 0.6)'
       }
     >
       <QuestionInfo>

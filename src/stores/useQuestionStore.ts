@@ -3,6 +3,8 @@ import { create } from 'zustand'
 interface QuestionBox {
   id: number
   content: string
+  isAnswerVisible: boolean // 각 QuestionBox에 대한 상태
+  animationState: 'scale-up' | 'scale-out' | 'none' // 각 QuestionBox에 대한 애니메이션 상태
 }
 
 interface QuestionState {
@@ -12,7 +14,7 @@ interface QuestionState {
   questionBoxes: QuestionBox[] // 질문 박스 리스트 타입
   selectedQuestion: QuestionBox | null // 선택된 질문
   isDisplayed: boolean
-  toggleAnswerVisibility: () => void
+  toggleAnswerVisibility: (id: number) => void
   toggleBoxHighlight: () => void
   addQuestionBox: () => void
   setAnswerVisibility: (visible: boolean) => void
@@ -28,7 +30,7 @@ const useQuestionStore = create<QuestionState>((set) => ({
   animationState: 'none', // 초기 애니메이션 상태
   questionBoxes: [],
   selectedQuestion: null, // 선택된 질문 저장
-  isDisplayed: true, // AnswerBox display 상태 관리
+  isDisplayed: false, // AnswerBox display 상태 관리
 
   setAnswerVisibility: (visible) => set({ isAnswerVisible: visible }),
 
@@ -42,22 +44,35 @@ const useQuestionStore = create<QuestionState>((set) => ({
       }, 500) // 5초 후 실행
     }
   },
-  toggleAnswerVisibility: () =>
-    set((state) => {
-      const newState = !state.isAnswerVisible
-      return {
-        isAnswerVisible: newState,
-        animationState: newState ? 'scale-up' : 'scale-out',
-      }
-    }),
+  // 특정 QuestionBox의 AnswerBox 보이기/숨기기
+  toggleAnswerVisibility: (id: number) =>
+    set((state) => ({
+      questionBoxes: state.questionBoxes.map((question) =>
+        question.id === id
+          ? {
+              ...question,
+              isAnswerVisible: !question.isAnswerVisible,
+              animationState: question.isAnswerVisible
+                ? 'scale-out'
+                : 'scale-up',
+            }
+          : question
+      ),
+    })),
 
   toggleBoxHighlight: () =>
     set((state) => ({ isBoxHighlighted: !state.isBoxHighlighted })),
 
+  // 질문 박스 추가
   addQuestionBox: () =>
     set((state) => ({
       questionBoxes: [
-        { id: Date.now(), content: '새로운 질문' },
+        {
+          id: Date.now(),
+          content: '새로운 질문',
+          isAnswerVisible: false,
+          animationState: 'none',
+        },
         ...state.questionBoxes,
       ],
     })),

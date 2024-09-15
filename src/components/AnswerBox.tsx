@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import useQuestionStore from '../stores/useQuestionStore'
@@ -137,19 +138,32 @@ interface AnswerBoxProps {
 }
 
 const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
-  const { animationState, isDisplayed } = useQuestionStore((state) => ({
-    animationState: state.animationState,
-    isDisplayed: state.isDisplayed,
-  }))
+  const { animationState, isDisplayed, questionBoxes } = useQuestionStore(
+    (state) => ({
+      animationState: state.animationState,
+      isDisplayed: state.isDisplayed,
+      questionBoxes: state.questionBoxes,
+    })
+  )
   const { toggleModal } = useAnswerStore()
+  const currentQuestion = questionBoxes.find((question) => question.id === id)
+
   //const { animationState } = useQuestionStore((state) => ({
   //  animationState: state.animationState,
   //}))
   //const isAnswerAnimated = useQuestionStore((state) => state.isAnswerAnimated)
 
+  useEffect(() => {
+    //console.log('Current animation state:', currentQuestion?.animationState)
+    console.log('Current display state:', isDisplayed)
+  }, [isDisplayed])
+
   return (
     <>
-      <Box animationState={animationState} isDisplayed={isDisplayed}>
+      <Box
+        animationState={currentQuestion?.animationState || 'none'}
+        isDisplayed={isDisplayed || false}
+      >
         {/*css={css`
           ${isAnswerAnimated
             ? 'animation: scale-up-ver-top 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both'
