@@ -36,14 +36,14 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       # Deploy Docker container (example deployment command)
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/familynote-web:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/familynote-web:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/familynote-web:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/familynote-web:latest
 
   deploy:
     needs: build
@@ -60,4 +60,4 @@ jobs:
           script: |
             sudo docker-compose -f /root/docker-compose.yml pull
             sudo docker-compose -f /root/docker-compose.yml up -d
-            sudo docker run -d ${{ secrets.DOCKERHUB_USERNAME }}/familynote-web:latest
+            sudo docker run -d ${{ secrets.DOCKER_USERNAME }}/familynote-web:latest
