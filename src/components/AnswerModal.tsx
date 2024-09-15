@@ -41,7 +41,7 @@ const AnswerBtnBox = styled.div`
   top: 0px;
 `
 
-const AnswerBtnTxt = styled.p`
+const AnswerBtnTxt = styled.p<{ isExceedingLimit: boolean }>`
   position: absolute;
   width: 103px;
   height: 45px;
@@ -61,20 +61,23 @@ const AnswerBtnTxt = styled.p`
   letter-spacing: -0.011em;
 
   color: #ffffff;
-  cursor: pointer;
+  cursor: ${({ isExceedingLimit }) =>
+    isExceedingLimit ? 'not-allowed' : 'pointer'};
 `
 
-const AnswerBtn = styled.button`
+const AnswerBtn = styled.button<{ isExceedingLimit: boolean }>`
   position: absolute;
   width: 226px;
   height: 82px;
   left: 558px;
   top: 375px;
 
-  background: #ffa800;
+  background: ${({ isExceedingLimit }) =>
+    isExceedingLimit ? '#EDEDED' : '#ffa800'};
   border-radius: 24px;
   border: 0;
   border-color: transparent;
+  cursor: ${({ isExceedingLimit }) => (isExceedingLimit ? 'not-allowed' : '')};
 `
 const Qustion = styled.p`
   position: absolute;
@@ -164,7 +167,7 @@ const AnswerContent = styled.textarea`
   color: #000000;
 `
 
-const AnswerCount = styled.p`
+const AnswerCount = styled.p<{ isExceedingLimit: boolean }>`
   position: absolute;
   width: 100px;
   height: 30px;
@@ -182,7 +185,7 @@ const AnswerCount = styled.p`
   align-items: center;
   text-align: center;
 
-  color: #868686;
+  color: ${({ isExceedingLimit }) => (isExceedingLimit ? 'red' : '#868686')};
 `
 
 function AnswerModal() {
@@ -212,11 +215,15 @@ function AnswerModal() {
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
         ></AnswerContent>
-        <AnswerCount>{answer.length} / 100</AnswerCount>
+        <AnswerCount isExceedingLimit={answer.length > 100}>
+          {answer.length} / 100
+        </AnswerCount>
         {/* post Answer api*/}
         <AnswerBtnBox onClick={toggleModal}>
-          <AnswerBtn />
-          <AnswerBtnTxt>답변하기</AnswerBtnTxt>
+          <AnswerBtn isExceedingLimit={answer.length > 100} />
+          <AnswerBtnTxt isExceedingLimit={answer.length > 100}>
+            답변하기
+          </AnswerBtnTxt>
         </AnswerBtnBox>
       </AnswerModalBox>
     </AnswerModalBackground>
