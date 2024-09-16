@@ -10,6 +10,7 @@ const Container = styled.div`
   height: 18px;
   border: 2px solid #cdcdcd;
   border-radius: 50px;
+  background: #fff;
 `
 
 const Input = styled.input`
