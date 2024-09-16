@@ -2,8 +2,8 @@ import styled from '@emotion/styled'
 import SearchBar from './SearchBar'
 import TextButton from './TextButton'
 import { TiPlus } from 'react-icons/ti'
-import { useState } from 'react'
 import Popup from './Popup'
+import usePopupStore from '../stores/usePopupStore'
 
 const Container = styled.div`
   display: flex;
@@ -66,15 +66,9 @@ const Icon = styled(TiPlus)`
 const items = Array.from({ length: 30 }, (_, i) => `Name ${i + 1}`)
 
 const SearchBox = () => {
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
-
-  const openPopup = () => {
-    setIsPopupOpen(true)
-  }
-
-  const closePopup = () => {
-    setIsPopupOpen(false)
-  }
+  const isPopupOpen = usePopupStore((state) => state.isOpen)
+  const openPopup = usePopupStore((state) => state.openPopup)
+  const closePopup = usePopupStore((state) => state.closePopup)
 
   return (
     <Container>
