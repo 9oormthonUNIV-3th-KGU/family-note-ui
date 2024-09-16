@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import Background from '../components/Background'
 import Header from '../components/Header'
-import SearchBar from '../components/SearchBar'
+import SearchBox from '../components/SearchBox'
 
 const Main = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ const Search = () => {
       <Header></Header>
       <Main>
         <Background></Background>
-        <SearchBar></SearchBar>
+        <SearchBox></SearchBox>
       </Main>
     </div>
   )
