@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import useQuestionStore from '../stores/useQuestionStore'
+import useQuestionStore from '../stores/UseQuestionStore'
 
 const GetQuestion = styled.button`
   position: absolute;
@@ -46,12 +46,16 @@ const GetQuestionTxt = styled.p`
 `
 
 function GetQuestionBtn() {
-  const addQuestionBox = useQuestionStore((state) => state.addQuestionBox)
+  const fetchQuestions = useQuestionStore((state) => state.fetchQuestions)
 
   /* get base question api 연동 */
-  const getQuestion = () => {
-    addQuestionBox()
-    console.log('새 질문이 추가되었습니다.')
+  const getQuestion = async () => {
+    try {
+      await fetchQuestions(0, 10) // 페이지와 사이즈를 인자로 전달
+      console.log('새 질문이 추가되었습니다.')
+    } catch (error) {
+      console.error('질문을 불러오는 데 실패했습니다:', error)
+    }
   }
 
   return (

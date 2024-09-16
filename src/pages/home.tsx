@@ -4,7 +4,7 @@ import FamilyBox from '../components/FamilyBox'
 import GetQuestionBtn from '../components/GetQuestionBtn'
 import QuestionBox from '../components/QuestionBox'
 import AnswerBox from '../components/AnswerBox'
-import useQuestionStore from '../stores/useQuestionStore'
+import useQuestionStore from '../stores/UseQuestionStore'
 
 const QuestionListContainer = styled.div`
   position: absolute;

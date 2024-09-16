@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { UseFamilyStore } from '../stores/UseFamilyStore'
-import { fetchFamilyData } from '../services/GetFamilyApi'
+import { FetchFamilyData } from '../services/GetFamilyApi'
 
 const Box = styled.div`
   position: absolute;
@@ -74,7 +74,7 @@ function FamilyBox() {
     UseFamilyStore()
 
   useEffect(() => {
-    fetchFamilyData()
+    FetchFamilyData()
       .then((data) => {
         setMyName(data.myName)
         setFamilyMembers(data.familyMembers)

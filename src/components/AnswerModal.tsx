@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import useAnswerStore from '../stores/useAnswerStore'
+import useAnswerStore from '../stores/UseAnswerModalStore'
 
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
