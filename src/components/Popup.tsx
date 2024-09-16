@@ -26,6 +26,18 @@ const PopupContent = styled.div`
   border-radius: 37px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
+  animation: popup-slide-in 0.3s ease-out;
+
+  @keyframes popup-slide-in {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 `
 
 const Title = styled.p`
