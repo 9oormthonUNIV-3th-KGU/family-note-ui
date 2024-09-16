@@ -15,7 +15,7 @@ const Button = styled.button<{ isPrimary?: boolean }>`
   font-size: ${(props) => (props.isPrimary ? '30px' : '26px')};
   font-weight: ${(props) => (props.isPrimary ? '700' : '500')};
   border: none;
-  border-radius: 5px;
+  border-radius: 9px;
   padding: 5px;
   margin-bottom: 20px;
   cursor: pointer;

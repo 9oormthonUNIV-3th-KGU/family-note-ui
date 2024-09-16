@@ -1,9 +1,10 @@
 import styled from '@emotion/styled'
-import { TiMinus } from 'react-icons/ti'
+import { IconType } from 'react-icons'
 
 interface Props {
   item: string
   index: number
+  icon: IconType
 }
 
 const Container = styled.div`
@@ -29,7 +30,10 @@ const Text = styled.p`
   font-weight: 500;
 `
 
-const Icon = styled(TiMinus)`
+const Icon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
   padding: 0;
   color: #7f7f7f;
@@ -39,11 +43,13 @@ const Icon = styled(TiMinus)`
   border-radius: 50%;
 `
 
-const ListItem = ({ item, index }: Props) => {
+const ListItem = ({ item, index, icon: IconComponent }: Props) => {
   return (
     <Container key={index}>
       <Text>{item}</Text>
-      <Icon></Icon>
+      <Icon>
+        <IconComponent size={24}></IconComponent>
+      </Icon>
     </Container>
   )
 }

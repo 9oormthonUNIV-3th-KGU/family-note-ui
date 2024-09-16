@@ -6,6 +6,7 @@ import ListItem from './ListItem'
 import usePopupStore from '../stores/usePopupStore'
 import useSearchStore from '../stores/useSearchStore'
 import { useEffect, useRef } from 'react'
+import { TiMinus, TiPlus } from 'react-icons/ti'
 
 const Container = styled.div`
   display: flex;
@@ -132,13 +133,13 @@ const FaimlySheet = () => {
       {isSearchBoxOpen && (
         <Box ref={boxRef}>
           {items.map((item, index) => (
-            <ListItem item={item} index={index}></ListItem>
+            <ListItem item={item} index={index} icon={TiPlus}></ListItem>
           ))}
         </Box>
       )}
       <Sheet>
         {items.map((item, index) => (
-          <ListItem item={item} index={index}></ListItem>
+          <ListItem item={item} index={index} icon={TiMinus}></ListItem>
         ))}
       </Sheet>
       <TextButtonWrapper>

@@ -41,8 +41,7 @@ const PopupContent = styled.div`
 `
 
 const Title = styled.p`
-  font-family: Pretendard;
-  font-style: semibold;
+  font-family: Pretendard Variable;
   font-size: 30px;
   font-weight: 600;
   text-align: center;
@@ -59,9 +58,8 @@ const RoundedButton = styled.button<{
   background-color: ${(props) => (props.isPrimary ? '#ffa800' : '#ffffff')};
   color: ${(props) => (props.isPrimary ? '#ffffff' : '#ffa800')};
   font-family: Pretendard;
-  font-style: semibold;
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 600;
   border: 4px solid #ffa800;
   border-radius: 24px;
   cursor: pointer;
