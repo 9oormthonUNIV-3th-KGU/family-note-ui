@@ -4,7 +4,7 @@ const LogoutButton = styled.button`
   position: absolute;
   width: auto;
   height: 39px;
-  left: 1258px;
+  left: 87.3%;
   top: 61px;
   padding: 0;
   border: 0;
