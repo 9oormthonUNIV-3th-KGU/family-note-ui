@@ -22,8 +22,12 @@ const Button = styled.button<{ isPrimary?: boolean }>`
   width: 417px;
 `
 
-const TextButton = ({ text, isPrimary }: Props) => {
-  return <Button isPrimary={isPrimary}>{text}</Button>
+const TextButton = ({ text, isPrimary, onClick }: Props) => {
+  return (
+    <Button isPrimary={isPrimary} onClick={onClick}>
+      {text}
+    </Button>
+  )
 }
 
 export default TextButton
