@@ -22,6 +22,8 @@ const Container = styled.div`
 `
 
 const Text = styled.p`
+  position: relative;
+  top: 6px;
   margin: 0;
   padding: 0;
   font-family: Inter;

@@ -57,7 +57,7 @@ const RoundedButton = styled.button<{
   display: inline-block;
   background-color: ${(props) => (props.isPrimary ? '#ffa800' : '#ffffff')};
   color: ${(props) => (props.isPrimary ? '#ffffff' : '#ffa800')};
-  font-family: Pretendard;
+  font-family: Pretendard Variable;
   font-size: 30px;
   font-weight: 600;
   border: 4px solid #ffa800;
