@@ -65,7 +65,7 @@ const Icon = styled(TiPlus)`
 
 const items = Array.from({ length: 30 }, (_, i) => `Name ${i + 1}`)
 
-const SearchBox = () => {
+const FaimlySheet = () => {
   const isPopupOpen = usePopupStore((state) => state.isOpen)
   const openPopup = usePopupStore((state) => state.openPopup)
   const closePopup = usePopupStore((state) => state.closePopup)
@@ -96,4 +96,4 @@ const SearchBox = () => {
   )
 }
 
-export default SearchBox
+export default FaimlySheet
