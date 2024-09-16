@@ -4,6 +4,7 @@ import TextButton from './TextButton'
 import { TiPlus, TiMinus } from 'react-icons/ti'
 import Popup from './Popup'
 import usePopupStore from '../stores/usePopupStore'
+import ListItem from './ListItem'
 
 const Container = styled.div`
   display: flex;
@@ -63,39 +64,6 @@ const Box = styled.div`
   scrollbar-width: none;
 `
 
-const ListItem = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 381px;
-  height: 62px;
-  border-bottom: 1px solid #5b5b5b;
-  margin-top: 22px;
-  padding-left: 18px;
-  padding-right: 18px;
-  box-sizing: border-box;
-  flex-shrink: 0;
-`
-
-const Text = styled.p`
-  margin: 0;
-  padding: 0;
-  font-family: Inter;
-  font-style: normal;
-  font-size: 24px;
-  font-weight: 500;
-`
-
-const Icon = styled(TiMinus)`
-  margin: 0;
-  padding: 0;
-  color: #7f7f7f;
-  width: 40px;
-  height: 40px;
-  border: 2px solid #808080;
-  border-radius: 50%;
-`
-
 const SearchBarWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -133,10 +101,7 @@ const FaimlySheet = () => {
       <Box></Box>
       <Sheet>
         {items.map((item, index) => (
-          <ListItem key={index}>
-            <Text>{item}</Text>
-            <Icon></Icon>
-          </ListItem>
+          <ListItem item={item} index={index}></ListItem>
         ))}
       </Sheet>
       <TextButtonWrapper>
