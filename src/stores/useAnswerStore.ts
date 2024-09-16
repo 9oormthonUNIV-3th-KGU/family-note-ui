@@ -1,17 +1,13 @@
 import { create } from 'zustand'
 
-interface ModalState {
-  isOpen: boolean
-  toggleModal: () => void
-  answer: string
-  setAnswer: (newAnswer: string) => void
+interface AnswerState {
+  answers: { nickname: string; content: string }[]
+  setAnswers: (newAnswers: { nickname: string; content: string }[]) => void
 }
 
-const useAnswerStore = create<ModalState>((set) => ({
-  isOpen: false,
-  toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
-  answer: '',
-  setAnswer: (newAnswer: string) => set({ answer: newAnswer }),
+const UseAnswerStore = create<AnswerState>((set) => ({
+  answers: [],
+  setAnswers: (newAnswers) => set({ answers: newAnswers }),
 }))
 
-export default useAnswerStore
+export default UseAnswerStore

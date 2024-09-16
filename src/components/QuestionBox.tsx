@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import styled from '@emotion/styled'
-import useQuestionStore from '../stores/useQuestionStore'
+import useQuestionStore from '../stores/UseQuestionStore'
 
 const Box = styled.div<{ backgroundColor?: string }>`
   position: relative;
@@ -15,25 +15,27 @@ const Box = styled.div<{ backgroundColor?: string }>`
 
 const QuestionInfo = styled.div`
   position: absolute;
-  width: 390px;
-  height: 60px;
+  max-width: 421px; // 최대 너비
+  width: 390px; // 너비를 내용에 맞게 자동 조정
+  height: 82px;
   left: 26px;
-  top: 28px;
+  top: 17px;
 `
 
 const QuestionTitle = styled.p`
   position: absolute;
-  width: 390px;
-  height: 33px;
+  max-width: 421px;
+  width: fit-content; // 너비를 내용에 맞게 자동 조정
+  height: auto;
   margin: 0;
   font-family: 'Pretendard Variable';
   font-style: normal;
   font-weight: 700;
   font-size: 22px;
-  line-height: 150%;
+  line-height: 130%;
   display: flex;
   align-items: center;
-  text-align: center;
+  text-align: left;
   letter-spacing: -0.011em;
   color: #000000;
 `
@@ -43,7 +45,7 @@ const QuestionNum = styled.p`
   width: 30px;
   height: 24px;
   left: 73px;
-  top: 36px;
+  top: 64px;
   margin: 0;
   font-family: 'Inter';
   font-style: normal;
@@ -61,7 +63,7 @@ const QuestionDate = styled.p`
   position: absolute;
   width: 65px;
   height: 24px;
-  top: 36px;
+  top: 64px;
   margin: 0;
   font-family: 'Inter';
   font-style: normal;
@@ -81,7 +83,7 @@ const QuestionViewBtn = styled.svg`
   height: 12px;
   fill: none;
   left: 495px;
-  top: 26px;
+  top: 37px;
   display: flex;
   cursor: pointer;
 `
@@ -139,14 +141,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     }
   }
 
-  //const handleClick = () => {
-  //  console.log(animationState)
-  //  toggleAnswerVisibility()
-  //}
-
-  //useEffect(() => {
-  //  console.log('Animation state changed:', animationState)
-  //}, [animationState])
   useEffect(() => {
     console.log(currentQuestion?.animationState)
     console.log(isDisplayed) // 이 값이 true인지 확인

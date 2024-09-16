@@ -2,9 +2,9 @@ import axios from 'axios'
 
 const token = import.meta.env.VITE_TEST_USER_API
 
-export const FetchFamilyData = async (familyId: number = 1) => {
+export const FetchFamilyAnswers = async (familyId: number = 1) => {
   try {
-    const response = await axios.get(`/api/v1/family/${familyId}`, {
+    const response = await axios.get(`/api/v1/family/answer/${familyId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: 'application/json',
