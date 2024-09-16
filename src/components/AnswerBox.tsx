@@ -226,7 +226,7 @@ const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
           </>
         )}
       </Box>
-      <AnswerModal />
+      <AnswerModal content={content} />
     </>
   )
 }

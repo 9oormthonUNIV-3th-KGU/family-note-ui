@@ -15,17 +15,17 @@ const Box = styled.div<{ backgroundColor?: string }>`
 
 const QuestionInfo = styled.div`
   position: absolute;
-  max-width: 421px; // 최대 너비
-  width: 390px; // 너비를 내용에 맞게 자동 조정
+  width: auto;
+  min-width: 390px;
+  max-width: 421px;
   height: 82px;
   left: 26px;
   top: 17px;
+  display: inline-block;
 `
 
 const QuestionTitle = styled.p`
-  position: absolute;
-  max-width: 421px;
-  width: fit-content; // 너비를 내용에 맞게 자동 조정
+  width: fit-content;
   height: auto;
   margin: 0;
   font-family: 'Pretendard Variable';
@@ -44,7 +44,7 @@ const QuestionNum = styled.p`
   position: absolute;
   width: 30px;
   height: 24px;
-  left: 73px;
+  left: 88px;
   top: 64px;
   margin: 0;
   font-family: 'Inter';
@@ -61,7 +61,7 @@ const QuestionNum = styled.p`
 
 const QuestionDate = styled.p`
   position: absolute;
-  width: 65px;
+  width: 80px;
   height: 24px;
   top: 64px;
   margin: 0;
@@ -75,6 +75,7 @@ const QuestionDate = styled.p`
   text-align: center;
   letter-spacing: -0.011em;
   color: #000000;
+  white-space: nowrap;
 `
 
 const QuestionViewBtn = styled.svg`
@@ -126,14 +127,13 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
   const handleClick = () => {
     if (isHighlighted) {
       setAnimationState('scale-out')
-      clearSelectedQuestion()
       setTimeout(() => {
         toggleAnswerVisibility(id)
       }, 0)
     } else {
       if (currentQuestion) {
         setIsDisplayed(true)
-        setSelectedQuestion(currentQuestion) // currentQuestion이 존재할 때만 설정
+        setSelectedQuestion(currentQuestion)
         setTimeout(() => {
           toggleAnswerVisibility(id)
         }, 0)
@@ -141,18 +141,23 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     }
   }
 
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const day = date.getDate().toString().padStart(2, '0')
+
+    return `${year}.${month}.${day}`
+  }
+
   useEffect(() => {
     console.log(currentQuestion?.animationState)
     console.log(isDisplayed) // 이 값이 true인지 확인
     if (currentQuestion?.animationState === 'scale-out') {
-      const timer = setTimeout(() => {
-        toggleBoxHighlight() // scale-out 애니메이션 후 로직
+      setTimeout(() => {
+        clearSelectedQuestion() // 5초 뒤에 선택된 질문을 해제
       }, 500)
-      return () => clearTimeout(timer)
-    } else if (currentQuestion?.animationState === 'scale-up') {
-      toggleBoxHighlight() // scale-up 애니메이션 후 로직
     }
-  }, [currentQuestion?.animationState, toggleBoxHighlight])
+  }, [currentQuestion?.animationState, clearSelectedQuestion])
 
   return (
     <Box
@@ -161,7 +166,9 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
       }
     >
       <QuestionInfo>
-        <QuestionDate>24.08.27</QuestionDate>
+        <QuestionDate>
+          {currentQuestion ? formatDate(currentQuestion.createdAt) : ''}
+        </QuestionDate>
         <QuestionNum>#24</QuestionNum>
         <QuestionTitle>{content}</QuestionTitle>
         <QuestionViewBtn

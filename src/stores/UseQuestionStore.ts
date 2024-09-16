@@ -21,7 +21,7 @@ interface QuestionApiResponse {
 interface QuestionBox {
   id: number
   content: string
-  createdAt: string
+  createdAt: Date
   isAnswerVisible: boolean // 각 QuestionBox에 대한 상태
   animationState: 'scale-up' | 'scale-out' | 'none' // 각 QuestionBox에 대한 애니메이션 상태
 }
@@ -94,7 +94,7 @@ const useQuestionStore = create<QuestionState>((set) => ({
           content,
           isAnswerVisible: false,
           animationState: 'none',
-          createdAt: new Date().toISOString(), // 현재 날짜로 설정
+          createdAt: new Date(), // 현재 날짜로 설정
         },
         ...state.questionBoxes,
       ],
@@ -118,7 +118,7 @@ const useQuestionStore = create<QuestionState>((set) => ({
         questionBoxes: response.contents.map((item) => ({
           id: item.familyQuestionId,
           content: item.content,
-          createdAt: item.createdAt,
+          createdAt: new Date(item.createdAt),
           isAnswerVisible: false,
           animationState: 'none',
         })),

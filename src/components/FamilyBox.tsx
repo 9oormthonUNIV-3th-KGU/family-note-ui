@@ -87,14 +87,16 @@ function FamilyBox() {
   return (
     <Box>
       <FamilyBoxTitle>{myName}의 가족</FamilyBoxTitle>
-      {familyMembers.map((member, index) => (
-        <FamilyList
-          key={member.familyMemberId}
-          css={css({ top: `${151 + index * 47}px` })}
-        >
-          {member.nickName}
-        </FamilyList>
-      ))}
+      {familyMembers
+        .filter((member) => member.nickName !== myName)
+        .map((member, index) => (
+          <FamilyList
+            key={member.familyMemberId}
+            css={css({ top: `${151 + index * 47}px` })}
+          >
+            {member.nickName}
+          </FamilyList>
+        ))}
       <FamilyBoxEye />
       <FamilyBoxEye left="325px" />
       <FamilyBoxLip viewBox="0 0 54 21" xmlns="http://www.w3.org/2000/svg">

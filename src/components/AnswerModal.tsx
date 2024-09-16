@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import useAnswerStore from '../stores/UseAnswerModalStore'
+import { PostFamilyAnswer } from '../services/FamilyAnswerApi'
 
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
@@ -102,7 +103,9 @@ const Qustion = styled.p`
 
 const QuestionContent = styled.p`
   position: absolute;
-  width: 460px;
+  max-width: 621px;
+  max-height: 78px;
+  width: auto;
   height: 39px;
   left: 101px;
   top: 28px;
@@ -188,8 +191,20 @@ const AnswerCount = styled.p<{ isExceedingLimit: boolean }>`
   color: ${({ isExceedingLimit }) => (isExceedingLimit ? 'red' : '#868686')};
 `
 
-function AnswerModal() {
+function AnswerModal({ content }: { content: string }) {
   const { isOpen, toggleModal, answer, setAnswer } = useAnswerStore()
+
+  const handlePostAnswer = async () => {
+    if (answer.length > 100) return // 답변이 100자 초과시 동작하지 않음
+
+    try {
+      await PostFamilyAnswer(1, answer)
+      alert('답변이 성공적으로 제출되었습니다.')
+      toggleModal()
+    } catch (error) {
+      alert('답변 제출 중 오류가 발생했습니다.')
+    }
+  }
 
   return (
     <AnswerModalBackground isOpen={isOpen}>
@@ -207,9 +222,7 @@ function AnswerModal() {
         </AnswerModalClose>
         <Qustion>질문</Qustion>
         {/* get Question api*/}
-        <QuestionContent>
-          고양이 VS 강아지 어떤 동물을 더 좋아하나요?
-        </QuestionContent>
+        <QuestionContent>{content}</QuestionContent>
         <Answer>답변</Answer>
         <AnswerContent
           value={answer}
@@ -219,7 +232,7 @@ function AnswerModal() {
           {answer.length} / 100
         </AnswerCount>
         {/* post Answer api*/}
-        <AnswerBtnBox onClick={toggleModal}>
+        <AnswerBtnBox onClick={handlePostAnswer}>
           <AnswerBtn isExceedingLimit={answer.length > 100} />
           <AnswerBtnTxt isExceedingLimit={answer.length > 100}>
             답변하기
