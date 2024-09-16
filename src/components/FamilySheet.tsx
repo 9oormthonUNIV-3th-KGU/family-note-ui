@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
 import SearchBar from './SearchBar'
 import TextButton from './TextButton'
-import { TiPlus, TiMinus } from 'react-icons/ti'
 import Popup from './Popup'
-import usePopupStore from '../stores/usePopupStore'
 import ListItem from './ListItem'
+import usePopupStore from '../stores/usePopupStore'
+import useSearchStore from '../stores/useSearchStore'
+import { useEffect, useRef } from 'react'
 
 const Container = styled.div`
   display: flex;
@@ -69,7 +70,7 @@ const SearchBarWrapper = styled.div`
   display: flex;
   justify-content: center;
   position: absolute;
-  top: -20px;
+  top: -30px;
   left: 0;
   right: 0;
   z-index: 3;
@@ -93,12 +94,48 @@ const FaimlySheet = () => {
   const openPopup = usePopupStore((state) => state.openPopup)
   const closePopup = usePopupStore((state) => state.closePopup)
 
+  const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
+  const openSearchBox = useSearchStore((state) => state.openSearchBox)
+  const closeSearchBox = useSearchStore((state) => state.closeSearchBox)
+
+  const boxRef = useRef<HTMLDivElement | null>(null)
+  const searchRef = useRef<HTMLDivElement | null>(null)
+  const popupRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const handler = (e: { target: any }) => {
+      if (
+        boxRef.current &&
+        !boxRef.current.contains(e.target) &&
+        searchRef.current &&
+        !searchRef.current.contains(e.target)
+      ) {
+        closeSearchBox()
+      }
+
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        closePopup()
+      }
+    }
+    document.addEventListener('mousedown', handler)
+
+    return () => {
+      document.removeEventListener('mousedown', handler)
+    }
+  })
+
   return (
     <Container>
-      <SearchBarWrapper>
-        <SearchBar></SearchBar>
+      <SearchBarWrapper ref={searchRef}>
+        <SearchBar onClick={openSearchBox}></SearchBar>
       </SearchBarWrapper>
-      <Box></Box>
+      {isSearchBoxOpen && (
+        <Box ref={boxRef}>
+          {items.map((item, index) => (
+            <ListItem item={item} index={index}></ListItem>
+          ))}
+        </Box>
+      )}
       <Sheet>
         {items.map((item, index) => (
           <ListItem item={item} index={index}></ListItem>
@@ -115,6 +152,7 @@ const FaimlySheet = () => {
         <Popup
           text={'가족 구성원 모집을\n 완료 하시겠습니까?'}
           onClick={closePopup}
+          ref={popupRef}
         ></Popup>
       )}
     </Container>

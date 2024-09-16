@@ -1,6 +1,10 @@
 import styled from '@emotion/styled'
 import { FiSearch } from 'react-icons/fi'
 
+interface Props {
+  onClick: () => void
+}
+
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -36,12 +40,13 @@ const Icon = styled(FiSearch)`
   width: 30px;
   height: 30px;
 `
-const SearchBar = () => {
+const SearchBar = ({ onClick }: Props) => {
   return (
     <Container>
       <Input
         type="text"
         placeholder="가족 구성원의 닉네임을 검색해주세요."
+        onClick={onClick}
       ></Input>
       <Icon></Icon>
     </Container>

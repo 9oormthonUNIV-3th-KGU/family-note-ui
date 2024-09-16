@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { forwardRef } from 'react'
 
 interface Props {
   text: string
@@ -66,10 +67,10 @@ const ButtonContainer = styled.div`
   margin-bottom: 26px;
 `
 
-const Popup = ({ text, onClick }: Props) => {
+const Popup = forwardRef<HTMLDivElement, Props>(({ text, onClick }, ref) => {
   return (
     <PopupContainer>
-      <PopupContent>
+      <PopupContent ref={ref}>
         <Title>{text}</Title>
         <ButtonContainer>
           <RoundedButton onClick={onClick || (() => {})}>아니요</RoundedButton>
@@ -80,6 +81,6 @@ const Popup = ({ text, onClick }: Props) => {
       </PopupContent>
     </PopupContainer>
   )
-}
+})
 
 export default Popup
