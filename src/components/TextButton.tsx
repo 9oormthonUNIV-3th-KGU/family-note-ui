@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 interface Props {
   text: string
   isPrimary: boolean
+  onClick?: () => void
 }
 
 const Button = styled.button<{ isPrimary?: boolean }>`

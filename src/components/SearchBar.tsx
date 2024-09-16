@@ -2,10 +2,6 @@ import styled from '@emotion/styled'
 import { FiSearch } from 'react-icons/fi'
 
 const Container = styled.div`
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,6 +20,7 @@ const Input = styled.input`
   line-height: 30px;
   border: none;
   outline: none;
+  background: none;
 
   &::placeholder {
     color: #cdcdcd;
