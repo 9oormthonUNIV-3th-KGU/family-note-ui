@@ -6,9 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: {
-          /* server url env 넣기 */
-        },
+        target: 'http://211.188.49.236:5252',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
