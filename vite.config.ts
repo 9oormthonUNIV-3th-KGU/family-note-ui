@@ -7,9 +7,12 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/family': {
-        target: 'http://211.188.49.236:5252',
+        target: 'http://211.188.49.236:5252/api/v1',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/family/, '/api/v1/family'),
+      },
+      '/users': {
+        target: 'http://211.188.49.236:5252/api/v1',
+        changeOrigin: true,
       },
     },
   },
