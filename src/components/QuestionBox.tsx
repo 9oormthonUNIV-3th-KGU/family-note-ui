@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import useQuestionStore from '../stores/UseQuestionStore'
+import FormatDate from '../utils/FormatDate'
 
 const Box = styled.div<{ backgroundColor?: string }>`
   position: relative;
@@ -126,12 +127,15 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
 
   const handleClick = () => {
     if (isHighlighted) {
+      // 현재 선택된 질문을 닫기
       setAnimationState('scale-out')
       setTimeout(() => {
         toggleAnswerVisibility(id)
+        clearSelectedQuestion() // 선택된 질문 해제
       }, 0)
     } else {
       if (currentQuestion) {
+        // 다른 질문을 클릭하면 기존 선택을 클리어하고 새 질문 선택
         setIsDisplayed(true)
         setSelectedQuestion(currentQuestion)
         setTimeout(() => {
@@ -141,23 +145,17 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     }
   }
 
-  const formatDate = (date: Date) => {
-    const year = date.getFullYear()
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const day = date.getDate().toString().padStart(2, '0')
-
-    return `${year}.${month}.${day}`
-  }
-
   useEffect(() => {
+    console.log('question-currentQuestion: ', id)
+    console.log('question-id: ', currentQuestion?.id)
     console.log(currentQuestion?.animationState)
     console.log(isDisplayed) // 이 값이 true인지 확인
     if (currentQuestion?.animationState === 'scale-out') {
       setTimeout(() => {
-        clearSelectedQuestion() // 5초 뒤에 선택된 질문을 해제
+        clearSelectedQuestion()
       }, 500)
     }
-  }, [currentQuestion?.animationState, clearSelectedQuestion])
+  }, [currentQuestion?.animationState, clearSelectedQuestion, isDisplayed])
 
   return (
     <Box
@@ -167,7 +165,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     >
       <QuestionInfo>
         <QuestionDate>
-          {currentQuestion ? formatDate(currentQuestion.createdAt) : ''}
+          {currentQuestion ? FormatDate(currentQuestion.createdAt) : ''}
         </QuestionDate>
         <QuestionNum>#24</QuestionNum>
         <QuestionTitle>{content}</QuestionTitle>
