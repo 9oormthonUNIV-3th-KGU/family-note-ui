@@ -8,7 +8,7 @@ export const FetchFamilyQuestions = async (
 ) => {
   try {
     const response = await axios.get(
-      `/api/family/question?page=${page}&size=${size}`,
+      `/family/question?page=${page}&size=${size}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -26,7 +26,7 @@ export const FetchFamilyQuestions = async (
 export const FetchFamilyNewQuestions = async () => {
   try {
     const response = await axios.post(
-      `/api/family/question`, // API 엔드포인트
+      `/family/question`, // API 엔드포인트
       {}, // 요청 본문 (빈 객체)
       {
         headers: {

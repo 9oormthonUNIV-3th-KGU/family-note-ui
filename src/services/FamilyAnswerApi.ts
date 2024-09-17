@@ -4,7 +4,7 @@ const token = import.meta.env.VITE_TEST_USER_API
 
 export const FetchFamilyAnswers = async (familyId: number) => {
   try {
-    const response = await axios.get(`/api/family/answer/${familyId}`, {
+    const response = await axios.get(`/family/answer/${familyId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: 'application/json',
@@ -21,7 +21,7 @@ export const FetchFamilyAnswers = async (familyId: number) => {
 export const PostFamilyAnswer = async (familyId: number, content: string) => {
   try {
     const response = await axios.post(
-      `/api/family/answer/${familyId}`,
+      `/family/answer/${familyId}`,
       { content },
       {
         headers: {

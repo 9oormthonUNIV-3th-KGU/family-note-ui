@@ -6,10 +6,10 @@ export default defineConfig({
     port: 5173,
     host: '0.0.0.0',
     proxy: {
-      '/api': {
+      '/family': {
         target: 'http://211.188.49.236:5252',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
+        rewrite: (path) => path.replace(/^\/family/, '/api/v1/family'),
       },
     },
   },
