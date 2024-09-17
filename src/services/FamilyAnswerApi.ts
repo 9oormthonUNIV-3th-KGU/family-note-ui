@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { loadAuthToken } from '../utils/\bUserToken'
 
-const token = import.meta.env.VITE_TEST_USER_API
+const token = loadAuthToken()
 
 export const FetchFamilyAnswers = async (familyId: number) => {
   try {
