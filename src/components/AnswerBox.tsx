@@ -136,13 +136,10 @@ interface AnswerBoxProps {
 }
 
 const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
-  const { animationState, isDisplayed, questionBoxes } = useQuestionStore(
-    (state) => ({
-      animationState: state.animationState,
-      isDisplayed: state.isDisplayed,
-      questionBoxes: state.questionBoxes,
-    })
-  )
+  const { isDisplayed, questionBoxes } = useQuestionStore((state) => ({
+    isDisplayed: state.isDisplayed,
+    questionBoxes: state.questionBoxes,
+  }))
   const { answers, setAnswers } = UseAnswerStore()
   const { familyMembers, myName } = UseFamilyStore()
   const { toggleModal } = UseAnswerModalStore()

@@ -98,10 +98,7 @@ interface QuestionBoxProps {
 const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
   const {
     questionBoxes,
-    isBoxHighlighted,
-    toggleBoxHighlight,
     toggleAnswerVisibility,
-    animationState,
     setAnimationState,
     selectedQuestion,
     setSelectedQuestion,
@@ -110,10 +107,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     setIsDisplayed,
   } = useQuestionStore((state) => ({
     questionBoxes: state.questionBoxes,
-    isBoxHighlighted: state.isBoxHighlighted,
-    toggleBoxHighlight: state.toggleBoxHighlight,
     toggleAnswerVisibility: state.toggleAnswerVisibility,
-    animationState: state.animationState,
     setAnimationState: state.setAnimationState,
     selectedQuestion: state.selectedQuestion,
     setSelectedQuestion: state.setSelectedQuestion,
