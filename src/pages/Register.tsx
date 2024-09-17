@@ -13,7 +13,7 @@ const FormWrapper = styled.form`
   width: 417px;
 `
 
-const Auth = () => {
+const Register = () => {
   return (
     <Container>
       <Background></Background>
@@ -21,7 +21,8 @@ const Auth = () => {
         <img src="../src/assets/images/logo.svg"></img>
         <FormWrapper>
           <LoginForm title="닉네임" marginBottom="35Px"></LoginForm>
-          <LoginForm title="비밀번호" marginBottom="66Px"></LoginForm>
+          <LoginForm title="비밀번호" marginBottom="35Px"></LoginForm>
+          <LoginForm title="비밀번호 재확인" marginBottom="66Px"></LoginForm>
           <TextButton text="로그인" isPrimary={true}></TextButton>
           <TextButton text="회원가입" isPrimary={false}></TextButton>
         </FormWrapper>
@@ -30,4 +31,4 @@ const Auth = () => {
   )
 }
 
-export default Auth
+export default Register
