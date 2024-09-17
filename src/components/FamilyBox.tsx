@@ -8,7 +8,7 @@ const Box = styled.div`
   position: absolute;
   width: 388px;
   height: 524px;
-  left: 208px;
+  left: 14.44vw;
   top: 150px;
   background: #ff5372;
   border-radius: 58px 194px 20px 20px;

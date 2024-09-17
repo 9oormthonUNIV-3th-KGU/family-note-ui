@@ -5,7 +5,7 @@ const GetQuestion = styled.button`
   position: absolute;
   width: 388px;
   height: 116px;
-  left: 208px;
+  left: 14.44vw;
   top: 694px;
   padding: 0;
 
