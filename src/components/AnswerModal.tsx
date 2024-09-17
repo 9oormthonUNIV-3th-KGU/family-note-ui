@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import useAnswerStore from '../stores/UseAnswerModalStore'
+import useQuestionStore from '../stores/UseQuestionStore'
 import { PostFamilyAnswer } from '../services/FamilyAnswerApi'
 
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
@@ -106,7 +107,7 @@ const QuestionContent = styled.p`
   max-width: 621px;
   max-height: 78px;
   width: auto;
-  height: 39px;
+  height: auto;
   left: 101px;
   top: 28px;
   margin: 0px;
@@ -119,7 +120,7 @@ const QuestionContent = styled.p`
   /* identical to box height, or 39px */
   display: flex;
   align-items: center;
-  text-align: center;
+  text-align: left;
   letter-spacing: -0.011em;
 
   color: #000000;
@@ -193,14 +194,25 @@ const AnswerCount = styled.p<{ isExceedingLimit: boolean }>`
 
 function AnswerModal({ content }: { content: string }) {
   const { isOpen, toggleModal, answer, setAnswer } = useAnswerStore()
+  const { fetchQuestions, clearSelectedQuestion } = useQuestionStore(
+    (state) => ({
+      fetchQuestions: state.fetchQuestions,
+      clearSelectedQuestion: state.clearSelectedQuestion,
+    })
+  )
 
   const handlePostAnswer = async () => {
     if (answer.length > 100) return // 답변이 100자 초과시 동작하지 않음
 
     try {
-      await PostFamilyAnswer(1, answer)
+      {
+        /* 로그인 api 연동 후 수정 */
+      }
+      await PostFamilyAnswer(2, answer)
       alert('답변이 성공적으로 제출되었습니다.')
       toggleModal()
+      clearSelectedQuestion() // 5초 뒤에 선택된 질문을 해제
+      await fetchQuestions(0, 10) // 새로운 질문 목록을 다시 패치
     } catch (error) {
       alert('답변 제출 중 오류가 발생했습니다.')
     }

@@ -149,6 +149,9 @@ const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
   const currentQuestion = questionBoxes.find((question) => question.id === id)
 
   const fetchData = async () => {
+    {
+      /* 로그인 api 연동 후 수정 */
+    }
     const data = await FetchFamilyAnswers(id)
     setAnswers(data.contents)
   }

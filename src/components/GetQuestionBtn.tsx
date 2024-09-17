@@ -46,15 +46,14 @@ const GetQuestionTxt = styled.p`
 `
 
 function GetQuestionBtn() {
-  const fetchQuestions = useQuestionStore((state) => state.fetchQuestions)
+  const fetchNewQuestions = useQuestionStore((state) => state.fetchNewQuestions)
 
-  /* get base question api 연동 */
   const getQuestion = async () => {
     try {
-      await fetchQuestions(0, 10) // 페이지와 사이즈를 인자로 전달
-      console.log('새 질문이 추가되었습니다.')
+      await fetchNewQuestions()
+      console.log('새로운 질문을 성공적으로 받아왔습니다.')
     } catch (error) {
-      console.error('질문을 불러오는 데 실패했습니다:', error)
+      console.error('새 질문을 받아오는 데 실패했습니다.', error)
     }
   }
 

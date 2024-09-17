@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import Header from '../components/Header'
 import FamilyBox from '../components/FamilyBox'
@@ -21,13 +22,17 @@ const QuestionAnswerBox = styled.div`
 `
 
 function Home() {
-  const { questionBoxes, selectedQuestion, animationState } = useQuestionStore(
-    (state) => ({
+  const { fetchQuestions, questionBoxes, selectedQuestion, animationState } =
+    useQuestionStore((state) => ({
+      fetchQuestions: state.fetchQuestions,
       questionBoxes: state.questionBoxes,
       selectedQuestion: state.selectedQuestion,
       animationState: state.animationState,
-    })
-  )
+    }))
+
+  useEffect(() => {
+    fetchQuestions(0, 10)
+  }, [fetchQuestions])
 
   return (
     <>

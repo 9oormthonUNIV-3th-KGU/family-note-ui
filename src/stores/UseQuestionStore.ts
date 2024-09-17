@@ -1,5 +1,8 @@
 import { create } from 'zustand'
-import { FetchFamilyQuestions } from '../services/GetFamilyQuestionApi'
+import {
+  FetchFamilyQuestions,
+  FetchFamilyNewQuestions,
+} from '../services/GetFamilyQuestionApi'
 
 // API 응답 타입 정의
 interface QuestionApiResponse {
@@ -43,6 +46,7 @@ interface QuestionState {
   clearSelectedQuestion: () => void
   setIsDisplayed: (state: boolean) => void
   fetchQuestions: (page: number, size: number) => void
+  fetchNewQuestions: () => void
 }
 
 const useQuestionStore = create<QuestionState>((set) => ({
@@ -125,6 +129,20 @@ const useQuestionStore = create<QuestionState>((set) => ({
       })
     } catch (error) {
       console.error('Error fetching questions:', error)
+    }
+  },
+
+  fetchNewQuestions: async () => {
+    try {
+      // 새 질문을 서버로부터 받아옵니다.
+      const response = await FetchFamilyNewQuestions()
+
+      // 받아온 familyQuestionId가 있으면 기존 질문 리스트를 다시 패치합니다.
+      if (response.familyQuestionId) {
+        await useQuestionStore.getState().fetchQuestions(0, 10) // 페이지와 사이즈를 전달
+      }
+    } catch (error) {
+      console.error('새 질문을 받아오는 데 실패했습니다.', error)
     }
   },
 }))

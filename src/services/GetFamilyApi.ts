@@ -2,7 +2,10 @@ import axios from 'axios'
 
 const token = import.meta.env.VITE_TEST_USER_API
 
-export const FetchFamilyData = async (familyId: number = 1) => {
+{
+  /* 로그인 api 연동 후 수정 */
+}
+export const FetchFamilyData = async (familyId: number = 2) => {
   try {
     const response = await axios.get(`/api/v1/family/${familyId}`, {
       headers: {

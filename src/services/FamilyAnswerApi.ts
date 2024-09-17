@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const token = import.meta.env.VITE_TEST_USER_API
 
-export const FetchFamilyAnswers = async (familyId: number = 1) => {
+export const FetchFamilyAnswers = async (familyId: number) => {
   try {
     const response = await axios.get(`/api/v1/family/answer/${familyId}`, {
       headers: {
@@ -18,10 +18,7 @@ export const FetchFamilyAnswers = async (familyId: number = 1) => {
   }
 }
 
-export const PostFamilyAnswer = async (
-  familyId: number = 1,
-  content: string
-) => {
+export const PostFamilyAnswer = async (familyId: number, content: string) => {
   try {
     const response = await axios.post(
       `/api/v1/family/answer/${familyId}`,
@@ -37,6 +34,11 @@ export const PostFamilyAnswer = async (
     console.log(response.data)
     return response.data
   } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      alert(error.response.data.message || 'An unexpected error occurred')
+    } else {
+      alert('An unexpected error occurred')
+    }
     console.error('Error posting data:', error)
     throw error
   }

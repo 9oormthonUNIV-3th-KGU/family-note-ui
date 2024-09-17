@@ -22,3 +22,29 @@ export const FetchFamilyQuestions = async (
     throw error
   }
 }
+
+export const FetchFamilyNewQuestions = async () => {
+  try {
+    const response = await axios.post(
+      `/api/v1/family/question`, // API 엔드포인트
+      {}, // 요청 본문 (빈 객체)
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Bearer 토큰
+          accept: 'application/json', // 응답 형식
+          'Content-Type': 'application/json', // 요청 본문 형식
+        },
+      }
+    )
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      alert(error.response.data.message || 'An unexpected error occurred')
+    } else {
+      alert('An unexpected error occurred')
+    }
+    console.error('Error posting data:', error)
+    throw error
+  }
+}
