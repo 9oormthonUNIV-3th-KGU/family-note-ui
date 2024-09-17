@@ -45,8 +45,10 @@ const Box = styled.div<{
 
 const AnswererBox = styled.div`
   position: relative;
+  max-height: 114px;
+  min-height: 91px;
   width: 539px;
-  height: 91px;
+  height: auto;
   top: 76px;
 
   &:last-of-type {
@@ -55,7 +57,7 @@ const AnswererBox = styled.div`
 `
 
 const Answerer = styled.p`
-  position: absolute;
+  position: relative;
   width: 116px;
   height: 30px;
   margin: 0;
@@ -73,10 +75,11 @@ const Answerer = styled.p`
 `
 
 const Answer = styled.p`
-  position: absolute;
+  position: relative;
+  max-height: 84px;
   width: 539px;
-  height: 61px;
-  top: 30px;
+  height: auto;
+  top: 0px;
   margin: 0;
 
   font-family: 'Pretendard Variable';
@@ -132,11 +135,10 @@ const BlurTxt = styled.p`
 `
 
 interface AnswerBoxProps {
-  content: string
   id: number
 }
 
-const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
+const AnswerBox: React.FC<AnswerBoxProps> = ({ id }) => {
   const { isDisplayed, questionBoxes, selectedQuestion } = useQuestionStore(
     (state) => ({
       isDisplayed: state.isDisplayed,
@@ -215,7 +217,12 @@ const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
           </>
         )}
       </Box>
-      <AnswerModal content={content} />
+      {selectedQuestion?.id && (
+        <AnswerModal
+          content={selectedQuestion?.content}
+          familyQuestionId={selectedQuestion?.id}
+        />
+      )}
     </>
   )
 }

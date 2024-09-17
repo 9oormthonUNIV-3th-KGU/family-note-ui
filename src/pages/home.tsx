@@ -41,9 +41,13 @@ function Home() {
       <FamilyBox />
       <GetQuestionBtn />
       <QuestionListContainer>
-        {questionBoxes.reverse().map((question) => (
+        {questionBoxes.reverse().map((question, index) => (
           <QuestionAnswerBox key={question.id}>
-            <QuestionBox content={question.content} id={question.id} />
+            <QuestionBox
+              content={question.content}
+              id={question.id}
+              index={questionBoxes.length - index}
+            />
             {(selectedQuestion?.id === question.id ||
               animationState === 'scale-out') && (
               <AnswerBox content={question.content} id={question.id} />

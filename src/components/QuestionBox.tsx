@@ -95,9 +95,10 @@ const QuestionViewBtn = styled.svg`
 interface QuestionBoxProps {
   content: string
   id: number
+  index: number
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id, index }) => {
   const {
     questionBoxes,
     toggleAnswerVisibility,
@@ -167,7 +168,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
         <QuestionDate>
           {currentQuestion ? FormatDate(currentQuestion.createdAt) : ''}
         </QuestionDate>
-        <QuestionNum>#24</QuestionNum>
+        <QuestionNum>#{index}</QuestionNum>
         <QuestionTitle>{content}</QuestionTitle>
         <QuestionViewBtn
           viewBox="0 0 23 12"

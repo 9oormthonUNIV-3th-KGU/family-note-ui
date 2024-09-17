@@ -26,13 +26,13 @@ export const FetchFamilyQuestions = async (
 export const FetchFamilyNewQuestions = async () => {
   try {
     const response = await axios.post(
-      `/family/question`, // API 엔드포인트
-      {}, // 요청 본문 (빈 객체)
+      `/family/question`,
+      {},
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Bearer 토큰
-          accept: 'application/json', // 응답 형식
-          'Content-Type': 'application/json', // 요청 본문 형식
+          Authorization: `Bearer ${token}`,
+          accept: 'application/json',
+          'Content-Type': 'application/json',
         },
       }
     )
