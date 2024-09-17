@@ -17,6 +17,7 @@ const QuestionListContainer = styled.div`
 
 const QuestionAnswerBox = styled.div`
   position: relative;
+  max-height: 524px;
   width: auto;
   height: auto;
 `
@@ -43,7 +44,6 @@ function Home() {
         {questionBoxes.reverse().map((question) => (
           <QuestionAnswerBox key={question.id}>
             <QuestionBox content={question.content} id={question.id} />
-            {/* selectedQuestion의 id와 question의 id가 일치하면 AnswerBox 렌더링 */}
             {(selectedQuestion?.id === question.id ||
               animationState === 'scale-out') && (
               <AnswerBox content={question.content} id={question.id} />

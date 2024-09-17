@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import styled from '@emotion/styled'
+import UseAnswerStore from '../stores/UseAnswerStore'
 import useQuestionStore from '../stores/UseQuestionStore'
 import FormatDate from '../utils/FormatDate'
+import { FetchFamilyAnswers } from '../services/GetFamilyAnswerApi'
 
 const Box = styled.div<{ backgroundColor?: string }>`
   position: relative;
@@ -103,7 +105,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     selectedQuestion,
     setSelectedQuestion,
     clearSelectedQuestion,
-    isDisplayed,
     setIsDisplayed,
   } = useQuestionStore((state) => ({
     questionBoxes: state.questionBoxes,
@@ -112,44 +113,49 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     selectedQuestion: state.selectedQuestion,
     setSelectedQuestion: state.setSelectedQuestion,
     clearSelectedQuestion: state.clearSelectedQuestion,
-    isDisplayed: state.isDisplayed,
     setIsDisplayed: state.setIsDisplayed,
   }))
+  const { setAnswers } = UseAnswerStore.getState()
 
   const isHighlighted = selectedQuestion?.id === id
   const currentQuestion = questionBoxes.find((question) => question.id === id)
 
-  const handleClick = () => {
+  const fetchData = async (id: number) => {
+    try {
+      const data = await FetchFamilyAnswers(id)
+      setAnswers(data.contents)
+    } catch (error) {
+      console.error('Failed to fetch family answers:', error)
+    }
+  }
+
+  const handleClick = async () => {
     if (isHighlighted) {
-      // 현재 선택된 질문을 닫기
       setAnimationState('scale-out')
-      setTimeout(() => {
-        toggleAnswerVisibility(id)
-        clearSelectedQuestion() // 선택된 질문 해제
-      }, 0)
+      toggleAnswerVisibility(id)
     } else {
       if (currentQuestion) {
-        // 다른 질문을 클릭하면 기존 선택을 클리어하고 새 질문 선택
+        setAnswers([])
         setIsDisplayed(true)
         setSelectedQuestion(currentQuestion)
-        setTimeout(() => {
-          toggleAnswerVisibility(id)
-        }, 0)
+        toggleAnswerVisibility(id)
       }
     }
   }
 
   useEffect(() => {
-    console.log('question-currentQuestion: ', id)
-    console.log('question-id: ', currentQuestion?.id)
-    console.log(currentQuestion?.animationState)
-    console.log(isDisplayed) // 이 값이 true인지 확인
+    if (selectedQuestion?.id) {
+      fetchData(selectedQuestion.id)
+    }
+  }, [selectedQuestion])
+
+  useEffect(() => {
     if (currentQuestion?.animationState === 'scale-out') {
       setTimeout(() => {
         clearSelectedQuestion()
       }, 500)
     }
-  }, [currentQuestion?.animationState, clearSelectedQuestion, isDisplayed])
+  }, [currentQuestion?.animationState, clearSelectedQuestion])
 
   return (
     <Box
