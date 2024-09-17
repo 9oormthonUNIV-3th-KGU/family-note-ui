@@ -5,9 +5,6 @@ export default defineConfig({
   server: {
     port: 5173,
     host: '0.0.0.0',
-  },
-  plugins: [react({ jsxImportSource: '@emotion/react' })],
-  server: {
     proxy: {
       '/api': {
         target: 'http://211.188.49.236:5252',
@@ -16,4 +13,5 @@ export default defineConfig({
       },
     },
   },
+  plugins: [react({ jsxImportSource: '@emotion/react' })],
 })
