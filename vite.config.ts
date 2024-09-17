@@ -1,11 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   server: {
     port: 5173,
     host: '0.0.0.0',
+    proxy: {
+      '/family': {
+        target: 'http://211.188.49.236:5252/api/v1',
+        changeOrigin: true,
+      },
+      '/users': {
+        target: 'http://211.188.49.236:5252/api/v1',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [react({ jsxImportSource: '@emotion/react' })],
 })

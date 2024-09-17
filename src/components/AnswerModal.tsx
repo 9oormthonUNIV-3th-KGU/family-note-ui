@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
-import useAnswerStore from '../stores/useAnswerStore'
+import useAnswerStore from '../stores/UseAnswerModalStore'
+import useQuestionStore from '../stores/UseQuestionStore'
+import { PostFamilyAnswer } from '../services/FamilyAnswerApi'
 
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
@@ -10,6 +12,7 @@ const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   top: 0px;
 
   background-color: rgb(0, 0, 0, 0.61);
+  z-index: 2;
 `
 
 const AnswerModalBox = styled.div`
@@ -40,7 +43,7 @@ const AnswerBtnBox = styled.div`
   top: 0px;
 `
 
-const AnswerBtnTxt = styled.p`
+const AnswerBtnTxt = styled.p<{ isExceedingLimit: boolean }>`
   position: absolute;
   width: 103px;
   height: 45px;
@@ -60,20 +63,23 @@ const AnswerBtnTxt = styled.p`
   letter-spacing: -0.011em;
 
   color: #ffffff;
-  cursor: pointer;
+  cursor: ${({ isExceedingLimit }) =>
+    isExceedingLimit ? 'not-allowed' : 'pointer'};
 `
 
-const AnswerBtn = styled.button`
+const AnswerBtn = styled.button<{ isExceedingLimit: boolean }>`
   position: absolute;
   width: 226px;
   height: 82px;
   left: 558px;
   top: 375px;
 
-  background: #ffa800;
+  background: ${({ isExceedingLimit }) =>
+    isExceedingLimit ? '#EDEDED' : '#ffa800'};
   border-radius: 24px;
   border: 0;
   border-color: transparent;
+  cursor: ${({ isExceedingLimit }) => (isExceedingLimit ? 'not-allowed' : '')};
 `
 const Qustion = styled.p`
   position: absolute;
@@ -98,8 +104,10 @@ const Qustion = styled.p`
 
 const QuestionContent = styled.p`
   position: absolute;
-  width: 460px;
-  height: 39px;
+  max-width: 621px;
+  max-height: 78px;
+  width: auto;
+  height: auto;
   left: 101px;
   top: 28px;
   margin: 0px;
@@ -112,7 +120,7 @@ const QuestionContent = styled.p`
   /* identical to box height, or 39px */
   display: flex;
   align-items: center;
-  text-align: center;
+  text-align: left;
   letter-spacing: -0.011em;
 
   color: #000000;
@@ -163,9 +171,9 @@ const AnswerContent = styled.textarea`
   color: #000000;
 `
 
-const AnswerCount = styled.p`
+const AnswerCount = styled.p<{ isExceedingLimit: boolean }>`
   position: absolute;
-  width: 45px;
+  width: 100px;
   height: 30px;
   left: 678px;
   top: 298px;
@@ -181,11 +189,34 @@ const AnswerCount = styled.p`
   align-items: center;
   text-align: center;
 
-  color: #868686;
+  color: ${({ isExceedingLimit }) => (isExceedingLimit ? 'red' : '#868686')};
 `
 
-function AnswerModal() {
+function AnswerModal({ content }: { content: string }) {
   const { isOpen, toggleModal, answer, setAnswer } = useAnswerStore()
+  const { fetchQuestions, clearSelectedQuestion } = useQuestionStore(
+    (state) => ({
+      fetchQuestions: state.fetchQuestions,
+      clearSelectedQuestion: state.clearSelectedQuestion,
+    })
+  )
+
+  const handlePostAnswer = async () => {
+    if (answer.length > 100) return // 답변이 100자 초과시 동작하지 않음
+
+    try {
+      {
+        /* 로그인 api 연동 후 수정 */
+      }
+      await PostFamilyAnswer(2, answer)
+      alert('답변이 성공적으로 제출되었습니다.')
+      toggleModal()
+      clearSelectedQuestion() // 5초 뒤에 선택된 질문을 해제
+      await fetchQuestions(0, 10) // 새로운 질문 목록을 다시 패치
+    } catch (error) {
+      alert('답변 제출 중 오류가 발생했습니다.')
+    }
+  }
 
   return (
     <AnswerModalBackground isOpen={isOpen}>
@@ -203,19 +234,21 @@ function AnswerModal() {
         </AnswerModalClose>
         <Qustion>질문</Qustion>
         {/* get Question api*/}
-        <QuestionContent>
-          고양이 VS 강아지 어떤 동물을 더 좋아하나요?
-        </QuestionContent>
+        <QuestionContent>{content}</QuestionContent>
         <Answer>답변</Answer>
         <AnswerContent
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
         ></AnswerContent>
-        <AnswerCount>/ 100</AnswerCount>
+        <AnswerCount isExceedingLimit={answer.length > 100}>
+          {answer.length} / 100
+        </AnswerCount>
         {/* post Answer api*/}
-        <AnswerBtnBox onClick={toggleModal}>
-          <AnswerBtn />
-          <AnswerBtnTxt>답변하기</AnswerBtnTxt>
+        <AnswerBtnBox onClick={handlePostAnswer}>
+          <AnswerBtn isExceedingLimit={answer.length > 100} />
+          <AnswerBtnTxt isExceedingLimit={answer.length > 100}>
+            답변하기
+          </AnswerBtnTxt>
         </AnswerBtnBox>
       </AnswerModalBox>
     </AnswerModalBackground>

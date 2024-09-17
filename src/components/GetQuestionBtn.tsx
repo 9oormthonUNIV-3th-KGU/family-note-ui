@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
+import useQuestionStore from '../stores/UseQuestionStore'
 
 const GetQuestion = styled.button`
   position: absolute;
   width: 388px;
   height: 116px;
-  left: 208px;
+  left: 14.44vw;
   top: 694px;
   padding: 0;
 
@@ -45,9 +46,15 @@ const GetQuestionTxt = styled.p`
 `
 
 function GetQuestionBtn() {
-  /* get base question api 연동 */
-  const getQuestion = () => {
-    console.log('GetQuestionBtn clicked')
+  const fetchNewQuestions = useQuestionStore((state) => state.fetchNewQuestions)
+
+  const getQuestion = async () => {
+    try {
+      await fetchNewQuestions()
+      console.log('새로운 질문을 성공적으로 받아왔습니다.')
+    } catch (error) {
+      console.error('새 질문을 받아오는 데 실패했습니다.', error)
+    }
   }
 
   return (

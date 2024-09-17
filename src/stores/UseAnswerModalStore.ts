@@ -7,11 +7,11 @@ interface ModalState {
   setAnswer: (newAnswer: string) => void
 }
 
-const useAnswerStore = create<ModalState>((set) => ({
+const UseAnswerModalStore = create<ModalState>((set) => ({
   isOpen: false,
   toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
   answer: '',
   setAnswer: (newAnswer: string) => set({ answer: newAnswer }),
 }))
 
-export default useAnswerStore
+export default UseAnswerModalStore
