@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 interface Props {
   text: string
   isPrimary: boolean
+  onClick?: () => void
 }
 
 const Button = styled.button<{ isPrimary?: boolean }>`
@@ -14,15 +15,19 @@ const Button = styled.button<{ isPrimary?: boolean }>`
   font-size: ${(props) => (props.isPrimary ? '30px' : '26px')};
   font-weight: ${(props) => (props.isPrimary ? '700' : '500')};
   border: none;
-  border-radius: 5px;
+  border-radius: 9px;
   padding: 5px;
   margin-bottom: 20px;
   cursor: pointer;
   width: 417px;
 `
 
-const TextButton = ({ text, isPrimary }: Props) => {
-  return <Button isPrimary={isPrimary}>{text}</Button>
+const TextButton = ({ text, isPrimary, onClick }: Props) => {
+  return (
+    <Button isPrimary={isPrimary} onClick={onClick}>
+      {text}
+    </Button>
+  )
 }
 
 export default TextButton
