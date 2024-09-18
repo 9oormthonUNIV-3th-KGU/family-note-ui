@@ -37,7 +37,18 @@ const InputForm = styled.input`
     caret-color: #ffa800;
   }
 `
-
+const Error = styled.div`
+  font-family: Inter;
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.011em;
+  color: #ff0000;
+  min-height: 24px;
+  margin-top: -30px;
+  margin-bottom: 35px;
+`
 const LoginForm = () => {
   const navigate = useNavigate()
 
@@ -64,6 +75,7 @@ const LoginForm = () => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
       ></InputForm>
+
       <FormLabel>비밀번호</FormLabel>
       <InputForm
         type="password"
