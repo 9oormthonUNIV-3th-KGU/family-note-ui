@@ -1,4 +1,6 @@
 import styled from '@emotion/styled'
+import TextButton from './TextButton'
+import { useNavigate } from 'react-router-dom'
 
 const Form = styled.div`
   margin-bottom: 31px;
@@ -34,12 +36,19 @@ const InputForm = styled.input`
 `
 
 const LoginForm = () => {
+  const navigate = useNavigate()
   return (
     <Form>
       <FormLabel>닉네임</FormLabel>
       <InputForm></InputForm>
       <FormLabel>비밀번호</FormLabel>
       <InputForm></InputForm>
+      <TextButton text="로그인" isPrimary={true}></TextButton>
+      <TextButton
+        text="회원가입"
+        isPrimary={false}
+        onClick={() => navigate('/register')}
+      ></TextButton>
     </Form>
   )
 }

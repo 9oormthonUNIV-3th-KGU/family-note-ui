@@ -21,8 +21,6 @@ const Login = () => {
         <img src="../src/assets/images/logo.svg"></img>
         <FormWrapper>
           <LoginForm></LoginForm>
-          <TextButton text="로그인" isPrimary={true}></TextButton>
-          <TextButton text="회원가입" isPrimary={false}></TextButton>
         </FormWrapper>
       </div>
     </Container>
