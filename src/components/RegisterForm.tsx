@@ -33,15 +33,17 @@ const InputForm = styled.input`
   }
 `
 
-const LoginForm = () => {
+const RegisterForm = () => {
   return (
     <Form>
       <FormLabel>닉네임</FormLabel>
       <InputForm></InputForm>
       <FormLabel>비밀번호</FormLabel>
       <InputForm></InputForm>
+      <FormLabel>비밀번호 재확인</FormLabel>
+      <InputForm></InputForm>
     </Form>
   )
 }
 
-export default LoginForm
+export default RegisterForm

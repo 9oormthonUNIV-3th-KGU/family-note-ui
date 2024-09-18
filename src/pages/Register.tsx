@@ -1,7 +1,10 @@
 import styled from '@emotion/styled'
-import LoginForm from '../components/LoginForm'
 import Background from '../components/Background'
 import TextButton from '../components/TextButton'
+import { useRegister } from '../hooks/useRegister'
+import { Profile } from '../model/Profile'
+import { useFormik } from 'formik'
+import RegisterForm from '../components/RegisterForm'
 
 const Container = styled.div`
   display: flex;
@@ -14,15 +17,29 @@ const FormWrapper = styled.form`
 `
 
 const Register = () => {
+  const { error, isLoading, signup, toast } = useRegister()
+  const formik = useFormik<Profile>({
+    initialValues: {
+      nickname: '',
+      password: '',
+      confirmPassword: '',
+    },
+    onSubmit: (profile: Profile, { resetForm }) => {
+      signup(profile)
+      resetForm()
+    },
+  })
+
   return (
     <Container>
       <Background></Background>
       <div>
         <img src="../src/assets/images/logo.svg"></img>
         <FormWrapper>
-          <LoginForm title="닉네임" marginBottom="35Px"></LoginForm>
-          <LoginForm title="비밀번호" marginBottom="35Px"></LoginForm>
-          <LoginForm title="비밀번호 재확인" marginBottom="66Px"></LoginForm>
+          {isLoading && <p>Loading...</p>}
+          {error && <p>{error}</p>}
+          {toast && <p>{toast}</p>}
+          <RegisterForm></RegisterForm>
           <TextButton text="로그인" isPrimary={true}></TextButton>
           <TextButton text="회원가입" isPrimary={false}></TextButton>
         </FormWrapper>

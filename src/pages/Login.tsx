@@ -20,8 +20,7 @@ const Login = () => {
       <div>
         <img src="../src/assets/images/logo.svg"></img>
         <FormWrapper>
-          <LoginForm title="닉네임" marginBottom="35Px"></LoginForm>
-          <LoginForm title="비밀번호" marginBottom="66Px"></LoginForm>
+          <LoginForm></LoginForm>
           <TextButton text="로그인" isPrimary={true}></TextButton>
           <TextButton text="회원가입" isPrimary={false}></TextButton>
         </FormWrapper>
