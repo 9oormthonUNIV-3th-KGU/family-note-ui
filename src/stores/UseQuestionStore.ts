@@ -38,6 +38,8 @@ interface QuestionState {
   selectedQuestion: QuestionBox | null
   isDisplayed: boolean
   isFetching: boolean
+  hasQuestion: boolean
+  initialized: boolean
   toggleAnswerVisibility: (id: number) => void
   toggleBoxHighlight: () => void
   addQuestionBox: (content: string) => void
@@ -49,6 +51,8 @@ interface QuestionState {
   fetchQuestions: (page: number, size: number) => void
   fetchNewQuestions: () => void
   setIsFetching: (value: boolean) => void
+  setHasQuestion: (hasQuestion: boolean) => void
+  setInitialized: (state: boolean) => void
 }
 
 const useQuestionStore = create<QuestionState>((set) => ({
@@ -59,6 +63,8 @@ const useQuestionStore = create<QuestionState>((set) => ({
   selectedQuestion: null,
   isDisplayed: false,
   isFetching: false,
+  hasQuestion: false,
+  initialized: false,
 
   setAnswerVisibility: (visible) => set({ isAnswerVisible: visible }),
 
@@ -136,6 +142,7 @@ const useQuestionStore = create<QuestionState>((set) => ({
 
       if (response.familyQuestionId) {
         await useQuestionStore.getState().fetchQuestions(0, 10)
+        set({ hasQuestion: true })
       }
     } catch (error) {
       console.error('새 질문을 받아오는 데 실패했습니다.', error)
@@ -143,6 +150,8 @@ const useQuestionStore = create<QuestionState>((set) => ({
   },
 
   setIsFetching: (value) => set({ isFetching: value }),
+  setHasQuestion: (hasQuestion: boolean) => set({ hasQuestion }),
+  setInitialized: () => set((state) => ({ initialized: !state.initialized })),
 }))
 
 export default useQuestionStore

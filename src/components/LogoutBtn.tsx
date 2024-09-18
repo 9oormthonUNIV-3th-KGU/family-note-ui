@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 const LogoutButton = styled.button`
@@ -5,7 +6,7 @@ const LogoutButton = styled.button`
   width: auto;
   height: 39px;
   left: 87.3%;
-  top: 61px;
+  top: 50px;
   padding: 0;
   border: 0;
   background-color: transparent;
@@ -22,8 +23,12 @@ const LogoutButton = styled.button`
 `
 
 function LogoutBtn() {
-  // 백엔드 연결 후 수정
+  const navigate = useNavigate()
+
+  // 임시 수정
   const logout = () => {
+    localStorage.removeItem('auth_token')
+    navigate('/login')
     console.log('logout')
   }
 

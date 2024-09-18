@@ -37,7 +37,6 @@ const GetQuestionTxt = styled.p`
   font-weight: 700;
   font-size: 34px;
   line-height: 150%;
-  /* identical to box height, or 51px */
   display: flex;
   align-items: center;
   text-align: center;
@@ -47,20 +46,32 @@ const GetQuestionTxt = styled.p`
 `
 
 function GetQuestionBtn() {
-  const { fetchNewQuestions, isFetching, setIsFetching } = useQuestionStore(
-    (state) => ({
-      fetchNewQuestions: state.fetchNewQuestions,
-      isFetching: state.isFetching,
-      setIsFetching: state.setIsFetching,
-    })
-  )
+  const {
+    fetchNewQuestions,
+    isFetching,
+    setIsFetching,
+    hasQuestion,
+    setHasQuestion,
+    initialized,
+    setInitialized,
+  } = useQuestionStore((state) => ({
+    fetchNewQuestions: state.fetchNewQuestions,
+    isFetching: state.isFetching,
+    setIsFetching: state.setIsFetching,
+    hasQuestion: state.hasQuestion,
+    setHasQuestion: state.setHasQuestion,
+    initialized: state.initialized,
+    setInitialized: state.setInitialized,
+  }))
 
   const getQuestion = async () => {
-    if (isFetching) return
+    if (isFetching || hasQuestion)
+      return console.log('오늘 할당된 질문이 존재합니다.')
     setIsFetching(true)
     try {
       await fetchNewQuestions()
       console.log('새로운 질문을 성공적으로 받아왔습니다.')
+      setHasQuestion(true)
     } catch (error) {
       console.error('새 질문을 받아오는 데 실패했습니다.', error)
     } finally {
@@ -68,12 +79,28 @@ function GetQuestionBtn() {
     }
   }
 
+  const resetHasQuestionDaily = () => {
+    const now = new Date()
+    const resetTime = new Date()
+
+    resetTime.setHours(0, 0, 0, 0)
+    if (now > resetTime) {
+      resetTime.setDate(resetTime.getDate() + 1)
+    }
+
+    const timeUntilReset = resetTime.getTime() - now.getTime()
+
+    setTimeout(() => {
+      setHasQuestion(false)
+      resetHasQuestionDaily()
+    }, timeUntilReset)
+  }
+
   const setDailyQuestionFetch = () => {
     const now = new Date()
     const nextFetch = new Date()
 
     nextFetch.setHours(0, 0, 0, 0)
-
     if (now > nextFetch) {
       nextFetch.setDate(nextFetch.getDate() + 1)
     }
@@ -82,14 +109,16 @@ function GetQuestionBtn() {
 
     setTimeout(() => {
       getQuestion()
-
-      setInterval(getQuestion, 86400000)
+      resetHasQuestionDaily()
     }, timeUntilNextFetch)
   }
 
   useEffect(() => {
-    setDailyQuestionFetch()
-  }, [])
+    if (!initialized) {
+      setDailyQuestionFetch()
+      setInitialized(true)
+    }
+  }, [initialized])
 
   return (
     <GetQuestion onClick={getQuestion}>

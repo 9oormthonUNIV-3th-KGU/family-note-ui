@@ -7,12 +7,24 @@ import QuestionBox from '../components/QuestionBox'
 import AnswerBox from '../components/AnswerBox'
 import useQuestionStore from '../stores/UseQuestionStore'
 
+const HeaderHeight = 150
+
+const Main = styled.div`
+  --header-height: ${HeaderHeight}px;
+  height: calc(100vh - var(--header-height));
+  overflow: auto;
+`
+
 const QuestionListContainer = styled.div`
   position: absolute;
+  max-height: 660px;
+  height: auto;
+  top: ${HeaderHeight}px;
   left: 43.6vw;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: scroll;
 `
 
 const QuestionAnswerBox = styled.div`
@@ -38,23 +50,25 @@ function Home() {
   return (
     <>
       <Header />
-      <FamilyBox />
-      <GetQuestionBtn />
-      <QuestionListContainer>
-        {questionBoxes.reverse().map((question, index) => (
-          <QuestionAnswerBox key={question.id}>
-            <QuestionBox
-              content={question.content}
-              id={question.id}
-              index={questionBoxes.length - index}
-            />
-            {(selectedQuestion?.id === question.id ||
-              animationState === 'scale-out') && (
-              <AnswerBox content={question.content} id={question.id} />
-            )}
-          </QuestionAnswerBox>
-        ))}
-      </QuestionListContainer>
+      <Main>
+        <FamilyBox />
+        <GetQuestionBtn />
+        <QuestionListContainer>
+          {questionBoxes.reverse().map((question, index) => (
+            <QuestionAnswerBox key={question.id}>
+              <QuestionBox
+                content={question.content}
+                id={question.id}
+                index={questionBoxes.length - index}
+              />
+              {(selectedQuestion?.id === question.id ||
+                animationState === 'scale-out') && (
+                <AnswerBox id={question.id} />
+              )}
+            </QuestionAnswerBox>
+          ))}
+        </QuestionListContainer>
+      </Main>
     </>
   )
 }

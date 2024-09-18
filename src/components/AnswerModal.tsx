@@ -11,7 +11,7 @@ const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   left: 0px;
   top: 0px;
 
-  background-color: rgb(0, 0, 0, 0.61);
+  background-color: rgba(0, 0, 0, 0.61);
   z-index: 2;
 `
 
