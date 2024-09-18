@@ -4,6 +4,7 @@ import { Profile } from '../model/Profile'
 import { useRegister } from '../hooks/useRegister'
 import TextButton from './TextButton'
 import profileValidationSchema from '../validation/profileValidationSchema'
+import { useNavigate } from 'react-router-dom'
 
 const Form = styled.form`
   margin-bottom: 31px;
@@ -39,6 +40,7 @@ const InputForm = styled.input<{ placeholder?: string }>`
 `
 
 const RegisterForm = () => {
+  const navigate = useNavigate()
   const { error, isLoading, signup, toast } = useRegister()
   const formik = useFormik<Profile>({
     initialValues: {
@@ -89,7 +91,11 @@ const RegisterForm = () => {
         isPrimary={false}
         onClick={formik.handleSubmit}
       ></TextButton>
-      <TextButton text="로그인" isPrimary={true}></TextButton>
+      <TextButton
+        text="로그인"
+        isPrimary={true}
+        onClick={() => navigate('/login')}
+      ></TextButton>
     </Form>
   )
 }
