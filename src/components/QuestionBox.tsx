@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import styled from '@emotion/styled'
+import UseAnswerStore from '../stores/UseAnswerStore'
 import useQuestionStore from '../stores/UseQuestionStore'
+import FormatDate from '../utils/FormatDate'
+import { FetchFamilyAnswers } from '../services/GetFamilyAnswerApi'
 
 const Box = styled.div<{ backgroundColor?: string }>`
   position: relative;
@@ -92,9 +95,10 @@ const QuestionViewBtn = styled.svg`
 interface QuestionBoxProps {
   content: string
   id: number
+  index: number
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id, index }) => {
   const {
     questionBoxes,
     toggleAnswerVisibility,
@@ -102,7 +106,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     selectedQuestion,
     setSelectedQuestion,
     clearSelectedQuestion,
-    isDisplayed,
     setIsDisplayed,
   } = useQuestionStore((state) => ({
     questionBoxes: state.questionBoxes,
@@ -111,44 +114,46 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     selectedQuestion: state.selectedQuestion,
     setSelectedQuestion: state.setSelectedQuestion,
     clearSelectedQuestion: state.clearSelectedQuestion,
-    isDisplayed: state.isDisplayed,
     setIsDisplayed: state.setIsDisplayed,
   }))
+  const { setAnswers } = UseAnswerStore.getState()
 
   const isHighlighted = selectedQuestion?.id === id
   const currentQuestion = questionBoxes.find((question) => question.id === id)
 
-  const handleClick = () => {
+  const fetchData = async (id: number) => {
+    try {
+      const data = await FetchFamilyAnswers(id)
+      setAnswers(data.contents)
+    } catch (error) {
+      console.error('Failed to fetch family answers:', error)
+    }
+  }
+
+  const handleClick = async () => {
     if (isHighlighted) {
       setAnimationState('scale-out')
-      setTimeout(() => {
-        toggleAnswerVisibility(id)
-      }, 0)
+      toggleAnswerVisibility(id)
     } else {
       if (currentQuestion) {
+        setAnswers([])
         setIsDisplayed(true)
         setSelectedQuestion(currentQuestion)
-        setTimeout(() => {
-          toggleAnswerVisibility(id)
-        }, 0)
+        toggleAnswerVisibility(id)
       }
     }
   }
 
-  const formatDate = (date: Date) => {
-    const year = date.getFullYear()
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const day = date.getDate().toString().padStart(2, '0')
-
-    return `${year}.${month}.${day}`
-  }
+  useEffect(() => {
+    if (selectedQuestion?.id) {
+      fetchData(selectedQuestion.id)
+    }
+  }, [selectedQuestion])
 
   useEffect(() => {
-    console.log(currentQuestion?.animationState)
-    console.log(isDisplayed) // 이 값이 true인지 확인
     if (currentQuestion?.animationState === 'scale-out') {
       setTimeout(() => {
-        clearSelectedQuestion() // 5초 뒤에 선택된 질문을 해제
+        clearSelectedQuestion()
       }, 500)
     }
   }, [currentQuestion?.animationState, clearSelectedQuestion])
@@ -161,9 +166,9 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ content, id }) => {
     >
       <QuestionInfo>
         <QuestionDate>
-          {currentQuestion ? formatDate(currentQuestion.createdAt) : ''}
+          {currentQuestion ? FormatDate(currentQuestion.createdAt) : ''}
         </QuestionDate>
-        <QuestionNum>#24</QuestionNum>
+        <QuestionNum>#{index}</QuestionNum>
         <QuestionTitle>{content}</QuestionTitle>
         <QuestionViewBtn
           viewBox="0 0 23 12"

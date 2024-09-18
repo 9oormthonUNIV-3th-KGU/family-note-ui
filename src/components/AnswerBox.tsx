@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import AnswerModal from './AnswerModal'
@@ -6,7 +5,6 @@ import useQuestionStore from '../stores/UseQuestionStore'
 import UseAnswerModalStore from '../stores/UseAnswerModalStore'
 import { UseFamilyStore } from '../stores/UseFamilyStore'
 import UseAnswerStore from '../stores/UseAnswerStore'
-import { FetchFamilyAnswers } from '../services/GetFamilyAnswerApi'
 
 const Box = styled.div<{
   animationState: 'none' | 'scale-up' | 'scale-out'
@@ -17,14 +15,16 @@ const Box = styled.div<{
   height: 462px;
   left: 0px;
   top: -54px;
+
   background: rgba(255, 206, 48, 0.57);
   border-radius: 26px;
-  display: ${(props) => (props.isDisplayed ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   gap: 20px;
   overflow-y: auto;
   transition: opacity 0.5s, transform 0.5s;
+
+  display: ${(props) => (props.isDisplayed ? 'flex' : 'none')};
   opacity: ${(props) => (props.animationState === 'none' ? 0 : 1)};
   transform: ${(props) =>
     props.animationState === 'scale-out' ? 'scale(0.5)' : 'scale(1)'};
@@ -45,8 +45,10 @@ const Box = styled.div<{
 
 const AnswererBox = styled.div`
   position: relative;
+  max-height: 114px;
+  min-height: 91px;
   width: 539px;
-  height: 91px;
+  height: auto;
   top: 76px;
 
   &:last-of-type {
@@ -55,7 +57,7 @@ const AnswererBox = styled.div`
 `
 
 const Answerer = styled.p`
-  position: absolute;
+  position: relative;
   width: 116px;
   height: 30px;
   margin: 0;
@@ -73,10 +75,11 @@ const Answerer = styled.p`
 `
 
 const Answer = styled.p`
-  position: absolute;
+  position: relative;
+  max-height: 84px;
   width: 539px;
-  height: 61px;
-  top: 30px;
+  height: auto;
+  top: 0px;
   margin: 0;
 
   font-family: 'Pretendard Variable';
@@ -97,6 +100,7 @@ const Blur = styled.div`
   height: calc(100% - 98px);
   left: 0;
   top: 167px;
+
   background: rgba(255, 206, 48, 0.07);
   backdrop-filter: blur(11.55px);
   z-index: 1;
@@ -131,49 +135,36 @@ const BlurTxt = styled.p`
 `
 
 interface AnswerBoxProps {
-  content: string
   id: number
 }
 
-const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
-  const { isDisplayed, questionBoxes } = useQuestionStore((state) => ({
-    isDisplayed: state.isDisplayed,
-    questionBoxes: state.questionBoxes,
-  }))
-  const { answers, setAnswers } = UseAnswerStore()
+const AnswerBox: React.FC<AnswerBoxProps> = ({ id }) => {
+  const { isDisplayed, questionBoxes, selectedQuestion } = useQuestionStore(
+    (state) => ({
+      isDisplayed: state.isDisplayed,
+      questionBoxes: state.questionBoxes,
+      selectedQuestion: state.selectedQuestion,
+    })
+  )
+  const { answers } = UseAnswerStore()
   const { familyMembers, myName } = UseFamilyStore()
   const { toggleModal } = UseAnswerModalStore()
   const currentQuestion = questionBoxes.find((question) => question.id === id)
-
-  const fetchData = async () => {
-    {
-      /* 로그인 api 연동 후 수정 */
-    }
-    const data = await FetchFamilyAnswers(id)
-    setAnswers(data.contents)
-  }
-
-  useEffect(() => {
-    fetchData()
-    console.log('Current display state:', isDisplayed)
-  }, [id, isDisplayed])
-
-  // 본인의 답변 여부 체크
   const myAnswer = answers.find((answer) => answer.nickname === myName)
   const hasMyAnswer = !!myAnswer
+  const isCurrentQuestion = selectedQuestion?.id === id
 
   return (
     <>
       <Box
         animationState={currentQuestion?.animationState || 'none'}
-        isDisplayed={isDisplayed || false}
+        isDisplayed={isCurrentQuestion && isDisplayed}
       >
-        {/* 본인을 맨 위로 정렬 */}
         {familyMembers
-          .slice() // 원본 배열을 변경하지 않도록 복사
+          .slice()
           .sort((a, b) =>
             a.nickName === myName ? -1 : b.nickName === myName ? 1 : 0
-          ) // 본인인 경우 우선순위로 정렬
+          )
           .map((member) => {
             const answer = answers.find(
               (answer) => answer.nickname === member.nickName
@@ -226,7 +217,12 @@ const AnswerBox: React.FC<AnswerBoxProps> = ({ content, id }) => {
           </>
         )}
       </Box>
-      <AnswerModal content={content} />
+      {selectedQuestion?.id && (
+        <AnswerModal
+          content={selectedQuestion?.content}
+          familyQuestionId={selectedQuestion?.id}
+        />
+      )}
     </>
   )
 }

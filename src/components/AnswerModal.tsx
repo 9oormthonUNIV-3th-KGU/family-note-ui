@@ -160,7 +160,6 @@ const AnswerContent = styled.textarea`
   font-weight: 700;
   font-size: 26px;
   line-height: 150%;
-  /* or 39px */
   letter-spacing: -0.011em;
 
   border: none;
@@ -192,7 +191,13 @@ const AnswerCount = styled.p<{ isExceedingLimit: boolean }>`
   color: ${({ isExceedingLimit }) => (isExceedingLimit ? 'red' : '#868686')};
 `
 
-function AnswerModal({ content }: { content: string }) {
+function AnswerModal({
+  content,
+  familyQuestionId,
+}: {
+  content: string
+  familyQuestionId: number
+}) {
   const { isOpen, toggleModal, answer, setAnswer } = useAnswerStore()
   const { fetchQuestions, clearSelectedQuestion } = useQuestionStore(
     (state) => ({
@@ -202,17 +207,15 @@ function AnswerModal({ content }: { content: string }) {
   )
 
   const handlePostAnswer = async () => {
-    if (answer.length > 100) return // 답변이 100자 초과시 동작하지 않음
+    if (answer.length > 100)
+      return alert('100자 이하의 답변만 입력 가능합니다.')
 
     try {
-      {
-        /* 로그인 api 연동 후 수정 */
-      }
-      await PostFamilyAnswer(2, answer)
+      await PostFamilyAnswer(familyQuestionId, answer)
       alert('답변이 성공적으로 제출되었습니다.')
       toggleModal()
-      clearSelectedQuestion() // 5초 뒤에 선택된 질문을 해제
-      await fetchQuestions(0, 10) // 새로운 질문 목록을 다시 패치
+      clearSelectedQuestion()
+      await fetchQuestions(0, 10)
     } catch (error) {
       alert('답변 제출 중 오류가 발생했습니다.')
     }
@@ -233,7 +236,6 @@ function AnswerModal({ content }: { content: string }) {
           />
         </AnswerModalClose>
         <Qustion>질문</Qustion>
-        {/* get Question api*/}
         <QuestionContent>{content}</QuestionContent>
         <Answer>답변</Answer>
         <AnswerContent
@@ -243,7 +245,6 @@ function AnswerModal({ content }: { content: string }) {
         <AnswerCount isExceedingLimit={answer.length > 100}>
           {answer.length} / 100
         </AnswerCount>
-        {/* post Answer api*/}
         <AnswerBtnBox onClick={handlePostAnswer}>
           <AnswerBtn isExceedingLimit={answer.length > 100} />
           <AnswerBtnTxt isExceedingLimit={answer.length > 100}>

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import useQuestionStore from '../stores/UseQuestionStore'
 
@@ -46,16 +47,49 @@ const GetQuestionTxt = styled.p`
 `
 
 function GetQuestionBtn() {
-  const fetchNewQuestions = useQuestionStore((state) => state.fetchNewQuestions)
+  const { fetchNewQuestions, isFetching, setIsFetching } = useQuestionStore(
+    (state) => ({
+      fetchNewQuestions: state.fetchNewQuestions,
+      isFetching: state.isFetching,
+      setIsFetching: state.setIsFetching,
+    })
+  )
 
   const getQuestion = async () => {
+    if (isFetching) return
+    setIsFetching(true)
     try {
       await fetchNewQuestions()
       console.log('새로운 질문을 성공적으로 받아왔습니다.')
     } catch (error) {
       console.error('새 질문을 받아오는 데 실패했습니다.', error)
+    } finally {
+      setIsFetching(false)
     }
   }
+
+  const setDailyQuestionFetch = () => {
+    const now = new Date()
+    const nextFetch = new Date()
+
+    nextFetch.setHours(0, 0, 0, 0)
+
+    if (now > nextFetch) {
+      nextFetch.setDate(nextFetch.getDate() + 1)
+    }
+
+    const timeUntilNextFetch = nextFetch.getTime() - now.getTime()
+
+    setTimeout(() => {
+      getQuestion()
+
+      setInterval(getQuestion, 86400000)
+    }, timeUntilNextFetch)
+  }
+
+  useEffect(() => {
+    setDailyQuestionFetch()
+  }, [])
 
   return (
     <GetQuestion onClick={getQuestion}>
