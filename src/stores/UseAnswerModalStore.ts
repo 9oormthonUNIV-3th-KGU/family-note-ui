@@ -9,7 +9,14 @@ interface ModalState {
 
 const UseAnswerModalStore = create<ModalState>((set) => ({
   isOpen: false,
-  toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
+  toggleModal: () =>
+    set((state) => {
+      if (state.isOpen) {
+        return { isOpen: false, answer: '' }
+      } else {
+        return { isOpen: true }
+      }
+    }),
   answer: '',
   setAnswer: (newAnswer: string) => set({ answer: newAnswer }),
 }))

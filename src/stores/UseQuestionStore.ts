@@ -37,6 +37,7 @@ interface QuestionState {
   questionBoxes: QuestionBox[]
   selectedQuestion: QuestionBox | null
   isDisplayed: boolean
+  isFetching: boolean
   toggleAnswerVisibility: (id: number) => void
   toggleBoxHighlight: () => void
   addQuestionBox: (content: string) => void
@@ -47,6 +48,7 @@ interface QuestionState {
   setIsDisplayed: (state: boolean) => void
   fetchQuestions: (page: number, size: number) => void
   fetchNewQuestions: () => void
+  setIsFetching: (value: boolean) => void
 }
 
 const useQuestionStore = create<QuestionState>((set) => ({
@@ -56,6 +58,7 @@ const useQuestionStore = create<QuestionState>((set) => ({
   questionBoxes: [],
   selectedQuestion: null,
   isDisplayed: false,
+  isFetching: false,
 
   setAnswerVisibility: (visible) => set({ isAnswerVisible: visible }),
 
@@ -138,6 +141,8 @@ const useQuestionStore = create<QuestionState>((set) => ({
       console.error('새 질문을 받아오는 데 실패했습니다.', error)
     }
   },
+
+  setIsFetching: (value) => set({ isFetching: value }),
 }))
 
 export default useQuestionStore

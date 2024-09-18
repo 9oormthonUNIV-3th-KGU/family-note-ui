@@ -236,7 +236,6 @@ function AnswerModal({
           />
         </AnswerModalClose>
         <Qustion>질문</Qustion>
-        {/* get Question api*/}
         <QuestionContent>{content}</QuestionContent>
         <Answer>답변</Answer>
         <AnswerContent
@@ -246,7 +245,6 @@ function AnswerModal({
         <AnswerCount isExceedingLimit={answer.length > 100}>
           {answer.length} / 100
         </AnswerCount>
-        {/* post Answer api*/}
         <AnswerBtnBox onClick={handlePostAnswer}>
           <AnswerBtn isExceedingLimit={answer.length > 100} />
           <AnswerBtnTxt isExceedingLimit={answer.length > 100}>
