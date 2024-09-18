@@ -46,8 +46,7 @@ const Error = styled.div`
   letter-spacing: -0.011em;
   color: #ff0000;
   min-height: 24px;
-  margin-top: -30px;
-  margin-bottom: 35px;
+  text-align: center;
 `
 const LoginForm = () => {
   const navigate = useNavigate()
@@ -75,7 +74,6 @@ const LoginForm = () => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
       ></InputForm>
-
       <FormLabel>비밀번호</FormLabel>
       <InputForm
         type="password"
@@ -94,7 +92,14 @@ const LoginForm = () => {
         text="회원가입"
         isPrimary={false}
         onClick={() => navigate('/register')}
-      ></TextButton>
+      ></TextButton>{' '}
+      {error && (
+        <Error>
+          로그인에 실패했습니다.
+          <br />
+          아이디와 비밀번호를 다시 한 번 확인해 주세요.
+        </Error>
+      )}
     </Form>
   )
 }
