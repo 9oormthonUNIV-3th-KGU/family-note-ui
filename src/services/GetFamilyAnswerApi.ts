@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { loadAuthToken } from '../utils/\bUserToken'
+import { loadAuthToken } from '../utils/UserToken'
 
 const token = loadAuthToken()
 

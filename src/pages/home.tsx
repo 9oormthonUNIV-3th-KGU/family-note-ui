@@ -44,7 +44,7 @@ function Home() {
     }))
 
   useEffect(() => {
-    fetchQuestions(0, 10)
+    fetchQuestions(0, 45)
   }, [fetchQuestions])
 
   return (
