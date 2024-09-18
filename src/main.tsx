@@ -7,6 +7,7 @@ import Home from './pages/home.tsx'
 import Login from './pages/Login.tsx'
 import Register from './pages/Register.tsx'
 import Search from './pages/search.tsx'
+import { AuthContextProvider } from './context/AuthContext.tsx'
 
 const router = createBrowserRouter([
   { path: '/home', element: <Home /> },
@@ -17,6 +18,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
   </StrictMode>
 )

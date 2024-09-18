@@ -8,5 +8,5 @@ export const createProfile = (profile: AuthRequest) => {
 }
 
 export const authenticate = (authRequest: AuthRequest) => {
-  return apiClient.post<AuthResponse>('/users/login', authRequest)
+  return apiClient.post<AuthResponse>('/login', authRequest)
 }

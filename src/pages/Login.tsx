@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import LoginForm from '../components/LoginForm'
 import Background from '../components/Background'
-import TextButton from '../components/TextButton'
 
 const Container = styled.div`
   display: flex;
@@ -9,7 +8,7 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
 `
-const FormWrapper = styled.form`
+const FormWrapper = styled.div`
   width: 417px;
 `
 

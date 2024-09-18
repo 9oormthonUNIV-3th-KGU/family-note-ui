@@ -13,9 +13,9 @@ export const useLogin = () => {
     setLoader(true)
     authenticate(authRequest)
       .then((response) => {
-        localStorage.setItem('user', JSON.stringify(response.data))
+        localStorage.setItem('user', JSON.stringify(response.data.accessToken))
         updateAuth(true)
-        navigate('/')
+        navigate('/search')
       })
       .catch((error) => {
         if (
