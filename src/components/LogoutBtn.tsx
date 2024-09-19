@@ -28,6 +28,7 @@ function LogoutBtn() {
   // 임시 수정
   const logout = () => {
     localStorage.removeItem('auth_token')
+    localStorage.removeItem('familyId')
     navigate('/login')
     console.log('logout')
   }
