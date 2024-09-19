@@ -24,7 +24,7 @@ const Button = styled.button<{ isPrimary?: boolean }>`
 
 const TextButton = ({ text, isPrimary, onClick }: Props) => {
   return (
-    <Button isPrimary={isPrimary} onClick={onClick}>
+    <Button isPrimary={isPrimary} onClick={onClick} type="submit">
       {text}
     </Button>
   )
