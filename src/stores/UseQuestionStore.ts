@@ -4,7 +4,6 @@ import {
   FetchFamilyNewQuestions,
 } from '../services/GetFamilyQuestionApi'
 
-// API 응답 타입 정의
 interface QuestionApiResponse {
   contents: {
     familyQuestionId: number
@@ -20,7 +19,6 @@ interface QuestionApiResponse {
   }
 }
 
-// 기존 QuestionBox 타입
 interface QuestionBox {
   id: number
   content: string
@@ -29,7 +27,6 @@ interface QuestionBox {
   animationState: 'scale-up' | 'scale-out' | 'none'
 }
 
-// 상태 관리 인터페이스
 interface QuestionState {
   isAnswerVisible: boolean
   isBoxHighlighted: boolean
@@ -40,9 +37,11 @@ interface QuestionState {
   isFetching: boolean
   hasQuestion: boolean
   initialized: boolean
+  //latestQuestionDate: Date | null
+  //setLatestQuestionDate: (date: Date) => void
   toggleAnswerVisibility: (id: number) => void
   toggleBoxHighlight: () => void
-  addQuestionBox: (content: string) => void
+  //addQuestionBox: (content: string) => void
   setAnswerVisibility: (visible: boolean) => void
   setAnimationState: (state: 'none' | 'scale-up' | 'scale-out') => void
   setSelectedQuestion: (question: QuestionBox) => void
@@ -65,16 +64,16 @@ const useQuestionStore = create<QuestionState>((set) => ({
   isFetching: false,
   hasQuestion: false,
   initialized: false,
+  //latestQuestionDate: null,
 
   setAnswerVisibility: (visible) => set({ isAnswerVisible: visible }),
 
   setAnimationState: (state) => {
     set({ animationState: state })
-
     if (state === 'scale-out') {
       setTimeout(() => {
         set({ isDisplayed: false })
-      }, 500) // 500ms 후 실행
+      }, 500)
     }
   },
 
@@ -96,19 +95,19 @@ const useQuestionStore = create<QuestionState>((set) => ({
   toggleBoxHighlight: () =>
     set((state) => ({ isBoxHighlighted: !state.isBoxHighlighted })),
 
-  addQuestionBox: (content: string) =>
-    set((state) => ({
-      questionBoxes: [
-        {
-          id: Date.now(),
-          content,
-          isAnswerVisible: false,
-          animationState: 'none',
-          createdAt: new Date(),
-        },
-        ...state.questionBoxes,
-      ],
-    })),
+  //addQuestionBox: (content: string) =>
+  //  set((state) => ({
+  //    questionBoxes: [
+  //      {
+  //        id: Date.now(),
+  //        content,
+  //        isAnswerVisible: false,
+  //        animationState: 'none',
+  //        createdAt: new Date(),
+  //      },
+  //      ...state.questionBoxes,
+  //    ],
+  //  })),
 
   setSelectedQuestion: (question) => set({ selectedQuestion: question }),
 
@@ -122,36 +121,61 @@ const useQuestionStore = create<QuestionState>((set) => ({
         page,
         size
       )
+      const questions: QuestionBox[] = response.contents.map((item) => ({
+        id: item.familyQuestionId,
+        content: item.content,
+        createdAt: new Date(item.createdAt),
+        isAnswerVisible: false,
+        animationState: 'none',
+      }))
+
       set({
-        questionBoxes: response.contents.map((item) => ({
-          id: item.familyQuestionId,
-          content: item.content,
-          createdAt: new Date(item.createdAt),
-          isAnswerVisible: false,
-          animationState: 'none',
-        })),
+        questionBoxes: questions,
+        //latestQuestionDate:
+        //  questions.length > 0
+        //    ? new Date(questions[0].createdAt.setHours(0, 0, 0, 0))
+        //    : null,
       })
+
+      const now = new Date()
+      now.setHours(0, 0, 0, 0)
+      const latestDate =
+        questions.length > 0
+          ? new Date(questions[0].createdAt.setHours(0, 0, 0, 0))
+          : null
+
+      if (latestDate && latestDate.getTime() === now.getTime()) {
+        set({ hasQuestion: true })
+      }
     } catch (error) {
-      console.error('Error fetching questions:', error)
+      console.error('질문을 가져오는 중 오류 발생:', error)
     }
   },
 
   fetchNewQuestions: async () => {
-    try {
-      const response = await FetchFamilyNewQuestions()
+    const { hasQuestion } = useQuestionStore.getState()
 
-      if (response.familyQuestionId) {
-        await useQuestionStore.getState().fetchQuestions(0, 10)
-        set({ hasQuestion: true })
+    if (hasQuestion) {
+      console.log('오늘 할당된 질문이 존재합니다.')
+      return
+    } else {
+      try {
+        const response = await FetchFamilyNewQuestions()
+        if (response.familyQuestionId) {
+          await useQuestionStore.getState().fetchQuestions(0, 45)
+          set({ hasQuestion: true })
+          console.log('새로운 질문을 성공적으로 받아왔습니다.')
+        }
+      } catch (error) {
+        console.error('새 질문을 받아오는 데 실패했습니다.', error)
       }
-    } catch (error) {
-      console.error('새 질문을 받아오는 데 실패했습니다.', error)
     }
   },
 
   setIsFetching: (value) => set({ isFetching: value }),
   setHasQuestion: (hasQuestion: boolean) => set({ hasQuestion }),
-  setInitialized: () => set((state) => ({ initialized: !state.initialized })),
+  setInitialized: (state: boolean) => set({ initialized: state }),
+  //setLatestQuestionDate: (date) => set({ latestQuestionDate: date }),
 }))
 
 export default useQuestionStore
