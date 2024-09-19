@@ -4,8 +4,6 @@ import {
   FetchFamilyNewQuestions,
 } from '../services/GetFamilyQuestionApi'
 import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
-import { UseFamilyStore } from './UseFamilyStore'
-import UseAnswerStore from './UseAnswerStore'
 
 interface QuestionApiResponse {
   contents: {
@@ -38,13 +36,8 @@ interface QuestionState {
   selectedQuestion: QuestionBox | null
   isDisplayed: boolean
   isFetching: boolean
-  //hasQuestion: boolean
-  //initialized: boolean
-  //latestQuestionDate: Date | null
-  //setLatestQuestionDate: (date: Date) => void
   toggleAnswerVisibility: (id: number) => void
   toggleBoxHighlight: () => void
-  //addQuestionBox: (content: string) => void
   setAnswerVisibility: (visible: boolean) => void
   setAnimationState: (state: 'none' | 'scale-up' | 'scale-out') => void
   setSelectedQuestion: (question: QuestionBox) => void
@@ -53,8 +46,6 @@ interface QuestionState {
   fetchQuestions: (page: number, size: number) => void
   fetchNewQuestions: () => void
   setIsFetching: (value: boolean) => void
-  //setHasQuestion: (hasQuestion: boolean) => void
-  //setInitialized: (state: boolean) => void
 }
 
 const useQuestionStore = create<QuestionState>((set) => ({
@@ -65,9 +56,6 @@ const useQuestionStore = create<QuestionState>((set) => ({
   selectedQuestion: null,
   isDisplayed: false,
   isFetching: false,
-  //hasQuestion: false,
-  //initialized: false,
-  //latestQuestionDate: null,
 
   setAnswerVisibility: (visible) => set({ isAnswerVisible: visible }),
 
@@ -98,20 +86,6 @@ const useQuestionStore = create<QuestionState>((set) => ({
   toggleBoxHighlight: () =>
     set((state) => ({ isBoxHighlighted: !state.isBoxHighlighted })),
 
-  //addQuestionBox: (content: string) =>
-  //  set((state) => ({
-  //    questionBoxes: [
-  //      {
-  //        id: Date.now(),
-  //        content,
-  //        isAnswerVisible: false,
-  //        animationState: 'none',
-  //        createdAt: new Date(),
-  //      },
-  //      ...state.questionBoxes,
-  //    ],
-  //  })),
-
   setSelectedQuestion: (question) => set({ selectedQuestion: question }),
 
   clearSelectedQuestion: () => set({ selectedQuestion: null }),
@@ -123,10 +97,9 @@ const useQuestionStore = create<QuestionState>((set) => ({
       const result = await FetchFamilyQuestions(page, size)
 
       if (result === 'no question') {
-        // result가 true일 때 setActivate() 호출
         const { setActivate } = UseGetQuestionBtnStore.getState()
         setActivate()
-        return // 추가적으로 처리를 종료할 수도 있습니다.
+        return
       }
 
       const response: QuestionApiResponse = result
@@ -147,29 +120,12 @@ const useQuestionStore = create<QuestionState>((set) => ({
   },
 
   fetchNewQuestions: async () => {
-    //const { hasQuestion } = useQuestionStore.getState()
-
-    //if (hasQuestion) {
-    //  console.log('오늘 할당된 질문이 존재합니다.')
-    //  return
-    //} else {
-    //  try {
-    //    const response = await FetchFamilyNewQuestions()
-    //    if (response.familyQuestionId) {
-    //      await useQuestionStore.getState().fetchQuestions(0, 45)
-    //      set({ hasQuestion: true })
-    //      console.log('새로운 질문을 성공적으로 받아왔습니다.')
-    //    }
-    //  } catch (error) {
-    //    console.error('새 질문을 받아오는 데 실패했습니다.', error)
-    //  }
-    //}
-
     try {
       const response = await FetchFamilyNewQuestions()
       if (response.familyQuestionId) {
         await useQuestionStore.getState().fetchQuestions(0, 45)
-        //set({ hasQuestion: true })
+        const { setActivate } = UseGetQuestionBtnStore.getState()
+        setActivate()
         console.log('새로운 질문을 성공적으로 받아왔습니다.')
       }
     } catch (error) {
@@ -178,9 +134,6 @@ const useQuestionStore = create<QuestionState>((set) => ({
   },
 
   setIsFetching: (value) => set({ isFetching: value }),
-  //setHasQuestion: (hasQuestion: boolean) => set({ hasQuestion }),
-  //setInitialized: (state: boolean) => set({ initialized: state }),
-  //setLatestQuestionDate: (date) => set({ latestQuestionDate: date }),
 }))
 
 export default useQuestionStore

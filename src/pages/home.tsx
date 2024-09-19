@@ -6,6 +6,11 @@ import GetQuestionBtn from '../components/GetQuestionBtn'
 import QuestionBox from '../components/QuestionBox'
 import AnswerBox from '../components/AnswerBox'
 import useQuestionStore from '../stores/UseQuestionStore'
+import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
+import UseAnswerStore from '../stores/UseAnswerStore'
+import { UseFamilyStore } from '../stores/UseFamilyStore'
+import { FetchFamilyAnswers } from '../services/GetFamilyAnswerApi'
+import { FetchFamilyAnswersResponse } from '../model/FamilyAnswerResponse'
 
 const HeaderHeight = 150
 
@@ -44,12 +49,64 @@ function Home() {
       animationState: state.animationState,
     }))
 
+  const { answers } = UseAnswerStore()
+  const { familyMembers } = UseFamilyStore()
+
+  const { activate, setActivate } = UseGetQuestionBtnStore((state) => ({
+    activate: state.activate,
+    setActivate: state.setActivate,
+  }))
+
   useEffect(() => {
     if (!hasFetched.current) {
       fetchQuestions(0, 45)
       hasFetched.current = true
     }
-  }, [fetchQuestions])
+
+    const checkAnswers = async () => {
+      if (questionBoxes.length > 0) {
+        const mostRecentQuestion = questionBoxes[0]
+        try {
+          const response: FetchFamilyAnswersResponse = await FetchFamilyAnswers(
+            mostRecentQuestion.id
+          )
+
+          const { isAnswered, contents } = response
+
+          if (isAnswered) {
+            const answeredNicknames = contents.map(
+              (content) => content.nickname
+            )
+            const allMembersAnswered = familyMembers.every((member) =>
+              answeredNicknames.includes(member.nickName)
+            )
+
+            if (allMembersAnswered && !activate) {
+              setActivate()
+            }
+          }
+        } catch (error) {
+          console.error('Error checking family answers:', error)
+        }
+      }
+    }
+
+    checkAnswers()
+  }, [
+    fetchQuestions,
+    questionBoxes,
+    familyMembers,
+    answers,
+    activate,
+    setActivate,
+  ])
+
+  useEffect(() => {
+    console.log('Question Boxes:', questionBoxes)
+    console.log('Family Members:', familyMembers)
+    console.log('Answers:', answers)
+    console.log('Activate:', activate)
+  }, [questionBoxes, familyMembers, answers, activate])
 
   return (
     <>

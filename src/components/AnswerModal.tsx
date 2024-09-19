@@ -45,7 +45,7 @@ const AnswerBtnBox = styled.div`
 
 const AnswerBtnTxt = styled.p<{ isExceedingLimit: boolean }>`
   position: absolute;
-  width: 103px;
+  width: 45.5752vw;
   height: 45px;
   left: 620px;
   top: 393px;

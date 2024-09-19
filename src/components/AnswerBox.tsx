@@ -5,7 +5,6 @@ import useQuestionStore from '../stores/UseQuestionStore'
 import UseAnswerModalStore from '../stores/UseAnswerModalStore'
 import { UseFamilyStore } from '../stores/UseFamilyStore'
 import UseAnswerStore from '../stores/UseAnswerStore'
-import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
 
 const Box = styled.div<{
   animationState: 'none' | 'scale-up' | 'scale-out'
@@ -150,32 +149,10 @@ const AnswerBox: React.FC<AnswerBoxProps> = ({ id }) => {
   const { answers } = UseAnswerStore()
   const { familyMembers, myName } = UseFamilyStore()
   const { toggleModal } = UseAnswerModalStore()
-  const { setActivate } = UseGetQuestionBtnStore()
   const currentQuestion = questionBoxes.find((question) => question.id === id)
   const myAnswer = answers.find((answer) => answer.nickname === myName)
   const hasMyAnswer = !!myAnswer
   const isCurrentQuestion = selectedQuestion?.id === id
-
-  // 가장 최신 질문 가져오기
-  const mostRecentQuestion = questionBoxes[0]
-
-  // 현재 질문이 가장 최신 질문인지 확인
-  const isMostRecentQuestion =
-    mostRecentQuestion && currentQuestion?.id === mostRecentQuestion.id
-
-  // 가장 최신 질문에 대해 모든 가족 구성원이 답변을 제출했는지 확인
-  const allAnswered = isMostRecentQuestion
-    ? familyMembers.every((member) =>
-        answers.some(
-          (answer) => answer.nickname === member.nickName && answer.content
-        )
-      )
-    : false
-
-  // 조건이 충족되면 setActivate 호출
-  if (isMostRecentQuestion && allAnswered) {
-    setActivate()
-  }
 
   return (
     <>

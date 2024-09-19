@@ -1,4 +1,3 @@
-//import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import useQuestionStore from '../stores/UseQuestionStore'
 import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
@@ -51,97 +50,31 @@ const GetQuestionTxt = styled.p<{ activate: boolean }>`
 `
 
 function GetQuestionBtn() {
-  const {
-    fetchNewQuestions,
-    isFetching,
-    setIsFetching,
-    //hasQuestion,
-    //setHasQuestion,
-    //initialized,
-    //setInitialized,
-    //setLatestQuestionDate,
-  } = useQuestionStore((state) => ({
-    fetchNewQuestions: state.fetchNewQuestions,
-    isFetching: state.isFetching,
-    setIsFetching: state.setIsFetching,
-    //hasQuestion: state.hasQuestion,
-    //setHasQuestion: state.setHasQuestion,
-    //initialized: state.initialized,
-    //setInitialized: state.setInitialized,
-    //latestQuestionDate: state.latestQuestionDate,
-    //setLatestQuestionDate: state.setLatestQuestionDate,
-  }))
+  const { fetchNewQuestions, isFetching, setIsFetching } = useQuestionStore(
+    (state) => ({
+      fetchNewQuestions: state.fetchNewQuestions,
+      isFetching: state.isFetching,
+      setIsFetching: state.setIsFetching,
+    })
+  )
 
-  const { activate, setActicate } = UseGetQuestionBtnStore((state) => ({
+  const { activate } = UseGetQuestionBtnStore((state) => ({
     activate: state.activate,
-    setActicate: state.setActivate,
   }))
 
   const getQuestion = async () => {
     setIsFetching(true)
-    //setHasQuestion(true) // 오늘 할당받은 질문이 있는지 확인
     if (isFetching) return console.log('질문을 받아오는 중입니다.')
-    //if (hasQuestion) {
-    //  console.log('오늘 할당된 질문이 존재합니다.')
-    //  setIsFetching(false)
-    //  return
-    //}
 
     try {
       await fetchNewQuestions()
-      setActicate()
-      //const newDate = new Date()
-      //setLatestQuestionDate(newDate)
+      location.reload()
     } catch (error) {
       console.error('새 질문을 받아오는 데 실패했습니다.', error)
     } finally {
       setIsFetching(false)
     }
   }
-
-  //const resetHasQuestionDaily = () => {
-  //  const now = new Date()
-  //  const resetTime = new Date()
-  //
-  //  resetTime.setHours(0, 10, 0, 0)
-  //  if (now > resetTime) {
-  //    resetTime.setDate(resetTime.getDate() + 1)
-  //  }
-  //
-  //  const timeUntilReset = resetTime.getTime() - now.getTime()
-  //
-  //  setTimeout(() => {
-  //    setHasQuestion(false)
-  //    resetHasQuestionDaily()
-  //  }, timeUntilReset)
-  //}
-  //
-  //const setDailyQuestionFetch = () => {
-  //  const now = new Date()
-  //  const nextFetch = new Date()
-  //
-  //  nextFetch.setHours(0, 10, 0, 0)
-  //  if (now > nextFetch) {
-  //    nextFetch.setDate(nextFetch.getDate() + 1)
-  //  }
-  //
-  //  const timeUntilNextFetch = nextFetch.getTime() - now.getTime()
-  //
-  //  setTimeout(() => {
-  //    setIsFetching(true)
-  //    setHasQuestion(true)
-  //    getQuestion()
-  //    resetHasQuestionDaily()
-  //  }, timeUntilNextFetch)
-  //}
-
-  //useEffect(() => {
-  //  if (!initialized) {
-  //    //setDailyQuestionFetch()
-  //    setInitialized(false)
-  //  }
-  //  console.log(hasQuestion)
-  //}, [initialized, hasQuestion])
 
   return (
     <GetQuestion onClick={getQuestion} activate={activate}>
