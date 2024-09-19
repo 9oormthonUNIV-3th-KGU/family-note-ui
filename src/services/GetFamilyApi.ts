@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { loadAuthToken } from '../utils/UserToken'
+import { loadAuthToken, loadFamilyId } from '../utils/UserToken'
 
 const token = loadAuthToken()
+const familyId = loadFamilyId()
 
-// 가족 구성원 모집 api 연동 후 수정
-export const FetchFamilyData = async (familyId: number = 1) => {
+export const FetchFamilyData = async () => {
   try {
     const response = await axios.get(`/family/${familyId}`, {
       headers: {
@@ -12,6 +12,7 @@ export const FetchFamilyData = async (familyId: number = 1) => {
         accept: 'application/json',
       },
     })
+    console.log(response.data)
     return response.data
   } catch (error) {
     console.error('Error fetching data:', error)
