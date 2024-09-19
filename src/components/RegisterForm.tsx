@@ -127,6 +127,7 @@ const RegisterForm = () => {
           type="password"
           id="confirmPassword"
           name="confirmPassword"
+          value={formik.values.confirmPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           hasError={
@@ -142,12 +143,12 @@ const RegisterForm = () => {
       ) : null}
       <TextButton
         text="회원가입"
-        isPrimary={false}
+        isPrimary={true}
         onClick={formik.handleSubmit}
       ></TextButton>
       <TextButton
         text="로그인"
-        isPrimary={true}
+        isPrimary={false}
         onClick={() => navigate('/login')}
       ></TextButton>
     </Form>
