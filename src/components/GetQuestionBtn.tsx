@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+//import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import useQuestionStore from '../stores/UseQuestionStore'
+import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
 
-const GetQuestion = styled.button`
+const GetQuestion = styled.button<{ activate: boolean }>`
   position: absolute;
   width: 388px;
   height: 116px;
@@ -10,20 +11,10 @@ const GetQuestion = styled.button`
   top: 694px;
   padding: 0;
 
-  background: #ffffff;
+  background: ${(props) => (props.activate ? '#ffa800' : '#ffffff')};
   border-radius: 20px;
   border: 5px solid #ffa800;
-
-  &:hover {
-    background: #ffa800;
-    svg path {
-      stroke: #ffffff;
-    }
-
-    p {
-      color: #ffffff;
-    }
-  }
+  cursor: ${(props) => (props.activate ? 'pointer' : 'not-allowed')};
 `
 
 const GetSvg = styled.svg`
@@ -37,7 +28,7 @@ const GetSvg = styled.svg`
   fill: none;
 `
 
-const GetQuestionTxt = styled.p`
+const GetQuestionTxt = styled.p<{ activate: boolean }>`
   position: absolute;
   width: 219px;
   height: 51px;
@@ -56,8 +47,7 @@ const GetQuestionTxt = styled.p`
   align-items: center;
   text-align: center;
   letter-spacing: -0.011em;
-
-  color: #ffa800;
+  color: ${(props) => (props.activate ? '#ffffff' : '#ffa800')};
 `
 
 function GetQuestionBtn() {
@@ -65,33 +55,41 @@ function GetQuestionBtn() {
     fetchNewQuestions,
     isFetching,
     setIsFetching,
-    hasQuestion,
-    setHasQuestion,
-    initialized,
-    setInitialized,
+    //hasQuestion,
+    //setHasQuestion,
+    //initialized,
+    //setInitialized,
     //setLatestQuestionDate,
   } = useQuestionStore((state) => ({
     fetchNewQuestions: state.fetchNewQuestions,
     isFetching: state.isFetching,
     setIsFetching: state.setIsFetching,
-    hasQuestion: state.hasQuestion,
-    setHasQuestion: state.setHasQuestion,
-    initialized: state.initialized,
-    setInitialized: state.setInitialized,
+    //hasQuestion: state.hasQuestion,
+    //setHasQuestion: state.setHasQuestion,
+    //initialized: state.initialized,
+    //setInitialized: state.setInitialized,
     //latestQuestionDate: state.latestQuestionDate,
     //setLatestQuestionDate: state.setLatestQuestionDate,
   }))
 
+  const { activate, setActicate } = UseGetQuestionBtnStore((state) => ({
+    activate: state.activate,
+    setActicate: state.setActivate,
+  }))
+
   const getQuestion = async () => {
+    setIsFetching(true)
+    //setHasQuestion(true) // 오늘 할당받은 질문이 있는지 확인
     if (isFetching) return console.log('질문을 받아오는 중입니다.')
-    if (hasQuestion) {
-      console.log('오늘 할당된 질문이 존재합니다.')
-      setIsFetching(false)
-      return
-    }
+    //if (hasQuestion) {
+    //  console.log('오늘 할당된 질문이 존재합니다.')
+    //  setIsFetching(false)
+    //  return
+    //}
 
     try {
       await fetchNewQuestions()
+      setActicate()
       //const newDate = new Date()
       //setLatestQuestionDate(newDate)
     } catch (error) {
@@ -101,62 +99,62 @@ function GetQuestionBtn() {
     }
   }
 
-  const resetHasQuestionDaily = () => {
-    const now = new Date()
-    const resetTime = new Date()
+  //const resetHasQuestionDaily = () => {
+  //  const now = new Date()
+  //  const resetTime = new Date()
+  //
+  //  resetTime.setHours(0, 10, 0, 0)
+  //  if (now > resetTime) {
+  //    resetTime.setDate(resetTime.getDate() + 1)
+  //  }
+  //
+  //  const timeUntilReset = resetTime.getTime() - now.getTime()
+  //
+  //  setTimeout(() => {
+  //    setHasQuestion(false)
+  //    resetHasQuestionDaily()
+  //  }, timeUntilReset)
+  //}
+  //
+  //const setDailyQuestionFetch = () => {
+  //  const now = new Date()
+  //  const nextFetch = new Date()
+  //
+  //  nextFetch.setHours(0, 10, 0, 0)
+  //  if (now > nextFetch) {
+  //    nextFetch.setDate(nextFetch.getDate() + 1)
+  //  }
+  //
+  //  const timeUntilNextFetch = nextFetch.getTime() - now.getTime()
+  //
+  //  setTimeout(() => {
+  //    setIsFetching(true)
+  //    setHasQuestion(true)
+  //    getQuestion()
+  //    resetHasQuestionDaily()
+  //  }, timeUntilNextFetch)
+  //}
 
-    resetTime.setHours(0, 10, 0, 0)
-    if (now > resetTime) {
-      resetTime.setDate(resetTime.getDate() + 1)
-    }
-
-    const timeUntilReset = resetTime.getTime() - now.getTime()
-
-    setTimeout(() => {
-      setHasQuestion(false)
-      resetHasQuestionDaily()
-    }, timeUntilReset)
-  }
-
-  const setDailyQuestionFetch = () => {
-    const now = new Date()
-    const nextFetch = new Date()
-
-    nextFetch.setHours(0, 10, 0, 0)
-    if (now > nextFetch) {
-      nextFetch.setDate(nextFetch.getDate() + 1)
-    }
-
-    const timeUntilNextFetch = nextFetch.getTime() - now.getTime()
-
-    setTimeout(() => {
-      setIsFetching(true)
-      setHasQuestion(true)
-      getQuestion()
-      resetHasQuestionDaily()
-    }, timeUntilNextFetch)
-  }
-
-  useEffect(() => {
-    if (!initialized) {
-      setDailyQuestionFetch()
-      setInitialized(false)
-    }
-    console.log(hasQuestion)
-  }, [initialized, hasQuestion])
+  //useEffect(() => {
+  //  if (!initialized) {
+  //    //setDailyQuestionFetch()
+  //    setInitialized(false)
+  //  }
+  //  console.log(hasQuestion)
+  //}, [initialized, hasQuestion])
 
   return (
-    <GetQuestion onClick={getQuestion}>
+    <GetQuestion onClick={getQuestion} activate={activate}>
       <GetSvg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M21 4V38M4 21H38"
-          stroke="#ffa800"
+          stroke={activate ? '#ffffff' : '#ffa800'}
           strokeWidth="8"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
       </GetSvg>
-      <GetQuestionTxt>새 질문 받아오기</GetQuestionTxt>
+      <GetQuestionTxt activate={activate}>새 질문 받아오기</GetQuestionTxt>
     </GetQuestion>
   )
 }

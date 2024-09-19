@@ -3,6 +3,9 @@ import {
   FetchFamilyQuestions,
   FetchFamilyNewQuestions,
 } from '../services/GetFamilyQuestionApi'
+import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
+import { UseFamilyStore } from './UseFamilyStore'
+import UseAnswerStore from './UseAnswerStore'
 
 interface QuestionApiResponse {
   contents: {
@@ -35,8 +38,8 @@ interface QuestionState {
   selectedQuestion: QuestionBox | null
   isDisplayed: boolean
   isFetching: boolean
-  hasQuestion: boolean
-  initialized: boolean
+  //hasQuestion: boolean
+  //initialized: boolean
   //latestQuestionDate: Date | null
   //setLatestQuestionDate: (date: Date) => void
   toggleAnswerVisibility: (id: number) => void
@@ -50,8 +53,8 @@ interface QuestionState {
   fetchQuestions: (page: number, size: number) => void
   fetchNewQuestions: () => void
   setIsFetching: (value: boolean) => void
-  setHasQuestion: (hasQuestion: boolean) => void
-  setInitialized: (state: boolean) => void
+  //setHasQuestion: (hasQuestion: boolean) => void
+  //setInitialized: (state: boolean) => void
 }
 
 const useQuestionStore = create<QuestionState>((set) => ({
@@ -62,8 +65,8 @@ const useQuestionStore = create<QuestionState>((set) => ({
   selectedQuestion: null,
   isDisplayed: false,
   isFetching: false,
-  hasQuestion: false,
-  initialized: false,
+  //hasQuestion: false,
+  //initialized: false,
   //latestQuestionDate: null,
 
   setAnswerVisibility: (visible) => set({ isAnswerVisible: visible }),
@@ -117,10 +120,16 @@ const useQuestionStore = create<QuestionState>((set) => ({
 
   fetchQuestions: async (page: number, size: number) => {
     try {
-      const response: QuestionApiResponse = await FetchFamilyQuestions(
-        page,
-        size
-      )
+      const result = await FetchFamilyQuestions(page, size)
+
+      if (result === 'no question') {
+        // result가 true일 때 setActivate() 호출
+        const { setActivate } = UseGetQuestionBtnStore.getState()
+        setActivate()
+        return // 추가적으로 처리를 종료할 수도 있습니다.
+      }
+
+      const response: QuestionApiResponse = result
       const questions: QuestionBox[] = response.contents.map((item) => ({
         id: item.familyQuestionId,
         content: item.content,
@@ -131,50 +140,46 @@ const useQuestionStore = create<QuestionState>((set) => ({
 
       set({
         questionBoxes: questions,
-        //latestQuestionDate:
-        //  questions.length > 0
-        //    ? new Date(questions[0].createdAt.setHours(0, 0, 0, 0))
-        //    : null,
       })
-
-      const now = new Date()
-      now.setHours(0, 0, 0, 0)
-      const latestDate =
-        questions.length > 0
-          ? new Date(questions[0].createdAt.setHours(0, 0, 0, 0))
-          : null
-
-      if (latestDate && latestDate.getTime() === now.getTime()) {
-        set({ hasQuestion: true })
-      }
     } catch (error) {
       console.error('질문을 가져오는 중 오류 발생:', error)
     }
   },
 
   fetchNewQuestions: async () => {
-    const { hasQuestion } = useQuestionStore.getState()
+    //const { hasQuestion } = useQuestionStore.getState()
 
-    if (hasQuestion) {
-      console.log('오늘 할당된 질문이 존재합니다.')
-      return
-    } else {
-      try {
-        const response = await FetchFamilyNewQuestions()
-        if (response.familyQuestionId) {
-          await useQuestionStore.getState().fetchQuestions(0, 45)
-          set({ hasQuestion: true })
-          console.log('새로운 질문을 성공적으로 받아왔습니다.')
-        }
-      } catch (error) {
-        console.error('새 질문을 받아오는 데 실패했습니다.', error)
+    //if (hasQuestion) {
+    //  console.log('오늘 할당된 질문이 존재합니다.')
+    //  return
+    //} else {
+    //  try {
+    //    const response = await FetchFamilyNewQuestions()
+    //    if (response.familyQuestionId) {
+    //      await useQuestionStore.getState().fetchQuestions(0, 45)
+    //      set({ hasQuestion: true })
+    //      console.log('새로운 질문을 성공적으로 받아왔습니다.')
+    //    }
+    //  } catch (error) {
+    //    console.error('새 질문을 받아오는 데 실패했습니다.', error)
+    //  }
+    //}
+
+    try {
+      const response = await FetchFamilyNewQuestions()
+      if (response.familyQuestionId) {
+        await useQuestionStore.getState().fetchQuestions(0, 45)
+        //set({ hasQuestion: true })
+        console.log('새로운 질문을 성공적으로 받아왔습니다.')
       }
+    } catch (error) {
+      console.error('새 질문을 받아오는 데 실패했습니다.', error)
     }
   },
 
   setIsFetching: (value) => set({ isFetching: value }),
-  setHasQuestion: (hasQuestion: boolean) => set({ hasQuestion }),
-  setInitialized: (state: boolean) => set({ initialized: state }),
+  //setHasQuestion: (hasQuestion: boolean) => set({ hasQuestion }),
+  //setInitialized: (state: boolean) => set({ initialized: state }),
   //setLatestQuestionDate: (date) => set({ latestQuestionDate: date }),
 }))
 

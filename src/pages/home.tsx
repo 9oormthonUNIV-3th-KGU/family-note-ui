@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 import Header from '../components/Header'
 import FamilyBox from '../components/FamilyBox'
@@ -35,6 +35,7 @@ const QuestionAnswerBox = styled.div`
 `
 
 function Home() {
+  const hasFetched = useRef(false)
   const { fetchQuestions, questionBoxes, selectedQuestion, animationState } =
     useQuestionStore((state) => ({
       fetchQuestions: state.fetchQuestions,
@@ -44,7 +45,10 @@ function Home() {
     }))
 
   useEffect(() => {
-    fetchQuestions(0, 45)
+    if (!hasFetched.current) {
+      fetchQuestions(0, 45)
+      hasFetched.current = true
+    }
   }, [fetchQuestions])
 
   return (
