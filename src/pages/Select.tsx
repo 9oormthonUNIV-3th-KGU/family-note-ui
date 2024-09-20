@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import Header from '../components/Header'
 import Background from '../components/Background'
-import SelectFamilyBox from '../components/SelectFamilyBox'
+import FamilyListBox from '../components/FamilyListBox'
 
 const Main = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ function Select() {
       <Main>
         <Background />
         <TitleText>어느 채팅방으로 들어가실 건가요?</TitleText>
-        <SelectFamilyBox />
+        <FamilyListBox />
       </Main>
     </>
   )
