@@ -2,8 +2,9 @@ import styled from '@emotion/styled'
 import logo_horizontal from '../assets/logo_horizontal.png'
 import LogoutBtn from './LogoutBtn'
 
-const HeaderWrap = styled.div`
+const HeaderWrap = styled.header`
   position: relative;
+  top: 0;
   width: 100%;
   height: 150px;
   display: flex;

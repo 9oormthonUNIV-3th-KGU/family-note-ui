@@ -1,9 +1,10 @@
 import axios from 'axios'
-import { loadAuthToken } from '../utils/\bUserToken'
+import { loadAuthToken, loadFamilyId } from '../utils/UserToken'
 
 const token = loadAuthToken()
+const familyId = loadFamilyId()
 
-export const FetchFamilyData = async (familyId: number = 2) => {
+export const FetchFamilyData = async () => {
   try {
     const response = await axios.get(`/family/${familyId}`, {
       headers: {

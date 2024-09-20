@@ -1,12 +1,9 @@
 import axios from 'axios'
-import { loadAuthToken } from '../utils/\bUserToken'
+import { loadAuthToken } from '../utils/UserToken'
 
 const token = loadAuthToken()
 
-export const FetchFamilyQuestions = async (
-  page: number = 0,
-  size: number = 10
-) => {
+export const FetchFamilyQuestions = async (page: number, size: number) => {
   try {
     const response = await axios.get(
       `/family/question?page=${page}&size=${size}`,
@@ -19,7 +16,15 @@ export const FetchFamilyQuestions = async (
     )
     return response.data
   } catch (error) {
-    console.error('Error fetching family questions:', error)
+    if (axios.isAxiosError(error)) {
+      console.error('HTTP Status Code:', error.response?.status)
+      if (error.response?.status === 500) {
+        alert('가족에게 할당된 질문이 없습니다.')
+        return 'no question'
+      }
+    } else {
+      console.error('An unexpected error occurred:', error)
+    }
     throw error
   }
 }

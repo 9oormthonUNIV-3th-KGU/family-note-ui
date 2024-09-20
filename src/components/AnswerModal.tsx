@@ -6,12 +6,12 @@ import { PostFamilyAnswer } from '../services/FamilyAnswerApi'
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   position: fixed;
-  width: 1440px;
-  height: 1024px;
+  width: 100%;
+  height: 100%;
   left: 0px;
   top: 0px;
 
-  background-color: rgb(0, 0, 0, 0.61);
+  background-color: rgba(0, 0, 0, 0.61);
   z-index: 2;
 `
 
@@ -20,7 +20,7 @@ const AnswerModalBox = styled.div`
   width: 812px;
   height: 485px;
   left: calc(50% - 812px / 2);
-  top: calc(50% - 485px / 2 + 0.5px);
+  top: 270px;
 
   background: #ffffff;
   border-radius: 34px;
@@ -45,7 +45,7 @@ const AnswerBtnBox = styled.div`
 
 const AnswerBtnTxt = styled.p<{ isExceedingLimit: boolean }>`
   position: absolute;
-  width: 103px;
+  width: 45.5752vw;
   height: 45px;
   left: 620px;
   top: 393px;
@@ -215,7 +215,7 @@ function AnswerModal({
       alert('답변이 성공적으로 제출되었습니다.')
       toggleModal()
       clearSelectedQuestion()
-      await fetchQuestions(0, 10)
+      await fetchQuestions(0, 45)
     } catch (error) {
       alert('답변 제출 중 오류가 발생했습니다.')
     }

@@ -3,8 +3,8 @@ import {
   FetchFamilyQuestions,
   FetchFamilyNewQuestions,
 } from '../services/GetFamilyQuestionApi'
+import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
 
-// API 응답 타입 정의
 interface QuestionApiResponse {
   contents: {
     familyQuestionId: number
@@ -20,7 +20,6 @@ interface QuestionApiResponse {
   }
 }
 
-// 기존 QuestionBox 타입
 interface QuestionBox {
   id: number
   content: string
@@ -29,7 +28,6 @@ interface QuestionBox {
   animationState: 'scale-up' | 'scale-out' | 'none'
 }
 
-// 상태 관리 인터페이스
 interface QuestionState {
   isAnswerVisible: boolean
   isBoxHighlighted: boolean
@@ -40,7 +38,6 @@ interface QuestionState {
   isFetching: boolean
   toggleAnswerVisibility: (id: number) => void
   toggleBoxHighlight: () => void
-  addQuestionBox: (content: string) => void
   setAnswerVisibility: (visible: boolean) => void
   setAnimationState: (state: 'none' | 'scale-up' | 'scale-out') => void
   setSelectedQuestion: (question: QuestionBox) => void
@@ -64,11 +61,10 @@ const useQuestionStore = create<QuestionState>((set) => ({
 
   setAnimationState: (state) => {
     set({ animationState: state })
-
     if (state === 'scale-out') {
       setTimeout(() => {
         set({ isDisplayed: false })
-      }, 500) // 500ms 후 실행
+      }, 500)
     }
   },
 
@@ -90,20 +86,6 @@ const useQuestionStore = create<QuestionState>((set) => ({
   toggleBoxHighlight: () =>
     set((state) => ({ isBoxHighlighted: !state.isBoxHighlighted })),
 
-  addQuestionBox: (content: string) =>
-    set((state) => ({
-      questionBoxes: [
-        {
-          id: Date.now(),
-          content,
-          isAnswerVisible: false,
-          animationState: 'none',
-          createdAt: new Date(),
-        },
-        ...state.questionBoxes,
-      ],
-    })),
-
   setSelectedQuestion: (question) => set({ selectedQuestion: question }),
 
   clearSelectedQuestion: () => set({ selectedQuestion: null }),
@@ -112,30 +94,39 @@ const useQuestionStore = create<QuestionState>((set) => ({
 
   fetchQuestions: async (page: number, size: number) => {
     try {
-      const response: QuestionApiResponse = await FetchFamilyQuestions(
-        page,
-        size
-      )
+      const result = await FetchFamilyQuestions(page, size)
+
+      if (result === 'no question') {
+        const { setActivate } = UseGetQuestionBtnStore.getState()
+        setActivate()
+        return
+      }
+
+      const response: QuestionApiResponse = result
+      const questions: QuestionBox[] = response.contents.map((item) => ({
+        id: item.familyQuestionId,
+        content: item.content,
+        createdAt: new Date(item.createdAt),
+        isAnswerVisible: false,
+        animationState: 'none',
+      }))
+
       set({
-        questionBoxes: response.contents.map((item) => ({
-          id: item.familyQuestionId,
-          content: item.content,
-          createdAt: new Date(item.createdAt),
-          isAnswerVisible: false,
-          animationState: 'none',
-        })),
+        questionBoxes: questions,
       })
     } catch (error) {
-      console.error('Error fetching questions:', error)
+      console.error('질문을 가져오는 중 오류 발생:', error)
     }
   },
 
   fetchNewQuestions: async () => {
     try {
       const response = await FetchFamilyNewQuestions()
-
       if (response.familyQuestionId) {
-        await useQuestionStore.getState().fetchQuestions(0, 10)
+        await useQuestionStore.getState().fetchQuestions(0, 45)
+        const { setActivate } = UseGetQuestionBtnStore.getState()
+        setActivate()
+        console.log('새로운 질문을 성공적으로 받아왔습니다.')
       }
     } catch (error) {
       console.error('새 질문을 받아오는 데 실패했습니다.', error)
