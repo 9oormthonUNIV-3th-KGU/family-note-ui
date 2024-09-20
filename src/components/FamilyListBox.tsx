@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import GotoSearchBtn from './GotoSearchBtn'
+import FamilyBox from './FamilyBox'
 
 const FamilyListBoxWrap = styled.div`
   box-sizing: border-box;
@@ -10,7 +11,7 @@ const FamilyListBoxWrap = styled.div`
   left: calc(50% - 417px / 2 + 0.5px);
   top: 256px;
 
-  border: 2px solid #cdcdcd;
+  border: 2px solid #ffa800;
   border-radius: 16px;
 `
 
@@ -18,6 +19,7 @@ const FamilyListBox = () => {
   return (
     <FamilyListBoxWrap>
       <GotoSearchBtn />
+      <FamilyBox />
     </FamilyListBoxWrap>
   )
 }
