@@ -25,9 +25,8 @@ const LogoutButton = styled.button`
 function LogoutBtn() {
   const navigate = useNavigate()
 
-  // 임시 수정
   const logout = () => {
-    localStorage.removeItem('auth_token')
+    localStorage.removeItem('user')
     localStorage.removeItem('familyId')
     navigate('/login')
     console.log('logout')

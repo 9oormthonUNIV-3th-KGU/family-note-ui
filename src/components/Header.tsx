@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import logo_horizontal from '../assets/logo_horizontal.png'
+import logo_horizontal from '../assets/images/logo_horizontal.png'
 import LogoutBtn from './LogoutBtn'
 
 const HeaderWrap = styled.header`

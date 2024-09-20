@@ -28,6 +28,8 @@ interface FamilyState {
       role: string | null
     }>
   ) => void
+  hoveredFamilyId: number | null
+  setHoveredFamilyId: (id: number | null) => void
 }
 
 export const UseFamilyStore = create<FamilyState>((set) => ({
@@ -37,4 +39,6 @@ export const UseFamilyStore = create<FamilyState>((set) => ({
   familyMembers: [],
   setMyName: (name) => set({ myName: name }),
   setFamilyMembers: (members) => set({ familyMembers: members }),
+  hoveredFamilyId: null,
+  setHoveredFamilyId: (id) => set({ hoveredFamilyId: id }),
 }))
