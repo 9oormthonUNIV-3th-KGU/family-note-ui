@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import useAnswerStore from '../stores/UseAnswerModalStore'
 import useQuestionStore from '../stores/UseQuestionStore'
 import { PostFamilyAnswer } from '../services/FamilyAnswerApi'
+import { loadFamilyId } from '../utils/UserToken'
 
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
@@ -81,6 +82,7 @@ const AnswerBtn = styled.button<{ isExceedingLimit: boolean }>`
   border-color: transparent;
   cursor: ${({ isExceedingLimit }) => (isExceedingLimit ? 'not-allowed' : '')};
 `
+
 const Qustion = styled.p`
   position: absolute;
   width: 45px;
@@ -206,7 +208,9 @@ function AnswerModal({
     })
   )
 
-  const handlePostAnswer = async () => {
+  const familyId = loadFamilyId()
+
+  const handlePostAnswer = async (familyId: number) => {
     if (answer.length > 100)
       return alert('100자 이하의 답변만 입력 가능합니다.')
 
@@ -215,7 +219,7 @@ function AnswerModal({
       alert('답변이 성공적으로 제출되었습니다.')
       toggleModal()
       clearSelectedQuestion()
-      await fetchQuestions(0, 45)
+      await fetchQuestions(familyId, 0, 45)
     } catch (error) {
       alert('답변 제출 중 오류가 발생했습니다.')
     }
@@ -245,7 +249,7 @@ function AnswerModal({
         <AnswerCount isExceedingLimit={answer.length > 100}>
           {answer.length} / 100
         </AnswerCount>
-        <AnswerBtnBox onClick={handlePostAnswer}>
+        <AnswerBtnBox onClick={() => handlePostAnswer(Number(familyId))}>
           <AnswerBtn isExceedingLimit={answer.length > 100} />
           <AnswerBtnTxt isExceedingLimit={answer.length > 100}>
             답변하기

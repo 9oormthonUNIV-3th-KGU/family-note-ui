@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { UseFamilyStore } from '../stores/UseFamilyStore'
 import { FetchFamilyList } from '../services/GetFamilyListApi'
+import { FetchFamilyData } from '../services/GetFamilyApi'
+import useQuestionStore from '../stores/UseQuestionStore'
 
 const FamilyBoxWrap = styled.div`
   position: absolute;
@@ -121,6 +123,7 @@ function FamilyBox() {
     UseFamilyStore()
   const familyNameRefs = useRef<(HTMLParagraphElement | null)[]>([])
   const navigate = useNavigate()
+  const { fetchQuestions } = useQuestionStore()
 
   useEffect(() => {
     const fetchFamilies = async () => {
@@ -143,9 +146,18 @@ function FamilyBox() {
     return acc
   }, [] as Family[][])
 
-  const handleFamilyClick = (familyId: number) => {
+  const handleFamilyClick = async (familyId: number) => {
     localStorage.setItem('familyId', String(familyId))
-    navigate('/home')
+
+    if (familyId) {
+      try {
+        await FetchFamilyData(familyId)
+        await fetchQuestions(familyId, 0, 45)
+        navigate('/home')
+      } catch (error) {
+        console.error('Error fetching family data before navigate:', error)
+      }
+    }
   }
 
   return (

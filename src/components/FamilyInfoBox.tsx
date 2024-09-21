@@ -1,8 +1,6 @@
-import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { UseFamilyStore } from '../stores/UseFamilyStore'
-import { FetchFamilyData } from '../services/GetFamilyApi'
 
 const Box = styled.div`
   position: absolute;
@@ -70,19 +68,7 @@ const FamilyList = styled.p`
 `
 
 function FamilyInfoBox() {
-  const { myName, familyMembers, setMyName, setFamilyMembers } =
-    UseFamilyStore()
-
-  useEffect(() => {
-    FetchFamilyData()
-      .then((data) => {
-        setMyName(data.myName)
-        setFamilyMembers(data.familyMembers)
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
-  }, [setMyName, setFamilyMembers])
+  const { myName, familyMembers } = UseFamilyStore()
 
   return (
     <Box>

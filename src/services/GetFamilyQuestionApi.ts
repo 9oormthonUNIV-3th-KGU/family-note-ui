@@ -1,10 +1,13 @@
 import axios from 'axios'
-import { loadAuthToken, loadFamilyId } from '../utils/UserToken'
+import { loadAuthToken } from '../utils/UserToken'
 
 const token = loadAuthToken()
-const familyId = loadFamilyId()
 
-export const FetchFamilyQuestions = async (page: number, size: number) => {
+export const FetchFamilyQuestions = async (
+  familyId: number,
+  page: number,
+  size: number
+) => {
   try {
     const response = await axios.get(
       `/family/question/${familyId}?page=${page}&size=${size}`,
@@ -30,7 +33,7 @@ export const FetchFamilyQuestions = async (page: number, size: number) => {
   }
 }
 
-export const FetchFamilyNewQuestions = async () => {
+export const FetchFamilyNewQuestions = async (familyId: number) => {
   try {
     const response = await axios.post(
       `/family/question/${familyId}`,
