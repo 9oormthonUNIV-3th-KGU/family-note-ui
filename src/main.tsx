@@ -7,6 +7,7 @@ import Home from './pages/home.tsx'
 import Login from './pages/Login.tsx'
 import Register from './pages/Register.tsx'
 import Search from './pages/search.tsx'
+import Select from './pages/Select.tsx'
 import { AuthContextProvider } from './context/AuthContext.tsx'
 
 const router = createBrowserRouter([
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
   { path: '/register', element: <Register /> },
   { path: '/search', element: <Search /> },
+  { path: '/select', element: <Select /> },
 ])
 
 createRoot(document.getElementById('root')!).render(

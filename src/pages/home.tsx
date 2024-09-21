@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 import Header from '../components/Header'
-import FamilyBox from '../components/FamilyBox'
+import FamilyInfoBox from '../components/FamilyInfoBox'
 import GetQuestionBtn from '../components/GetQuestionBtn'
 import QuestionBox from '../components/QuestionBox'
 import AnswerBox from '../components/AnswerBox'
@@ -101,18 +101,11 @@ function Home() {
     setActivate,
   ])
 
-  useEffect(() => {
-    console.log('Question Boxes:', questionBoxes)
-    console.log('Family Members:', familyMembers)
-    console.log('Answers:', answers)
-    console.log('Activate:', activate)
-  }, [questionBoxes, familyMembers, answers, activate])
-
   return (
     <>
       <Header />
       <Main>
-        <FamilyBox />
+        <FamilyInfoBox />
         <GetQuestionBtn />
         <QuestionListContainer>
           {questionBoxes.reverse().map((question, index) => (
