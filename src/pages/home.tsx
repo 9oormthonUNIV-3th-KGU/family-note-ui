@@ -101,13 +101,6 @@ function Home() {
     setActivate,
   ])
 
-  useEffect(() => {
-    console.log('Question Boxes:', questionBoxes)
-    console.log('Family Members:', familyMembers)
-    console.log('Answers:', answers)
-    console.log('Activate:', activate)
-  }, [questionBoxes, familyMembers, answers, activate])
-
   return (
     <>
       <Header />
