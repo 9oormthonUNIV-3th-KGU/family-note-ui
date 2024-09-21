@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import useQuestionStore from '../stores/UseQuestionStore'
-import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
+import useQuestionStore from '../../stores/UseQuestionStore'
+import UseGetQuestionBtnStore from '../../stores/UseGetQuestionBtnStore'
 
 const GetQuestion = styled.button<{ activate: boolean }>`
   position: absolute;

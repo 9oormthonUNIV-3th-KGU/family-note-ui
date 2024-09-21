@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import useAnswerStore from '../stores/UseAnswerModalStore'
-import useQuestionStore from '../stores/UseQuestionStore'
-import { PostFamilyAnswer } from '../services/FamilyAnswerApi'
+import useAnswerStore from '../../stores/UseAnswerModalStore'
+import useQuestionStore from '../../stores/UseQuestionStore'
+import { PostFamilyAnswer } from '../../services/FamilyAnswerApi'
 
 const AnswerModalBackground = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};

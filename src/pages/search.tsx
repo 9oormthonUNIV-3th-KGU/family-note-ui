@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import Background from '../components/Background'
-import Header from '../components/Header'
+import Header from '../components/common/Header'
 import FamilySheet from '../components/FamilySheet'
 
 const Main = styled.div`

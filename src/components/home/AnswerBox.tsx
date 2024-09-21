@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import AnswerModal from './AnswerModal'
-import useQuestionStore from '../stores/UseQuestionStore'
-import UseAnswerModalStore from '../stores/UseAnswerModalStore'
-import { UseFamilyStore } from '../stores/UseFamilyStore'
-import UseAnswerStore from '../stores/UseAnswerStore'
+import AnswerModal from '../home/AnswerModal'
+import useQuestionStore from '../../stores/UseQuestionStore'
+import UseAnswerModalStore from '../../stores/UseAnswerModalStore'
+import { UseFamilyStore } from '../../stores/UseFamilyStore'
+import UseAnswerStore from '../../stores/UseAnswerStore'
 
 const Box = styled.div<{
   animationState: 'none' | 'scale-up' | 'scale-out'

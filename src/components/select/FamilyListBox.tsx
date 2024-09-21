@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import GotoSearchBtn from './GotoSearchBtn'
-import FamilyBox from './FamilyBox'
+import FamilyBox from '../select/FamilyBox'
 
 const FamilyListBoxWrap = styled.div`
   box-sizing: border-box;

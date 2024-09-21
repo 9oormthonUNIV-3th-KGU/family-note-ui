@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import styled from '@emotion/styled'
-import UseAnswerStore from '../stores/UseAnswerStore'
-import useQuestionStore from '../stores/UseQuestionStore'
-import FormatDate from '../utils/FormatDate'
-import { FetchFamilyAnswers } from '../services/GetFamilyAnswerApi'
+import UseAnswerStore from '../../stores/UseAnswerStore'
+import useQuestionStore from '../../stores/UseQuestionStore'
+import FormatDate from '../../utils/FormatDate'
+import { FetchFamilyAnswers } from '../../services/GetFamilyAnswerApi'
 
 const Box = styled.div<{ backgroundColor?: string }>`
   position: relative;

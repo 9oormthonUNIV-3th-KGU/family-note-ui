@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { UseFamilyStore } from '../stores/UseFamilyStore'
-import { FetchFamilyData } from '../services/GetFamilyApi'
+import { UseFamilyStore } from '../../stores/UseFamilyStore'
+import { FetchFamilyData } from '../../services/GetFamilyApi'
 
 const Box = styled.div`
   position: absolute;

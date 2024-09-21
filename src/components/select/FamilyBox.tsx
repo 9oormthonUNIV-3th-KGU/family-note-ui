@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
-import { UseFamilyStore } from '../stores/UseFamilyStore'
-import { FetchFamilyList } from '../services/GetFamilyListApi'
+import { UseFamilyStore } from '../../stores/UseFamilyStore'
+import { FetchFamilyList } from '../../services/GetFamilyListApi'
 
 const FamilyBoxWrap = styled.div`
   position: absolute;

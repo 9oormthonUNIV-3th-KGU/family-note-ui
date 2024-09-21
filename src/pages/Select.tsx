@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import Header from '../components/Header'
+import Header from '../components/common/Header'
 import Background from '../components/Background'
-import FamilyListBox from '../components/FamilyListBox'
+import FamilyListBox from '../components/select/FamilyListBox'
 
 const Main = styled.div`
   display: flex;
