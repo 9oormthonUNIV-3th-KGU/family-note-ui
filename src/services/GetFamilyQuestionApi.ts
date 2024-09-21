@@ -1,12 +1,13 @@
 import axios from 'axios'
-import { loadAuthToken } from '../utils/UserToken'
+import { loadAuthToken, loadFamilyId } from '../utils/UserToken'
 
 const token = loadAuthToken()
+const familyId = loadFamilyId()
 
 export const FetchFamilyQuestions = async (page: number, size: number) => {
   try {
     const response = await axios.get(
-      `/family/question?page=${page}&size=${size}`,
+      `/family/question/${familyId}?page=${page}&size=${size}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +33,7 @@ export const FetchFamilyQuestions = async (page: number, size: number) => {
 export const FetchFamilyNewQuestions = async () => {
   try {
     const response = await axios.post(
-      `/family/question`,
+      `/family/question/${familyId}`,
       {},
       {
         headers: {
