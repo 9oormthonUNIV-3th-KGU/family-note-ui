@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import useQuestionStore from '../stores/UseQuestionStore'
 import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
+import { loadFamilyId } from '../utils/UserToken'
 
 const GetQuestion = styled.button<{ activate: boolean }>`
   position: absolute;
@@ -63,11 +64,14 @@ function GetQuestionBtn() {
   }))
 
   const getQuestion = async () => {
+    const familyId = loadFamilyId()
+
     setIsFetching(true)
     if (isFetching) return console.log('질문을 받아오는 중입니다.')
 
     try {
-      await fetchNewQuestions()
+      const id = Number(familyId)
+      await fetchNewQuestions(id)
       location.reload()
     } catch (error) {
       console.error('새 질문을 받아오는 데 실패했습니다.', error)

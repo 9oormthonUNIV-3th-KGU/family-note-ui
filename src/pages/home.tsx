@@ -10,6 +10,7 @@ import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
 import UseAnswerStore from '../stores/UseAnswerStore'
 import { UseFamilyStore } from '../stores/UseFamilyStore'
 import { FetchFamilyAnswers } from '../services/GetFamilyAnswerApi'
+import { FetchFamilyData } from '../services/GetFamilyApi'
 import { FetchFamilyAnswersResponse } from '../model/FamilyAnswerResponse'
 
 const HeaderHeight = 150
@@ -50,7 +51,7 @@ function Home() {
     }))
 
   const { answers } = UseAnswerStore()
-  const { familyMembers } = UseFamilyStore()
+  const { familyMembers, setMyName, setFamilyMembers } = UseFamilyStore()
 
   const { activate, setActivate } = UseGetQuestionBtnStore((state) => ({
     activate: state.activate,
@@ -58,11 +59,25 @@ function Home() {
   }))
 
   useEffect(() => {
-    if (!hasFetched.current) {
-      fetchQuestions(0, 45)
+    const familyId = localStorage.getItem('familyId')
+
+    if (familyId && !hasFetched.current) {
+      FetchFamilyData(Number(familyId))
+        .then((data) => {
+          setMyName(data.myName)
+          setFamilyMembers(data.familyMembers)
+        })
+        .catch((error) => {
+          console.error('Error fetching family data:', error)
+        })
+
+      fetchQuestions(Number(familyId), 0, 45)
+
       hasFetched.current = true
     }
+  }, [])
 
+  useEffect(() => {
     const checkAnswers = async () => {
       if (questionBoxes.length > 0) {
         const mostRecentQuestion = questionBoxes[0]
@@ -93,12 +108,13 @@ function Home() {
 
     checkAnswers()
   }, [
-    fetchQuestions,
     questionBoxes,
     familyMembers,
     answers,
     activate,
     setActivate,
+    setMyName,
+    setFamilyMembers,
   ])
 
   return (

@@ -43,8 +43,8 @@ interface QuestionState {
   setSelectedQuestion: (question: QuestionBox) => void
   clearSelectedQuestion: () => void
   setIsDisplayed: (state: boolean) => void
-  fetchQuestions: (page: number, size: number) => void
-  fetchNewQuestions: () => void
+  fetchQuestions: (familyId: number, page: number, size: number) => void
+  fetchNewQuestions: (familyId: number) => void
   setIsFetching: (value: boolean) => void
 }
 
@@ -92,9 +92,9 @@ const useQuestionStore = create<QuestionState>((set) => ({
 
   setIsDisplayed: (newState) => set({ isDisplayed: newState }),
 
-  fetchQuestions: async (page: number, size: number) => {
+  fetchQuestions: async (familyId: number, page: number, size: number) => {
     try {
-      const result = await FetchFamilyQuestions(page, size)
+      const result = await FetchFamilyQuestions(familyId, page, size)
 
       if (result === 'no question') {
         const { setActivate } = UseGetQuestionBtnStore.getState()
@@ -119,11 +119,11 @@ const useQuestionStore = create<QuestionState>((set) => ({
     }
   },
 
-  fetchNewQuestions: async () => {
+  fetchNewQuestions: async (familyId: number) => {
     try {
-      const response = await FetchFamilyNewQuestions()
+      const response = await FetchFamilyNewQuestions(familyId)
       if (response.familyQuestionId) {
-        await useQuestionStore.getState().fetchQuestions(0, 45)
+        await useQuestionStore.getState().fetchQuestions(familyId, 0, 45)
         const { setActivate } = UseGetQuestionBtnStore.getState()
         setActivate()
         console.log('새로운 질문을 성공적으로 받아왔습니다.')
