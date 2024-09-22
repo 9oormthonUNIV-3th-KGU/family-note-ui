@@ -1,6 +1,7 @@
 import { ProfileResponse } from './../model/ProfileResponse'
 import apiClient from '../config/api-client'
 import { FamilyCreateRequest } from '../model/FamilyCreateRequest'
+import { FamilyCreateResponse } from '../model/FamilyCreateResponse'
 
 export const getProfiles = (nickname: string) => {
   return apiClient.get<ProfileResponse>('/users', {
@@ -9,5 +10,5 @@ export const getProfiles = (nickname: string) => {
 }
 
 export const createNewFamily = (family: FamilyCreateRequest) => {
-  return apiClient.post<number>('/family/members', family)
+  return apiClient.post<FamilyCreateResponse>('/family/members', family)
 }

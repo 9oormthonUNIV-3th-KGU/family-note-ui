@@ -15,8 +15,9 @@ const useFamilyCreate = () => {
     createNewFamily(familyCreateRequest)
       .then((response) => {
         if (response && response.status === 201) {
+          const familyId = response.data.familyId
           navigate('/home')
-          localStorage.setItem('familyId', JSON.stringify(response.data))
+          localStorage.setItem('familyId', familyId.toString())
         }
       })
       .catch((error) => setError(error.message))
