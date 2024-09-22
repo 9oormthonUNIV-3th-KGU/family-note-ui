@@ -10,16 +10,30 @@ export const useRegister = () => {
 
   const navigate = useNavigate()
 
-  const signup = (profile: AuthRequest) => {
+  const signup = (
+    profile: AuthRequest,
+    setErrors: (errors: any) => void,
+    resetForm: () => void
+  ) => {
     setLoader(true)
     createProfile(profile)
       .then((response) => {
         if (response && response.status === 201) {
           setToast('Profile is successfully created')
+          resetForm()
           navigate('/login')
         }
       })
-      .catch((error) => setError(error.message))
+      .catch((error) => {
+        if (
+          error.response &&
+          error.response.data.code === 'USER_NICKNAME_DUPLICATED'
+        ) {
+          setErrors({ nickname: '중복된 닉네임입니다.' })
+        } else {
+          setError(error.message)
+        }
+      })
       .finally(() => setLoader(false))
   }
   return { error, isLoading, signup, toast }

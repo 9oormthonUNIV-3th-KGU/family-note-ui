@@ -8,6 +8,7 @@ import useCurrentUserStore from '../stores/useCurrentUserStore'
 
 const Form = styled.form`
   margin-bottom: 31px;
+  position: relative;
 `
 
 const FormLabel = styled.label`
@@ -46,8 +47,11 @@ const Error = styled.div`
   line-height: 150%;
   letter-spacing: -0.011em;
   color: #ff0000;
+  position: absolute;
   min-height: 24px;
   text-align: center;
+  width: 100%;
+  bottom: -50px;
 `
 const LoginForm = () => {
   const navigate = useNavigate()
