@@ -10,7 +10,7 @@ const Main = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh - 150px;
+  height: 100vh;
 `
 
 const TitleText = styled.p`
@@ -41,20 +41,21 @@ function Select() {
   }
   return (
     <>
-      <Header></Header>
+      <Header />
       <Main>
-        <Background />
-        <TitleText>어느 채팅방으로 들어가실 건가요?</TitleText>
-        <FamilyListBox />
-        <TextButton
-          text="새 가족 구성원 모집하기"
-          isPrimary={true}
-          onClick={gotoSearch}
-          position={'absolute'}
-          left={'calc(50% - 417px / 2 + 0.5px)'}
-          top={'776px'}
-          margin={'0'}
-        />
+        <Background>
+          <TitleText>어느 채팅방으로 들어가실 건가요?</TitleText>
+          <FamilyListBox />
+          <TextButton
+            text="새 가족 구성원 모집하기"
+            isPrimary={true}
+            onClick={gotoSearch}
+            position={'absolute'}
+            left={'calc(50% - 417px / 2 + 0.5px)'}
+            top={'776px'}
+            margin={'0'}
+          />
+        </Background>
       </Main>
     </>
   )

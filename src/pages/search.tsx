@@ -11,13 +11,23 @@ const Main = styled.div`
   height: 100vh - 150px;
 `
 
+const StyledDiv = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`
+
 const Search = () => {
   return (
     <div>
-      <Header></Header>
+      <Header />
       <Main>
-        <Background></Background>
-        <FamilySheet></FamilySheet>
+        <Background>
+          <StyledDiv>
+            <FamilySheet></FamilySheet>
+          </StyledDiv>
+        </Background>
       </Main>
     </div>
   )
