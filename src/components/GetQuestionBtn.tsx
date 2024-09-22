@@ -36,7 +36,7 @@ const GetSvg = styled.svg`
 
 const GetQuestionTxt = styled.p<{ activate: boolean }>`
   position: absolute;
-  width: 219px;
+  width: 20vw;
   height: 51px;
   left: 27.32%;
   right: 16.24%;
