@@ -1,16 +1,13 @@
-import { useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
+import { useFetchQuestions } from '../hooks/useFetchQuestions'
+import { useCheckAnswers } from '../hooks/useCheckAnswers'
+import useQuestionStore from '../stores/UseQuestionStore'
 import Header from '../components/common/Header'
 import FamilyInfoBox from '../components/home/FamilyInfoBox'
 import GetQuestionBtn from '../components/home/GetQuestionBtn'
 import QuestionBox from '../components/home/QuestionBox'
 import AnswerBox from '../components/home/AnswerBox'
-import useQuestionStore from '../stores/UseQuestionStore'
-import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
-import UseAnswerStore from '../stores/UseAnswerStore'
-import { UseFamilyStore } from '../stores/UseFamilyStore'
-import { FetchFamilyAnswers } from '../services/GetFamilyAnswerApi'
-import { FetchFamilyAnswersResponse } from '../model/FamilyAnswerResponse'
+import { loadFamilyId } from '../utils/UserToken'
 
 const HeaderHeight = 150
 
@@ -39,67 +36,19 @@ const QuestionAnswerBox = styled.div`
   height: auto;
 `
 
+const familyId = loadFamilyId()
+
 function Home() {
-  const hasFetched = useRef(false)
-  const { fetchQuestions, questionBoxes, selectedQuestion, animationState } =
-    useQuestionStore((state) => ({
-      fetchQuestions: state.fetchQuestions,
+  useFetchQuestions(Number(familyId))
+  useCheckAnswers()
+
+  const { questionBoxes, selectedQuestion, animationState } = useQuestionStore(
+    (state) => ({
       questionBoxes: state.questionBoxes,
       selectedQuestion: state.selectedQuestion,
       animationState: state.animationState,
-    }))
-
-  const { answers } = UseAnswerStore()
-  const { familyMembers } = UseFamilyStore()
-
-  const { activate, setActivate } = UseGetQuestionBtnStore((state) => ({
-    activate: state.activate,
-    setActivate: state.setActivate,
-  }))
-
-  useEffect(() => {
-    if (!hasFetched.current) {
-      fetchQuestions(0, 45)
-      hasFetched.current = true
-    }
-
-    const checkAnswers = async () => {
-      if (questionBoxes.length > 0) {
-        const mostRecentQuestion = questionBoxes[0]
-        try {
-          const response: FetchFamilyAnswersResponse = await FetchFamilyAnswers(
-            mostRecentQuestion.id
-          )
-
-          const { isAnswered, contents } = response
-
-          if (isAnswered) {
-            const answeredNicknames = contents.map(
-              (content) => content.nickname
-            )
-            const allMembersAnswered = familyMembers.every((member) =>
-              answeredNicknames.includes(member.nickName)
-            )
-
-            if (allMembersAnswered && !activate) {
-              setActivate()
-            }
-          }
-        } catch (error) {
-          console.error('Error checking family answers:', error)
-        }
-      }
-    }
-
-    checkAnswers()
-  }, [
-    fetchQuestions,
-    questionBoxes,
-    familyMembers,
-    answers,
-    activate,
-    setActivate,
-  ])
+    })
+  )
 
   return (
     <>

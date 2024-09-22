@@ -10,8 +10,16 @@ apiClient.interceptors.request.use(
     if (!config.url?.includes('/login') && !config.url?.includes('/signup')) {
       const authObject = localStorage.getItem('user')
       if (authObject) {
-        const { accessToken } = JSON.parse(authObject) as AuthResponse
-        config.headers.Authorization = `Bearer ${accessToken}`
+        try {
+          if (authObject.includes('.')) {
+            config.headers.Authorization = `Bearer ${authObject}`
+          } else {
+            const { accessToken } = JSON.parse(authObject) as AuthResponse
+            config.headers.Authorization = `Bearer ${accessToken}`
+          }
+        } catch (e) {
+          console.error('Error parsing authObject from localStorage:', e)
+        }
       }
     }
     return config

@@ -2,51 +2,13 @@ import { create } from 'zustand'
 import {
   FetchFamilyQuestions,
   FetchFamilyNewQuestions,
-} from '../services/GetFamilyQuestionApi'
+} from '../services/family-questions'
 import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
-
-interface QuestionApiResponse {
-  contents: {
-    familyQuestionId: number
-    content: string
-    createdAt: string
-  }[]
-  pageable: {
-    page: number
-    size: number
-    totalPages: number
-    totalElements: number
-    isEnd: boolean
-  }
-}
-
-interface QuestionBox {
-  id: number
-  content: string
-  createdAt: Date
-  isAnswerVisible: boolean
-  animationState: 'scale-up' | 'scale-out' | 'none'
-}
-
-interface QuestionState {
-  isAnswerVisible: boolean
-  isBoxHighlighted: boolean
-  animationState: 'scale-up' | 'scale-out' | 'none'
-  questionBoxes: QuestionBox[]
-  selectedQuestion: QuestionBox | null
-  isDisplayed: boolean
-  isFetching: boolean
-  toggleAnswerVisibility: (id: number) => void
-  toggleBoxHighlight: () => void
-  setAnswerVisibility: (visible: boolean) => void
-  setAnimationState: (state: 'none' | 'scale-up' | 'scale-out') => void
-  setSelectedQuestion: (question: QuestionBox) => void
-  clearSelectedQuestion: () => void
-  setIsDisplayed: (state: boolean) => void
-  fetchQuestions: (page: number, size: number) => void
-  fetchNewQuestions: () => void
-  setIsFetching: (value: boolean) => void
-}
+import {
+  QuestionApiResponse,
+  QuestionBox,
+  QuestionState,
+} from '../model/FamilyQuestionModel'
 
 const useQuestionStore = create<QuestionState>((set) => ({
   isAnswerVisible: false,
@@ -92,9 +54,11 @@ const useQuestionStore = create<QuestionState>((set) => ({
 
   setIsDisplayed: (newState) => set({ isDisplayed: newState }),
 
-  fetchQuestions: async (page: number, size: number) => {
+  setQuestions: (questions: QuestionBox[]) => set({ questionBoxes: questions }),
+
+  fetchQuestions: async (familyId: number, page: number, size: number) => {
     try {
-      const result = await FetchFamilyQuestions(page, size)
+      const result = await FetchFamilyQuestions(familyId, page, size)
 
       if (result === 'no question') {
         const { setActivate } = UseGetQuestionBtnStore.getState()
@@ -119,11 +83,11 @@ const useQuestionStore = create<QuestionState>((set) => ({
     }
   },
 
-  fetchNewQuestions: async () => {
+  fetchNewQuestions: async (familyId: number) => {
     try {
-      const response = await FetchFamilyNewQuestions()
+      const response = await FetchFamilyNewQuestions(familyId)
       if (response.familyQuestionId) {
-        await useQuestionStore.getState().fetchQuestions(0, 45)
+        await useQuestionStore.getState().fetchQuestions(familyId, 0, 45)
         const { setActivate } = UseGetQuestionBtnStore.getState()
         setActivate()
         console.log('새로운 질문을 성공적으로 받아왔습니다.')
