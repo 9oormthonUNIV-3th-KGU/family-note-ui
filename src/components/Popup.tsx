@@ -3,7 +3,8 @@ import { forwardRef } from 'react'
 
 interface Props {
   text: string
-  onClick?: () => void
+  onClickYes: () => void
+  onClickNo: () => void
 }
 
 const PopupContainer = styled.div`
@@ -77,20 +78,22 @@ const ButtonContainer = styled.div`
   margin-bottom: 26px;
 `
 
-const Popup = forwardRef<HTMLDivElement, Props>(({ text, onClick }, ref) => {
-  return (
-    <PopupContainer>
-      <PopupContent ref={ref}>
-        <Title>{text}</Title>
-        <ButtonContainer>
-          <RoundedButton onClick={onClick || (() => {})}>아니요</RoundedButton>
-          <RoundedButton onClick={onClick || (() => {})} isPrimary={true}>
-            네
-          </RoundedButton>
-        </ButtonContainer>
-      </PopupContent>
-    </PopupContainer>
-  )
-})
+const Popup = forwardRef<HTMLDivElement, Props>(
+  ({ text, onClickNo, onClickYes }, ref) => {
+    return (
+      <PopupContainer>
+        <PopupContent ref={ref}>
+          <Title>{text}</Title>
+          <ButtonContainer>
+            <RoundedButton onClick={onClickNo}>아니요</RoundedButton>
+            <RoundedButton onClick={onClickYes} isPrimary={true}>
+              네
+            </RoundedButton>
+          </ButtonContainer>
+        </PopupContent>
+      </PopupContainer>
+    )
+  }
+)
 
 export default Popup

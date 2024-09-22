@@ -10,6 +10,7 @@ import useProfiles from '../hooks/useProfiles'
 import ProfileCard from './ProfileCard'
 import useProfileIdState from '../stores/userProfileStore'
 import useProfileState from '../stores/userProfileStore'
+import { useNavigate } from 'react-router-dom'
 
 const FaimlySheet = () => {
   const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
@@ -29,6 +30,8 @@ const FaimlySheet = () => {
   const removeProfile = useProfileState((state) => state.removeProfile)
 
   const { profiles, error, isLoading, setCurrentProfiles } = useProfiles()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handler = (e: { target: any }) => {
@@ -98,7 +101,10 @@ const FaimlySheet = () => {
       {isPopupOpen && (
         <Popup
           text={'가족 구성원 모집을\n 완료 하시겠습니까?'}
-          onClick={closePopup}
+          onClickYes={() => {
+            navigate('/home', { state: { selectedProfiles } })
+          }}
+          onClickNo={closePopup}
           ref={popupRef}
         ></Popup>
       )}
