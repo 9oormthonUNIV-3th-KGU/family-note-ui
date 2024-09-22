@@ -21,7 +21,7 @@ const router = createBrowserRouter([
   { path: '/', element: <ProtectedRoute element={<Select />} /> },
   { path: '/home', element: <ProtectedRoute element={<Home />} /> },
   { path: '/login', element: <Login /> },
-  { path: '/register', element: <ProtectedRoute element={<Register />} /> },
+  { path: '/register', element: <Register /> },
   { path: '/search', element: <ProtectedRoute element={<Search />} /> },
   { path: '/select', element: <ProtectedRoute element={<Select />} /> },
 ])
