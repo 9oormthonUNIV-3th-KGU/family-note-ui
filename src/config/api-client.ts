@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AuthResponse } from '../model/AuthResponse'
+import useCurrentUserStore from '../stores/useCurrentUserStore'
 
 const apiClient = axios.create({
   baseURL: 'http://211.188.49.236:5252/api/v1',
@@ -8,9 +8,8 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     if (!config.url?.includes('/login') && !config.url?.includes('/signup')) {
-      const authObject = localStorage.getItem('user')
-      if (authObject) {
-        const { accessToken } = JSON.parse(authObject) as AuthResponse
+      const { accessToken } = useCurrentUserStore.getState()
+      if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`
       }
     }

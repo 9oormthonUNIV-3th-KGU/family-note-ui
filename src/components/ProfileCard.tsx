@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
 import { IconType } from 'react-icons'
+import { Content } from '../model/ProfileResponse'
 
 interface Props {
-  item: string
-  index: number
+  profile: Content
   icon: IconType
+  onClick: () => void
 }
 
 const Container = styled.div`
@@ -43,17 +44,18 @@ const Icon = styled.div`
   height: 40px;
   border: 2px solid #808080;
   border-radius: 50%;
+  cursor: pointer;
 `
 
-const ListItem = ({ item, index, icon: IconComponent }: Props) => {
+const ProfileCard = ({ profile, icon: IconComponent, onClick }: Props) => {
   return (
-    <Container key={index}>
-      <Text>{item}</Text>
-      <Icon>
+    <Container key={profile.id}>
+      <Text>{profile.nickname}</Text>
+      <Icon onClick={onClick}>
         <IconComponent size={24}></IconComponent>
       </Icon>
     </Container>
   )
 }
 
-export default ListItem
+export default ProfileCard

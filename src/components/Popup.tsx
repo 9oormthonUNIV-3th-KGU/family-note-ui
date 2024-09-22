@@ -1,12 +1,16 @@
 import styled from '@emotion/styled'
-import { forwardRef } from 'react'
+import { ChangeEvent, forwardRef } from 'react'
+import useFamilyCreate from '../hooks/useFamilyCreate'
+import { useFormik } from 'formik'
+import useProfileState from '../stores/userProfileStore'
+import familyNameValidationSchema from '../validation/familyNameValidationSchema'
 
 interface Props {
   text: string
-  onClick?: () => void
+  onClickNo: () => void
 }
 
-const PopupContainer = styled.div`
+const PopupForm = styled.form`
   position: fixed;
   top: 0;
   left: 0;
@@ -44,14 +48,16 @@ const Title = styled.p`
   font-family: Pretendard Variable;
   font-size: 30px;
   font-weight: 600;
-  text-align: center;
+  text-align: left;
   white-space: pre-line;
   line-height: 150%;
   letter-spacing: -1.1%;
+  margin-left: 20px;
+  margin-bottom: 24px;
 `
 
 const RoundedButton = styled.button<{
-  onClick: () => void
+  onClick?: () => void
   isPrimary?: boolean
 }>`
   display: inline-block;
@@ -71,25 +77,74 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 30px;
-  margin-top: 60px;
-  margin-left: 21px;
-  margin-right: 21px;
-  margin-bottom: 26px;
+  margin-top: 24px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 24px;
 `
 
-const Popup = forwardRef<HTMLDivElement, Props>(({ text, onClick }, ref) => {
+const Input = styled.input<{ hasError: boolean }>`
+  font-family: Inter;
+  font-style: normal;
+  font-size: 24px;
+  width: 441px;
+  padding: 10px 15px;
+  line-height: 30px;
+  border: ${({ hasError }) =>
+    hasError ? '1px solid #ff0000' : '1px solid #ededed'};
+  border-radius: 5px;
+  outline: none;
+  background: #ededed;
+  caret-color: #ffa800;
+
+  &::placeholder {
+    color: #cdcdcd;
+    font-family: Inter;
+    font-style: light;
+    font-size: 20px;
+  }
+`
+
+const Popup = forwardRef<HTMLDivElement, Props>(({ text, onClickNo }, ref) => {
+  const { createFamily } = useFamilyCreate()
+
+  const selectedProfiles = useProfileState((state) => state.contents)
+
+  const userIds = selectedProfiles.map((profile) => profile.id)
+
+  const formik = useFormik<{ familyName: string }>({
+    initialValues: {
+      familyName: '',
+    },
+    validationSchema: familyNameValidationSchema,
+    onSubmit: (value) => {
+      createFamily({ userIds: userIds, familyName: value.familyName })
+      console.log(`family created : ${value.familyName}, ${userIds}`)
+    },
+  })
+
   return (
-    <PopupContainer>
+    <PopupForm onSubmit={formik.handleSubmit}>
       <PopupContent ref={ref}>
         <Title>{text}</Title>
+        <Input
+          type="familyName"
+          id="familyName"
+          name="familyName"
+          placeholder="가족 구성원의 이름을 지어주세요"
+          value={formik.values.familyName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          hasError={!!(formik.touched.familyName && formik.errors.familyName)}
+        ></Input>
         <ButtonContainer>
-          <RoundedButton onClick={onClick || (() => {})}>아니요</RoundedButton>
-          <RoundedButton onClick={onClick || (() => {})} isPrimary={true}>
+          <RoundedButton onClick={onClickNo}>아니요</RoundedButton>
+          <RoundedButton type="submit" isPrimary={true}>
             네
           </RoundedButton>
         </ButtonContainer>
       </PopupContent>
-    </PopupContainer>
+    </PopupForm>
   )
 })
 

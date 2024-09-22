@@ -29,7 +29,8 @@ const InputWrapper = styled.div`
 const InputForm = styled.input<{ placeholder?: string; hasError: boolean }>`
   display: inline-block;
   background-color: #ededed;
-  border: ${({ hasError }) => (hasError ? '1px solid #ff0000' : 'none')};
+  border: ${({ hasError }) =>
+    hasError ? '1px solid #ff0000' : '1px solid #ededed'};
   border-radius: 5px;
   font-family: Inter;
   font-style: normal;
@@ -38,7 +39,7 @@ const InputForm = styled.input<{ placeholder?: string; hasError: boolean }>`
   padding: 10px;
   height: 34px;
   width: 397px;
-  margin-bottom: 35px;
+  margin-bottom: 40px;
 
   &:focus {
     outline: none;
@@ -54,8 +55,8 @@ const Error = styled.div`
   line-height: 150%;
   letter-spacing: -0.011em;
   color: #ff0000;
-  min-height: 24px;
-  margin-top: -30px;
+  position: absolute;
+  margin-top: -36px;
   margin-bottom: 35px;
 `
 
@@ -78,11 +79,10 @@ const RegisterForm = () => {
       confirmPassword: '',
     },
     validationSchema: profileValidationSchema,
-    onSubmit: (profile: Profile, { resetForm }) => {
+    onSubmit: (profile: Profile, { resetForm, setErrors }) => {
       const { confirmPassword, ...profileData } = profile
       console.log(profileData)
-      signup(profileData)
-      resetForm()
+      signup(profileData, setErrors, resetForm)
     },
   })
 

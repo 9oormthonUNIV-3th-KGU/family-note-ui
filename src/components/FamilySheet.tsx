@@ -2,11 +2,108 @@ import styled from '@emotion/styled'
 import SearchBar from './SearchBar'
 import TextButton from './TextButton'
 import Popup from './Popup'
-import ListItem from './ListItem'
 import usePopupStore from '../stores/usePopupStore'
 import useSearchStore from '../stores/useSearchStore'
 import { useEffect, useRef } from 'react'
 import { TiMinus, TiPlus } from 'react-icons/ti'
+import useProfiles from '../hooks/useProfiles'
+import ProfileCard from './ProfileCard'
+import useProfileState from '../stores/userProfileStore'
+
+const FaimlySheet = () => {
+  const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
+  const openSearchBox = useSearchStore((state) => state.openSearchBox)
+  const closeSearchBox = useSearchStore((state) => state.closeSearchBox)
+
+  const isPopupOpen = usePopupStore((state) => state.isOpen)
+  const openPopup = usePopupStore((state) => state.openPopup)
+  const closePopup = usePopupStore((state) => state.closePopup)
+
+  const boxRef = useRef<HTMLDivElement | null>(null)
+  const searchRef = useRef<HTMLDivElement | null>(null)
+  const popupRef = useRef<HTMLDivElement | null>(null)
+
+  const selectedProfiles = useProfileState((state) => state.contents)
+  const addProfile = useProfileState((state) => state.addProfile)
+  const removeProfile = useProfileState((state) => state.removeProfile)
+
+  const { setCurrentProfiles, profiles, error, isLoading } = useProfiles()
+
+  useEffect(() => {
+    const handler = (e: { target: any }) => {
+      if (
+        boxRef.current &&
+        !boxRef.current.contains(e.target) &&
+        searchRef.current &&
+        !searchRef.current.contains(e.target)
+      ) {
+        closeSearchBox()
+      }
+
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        closePopup()
+      }
+    }
+    document.addEventListener('mousedown', handler)
+
+    return () => {
+      document.removeEventListener('mousedown', handler)
+    }
+  })
+
+  return (
+    <Container>
+      <SearchBarWrapper ref={searchRef}>
+        <SearchBar
+          onClick={openSearchBox}
+          onChange={(e) => {
+            setCurrentProfiles(e.target.value)
+          }}
+        ></SearchBar>
+      </SearchBarWrapper>
+      {isSearchBoxOpen && (
+        <Box ref={boxRef}>
+          {profiles.map((profile) => (
+            <ProfileCard
+              key={profile.id}
+              profile={profile}
+              icon={TiPlus}
+              onClick={() => {
+                addProfile(profile)
+              }}
+            ></ProfileCard>
+          ))}
+        </Box>
+      )}
+      <Sheet>
+        {selectedProfiles.map((profile, index) => (
+          <ProfileCard
+            profile={profile}
+            key={index}
+            icon={TiMinus}
+            onClick={() => {
+              removeProfile(profile.id)
+            }}
+          ></ProfileCard>
+        ))}
+      </Sheet>
+      <TextButtonWrapper>
+        <TextButton
+          text="가족 구성원 모집 완료"
+          isPrimary={true}
+          onClick={openPopup}
+        ></TextButton>
+      </TextButtonWrapper>
+      {isPopupOpen && (
+        <Popup
+          text={'가족 구성원 이름'}
+          onClickNo={closePopup}
+          ref={popupRef}
+        ></Popup>
+      )}
+    </Container>
+  )
+}
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +122,7 @@ const Sheet = styled.div`
   width: 417px;
   height: 493px;
   overflow-y: scroll;
-  border: 2px solid #cdcdcd;
+  border: 2px solid #ffa800;
   border-radius: 16px;
   background: #fff;
   margin-top: 16px;
@@ -48,9 +145,9 @@ const Box = styled.div`
   width: 479px;
   height: 494px;
   overflow-y: scroll;
-  border-left: 2px solid #cdcdcd;
-  border-right: 2px solid #cdcdcd;
-  border-bottom: 2px solid #cdcdcd;
+  border-left: 2px solid #ffa800;
+  border-right: 2px solid #ffa800;
+  border-bottom: 2px solid #ffa800;
   border-radius: 46px;
   background: #fff;
   margin-top: 16px;
@@ -87,77 +184,5 @@ const TextButtonWrapper = styled.div`
   right: 0;
   z-index: 3;
 `
-
-const items = Array.from({ length: 30 }, (_, i) => `Name ${i + 1}`)
-
-const FaimlySheet = () => {
-  const isPopupOpen = usePopupStore((state) => state.isOpen)
-  const openPopup = usePopupStore((state) => state.openPopup)
-  const closePopup = usePopupStore((state) => state.closePopup)
-
-  const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
-  const openSearchBox = useSearchStore((state) => state.openSearchBox)
-  const closeSearchBox = useSearchStore((state) => state.closeSearchBox)
-
-  const boxRef = useRef<HTMLDivElement | null>(null)
-  const searchRef = useRef<HTMLDivElement | null>(null)
-  const popupRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    const handler = (e: { target: any }) => {
-      if (
-        boxRef.current &&
-        !boxRef.current.contains(e.target) &&
-        searchRef.current &&
-        !searchRef.current.contains(e.target)
-      ) {
-        closeSearchBox()
-      }
-
-      if (popupRef.current && !popupRef.current.contains(e.target)) {
-        closePopup()
-      }
-    }
-    document.addEventListener('mousedown', handler)
-
-    return () => {
-      document.removeEventListener('mousedown', handler)
-    }
-  })
-
-  return (
-    <Container>
-      <SearchBarWrapper ref={searchRef}>
-        <SearchBar onClick={openSearchBox}></SearchBar>
-      </SearchBarWrapper>
-      {isSearchBoxOpen && (
-        <Box ref={boxRef}>
-          {items.map((item, index) => (
-            <ListItem item={item} index={index} icon={TiPlus}></ListItem>
-          ))}
-        </Box>
-      )}
-      <Sheet>
-        {items.map((item, index) => (
-          <ListItem item={item} index={index} icon={TiMinus}></ListItem>
-        ))}
-      </Sheet>
-      <TextButtonWrapper>
-        <TextButton
-          text="가족 구성원 모집 완료"
-          isPrimary={true}
-          onClick={openPopup}
-        ></TextButton>
-      </TextButtonWrapper>
-      {isPopupOpen && (
-        <Popup
-          text={'가족 구성원 모집을\n 완료 하시겠습니까?'}
-          onClick={closePopup}
-          ref={popupRef}
-        ></Popup>
-      )}
-    </Container>
-  )
-}
 
 export default FaimlySheet
