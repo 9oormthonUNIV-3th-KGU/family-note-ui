@@ -2,8 +2,8 @@ import styled from '@emotion/styled'
 import { IconType } from 'react-icons'
 
 interface Props {
-  item: string
-  index: number
+  nickname: string
+  key: number
   icon: IconType
 }
 
@@ -45,10 +45,10 @@ const Icon = styled.div`
   border-radius: 50%;
 `
 
-const ListItem = ({ item, index, icon: IconComponent }: Props) => {
+const ProfileCard = ({ nickname, key, icon: IconComponent }: Props) => {
   return (
-    <Container key={index}>
-      <Text>{item}</Text>
+    <Container key={key}>
+      <Text>{nickname}</Text>
       <Icon>
         <IconComponent size={24}></IconComponent>
       </Icon>
@@ -56,4 +56,4 @@ const ListItem = ({ item, index, icon: IconComponent }: Props) => {
   )
 }
 
-export default ListItem
+export default ProfileCard
