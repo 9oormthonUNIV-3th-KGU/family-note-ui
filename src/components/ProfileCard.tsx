@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { IconType } from 'react-icons'
+import { Content } from '../model/ProfileResponse'
 
 interface Props {
-  nickname: string
-  key: number
+  profile: Content
   icon: IconType
 }
 
@@ -43,12 +43,13 @@ const Icon = styled.div`
   height: 40px;
   border: 2px solid #808080;
   border-radius: 50%;
+  cursor: pointer;
 `
 
-const ProfileCard = ({ nickname, key, icon: IconComponent }: Props) => {
+const ProfileCard = ({ profile, icon: IconComponent }: Props) => {
   return (
-    <Container key={key}>
-      <Text>{nickname}</Text>
+    <Container key={profile.id}>
+      <Text>{profile.nickname}</Text>
       <Icon>
         <IconComponent size={24}></IconComponent>
       </Icon>

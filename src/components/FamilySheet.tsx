@@ -2,11 +2,94 @@ import styled from '@emotion/styled'
 import SearchBar from './SearchBar'
 import TextButton from './TextButton'
 import Popup from './Popup'
-import ListItem from './ListItem'
 import usePopupStore from '../stores/usePopupStore'
 import useSearchStore from '../stores/useSearchStore'
 import { useEffect, useRef } from 'react'
 import { TiMinus, TiPlus } from 'react-icons/ti'
+import useProfiles from '../hooks/useProfiles'
+import ProfileCard from './ProfileCard'
+
+const FaimlySheet = () => {
+  const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
+  const openSearchBox = useSearchStore((state) => state.openSearchBox)
+  const closeSearchBox = useSearchStore((state) => state.closeSearchBox)
+
+  const isPopupOpen = usePopupStore((state) => state.isOpen)
+  const openPopup = usePopupStore((state) => state.openPopup)
+  const closePopup = usePopupStore((state) => state.closePopup)
+
+  const boxRef = useRef<HTMLDivElement | null>(null)
+  const searchRef = useRef<HTMLDivElement | null>(null)
+  const popupRef = useRef<HTMLDivElement | null>(null)
+
+  const { profiles, error, isLoading, setCurrentProfiles } = useProfiles()
+
+  useEffect(() => {
+    const handler = (e: { target: any }) => {
+      if (
+        boxRef.current &&
+        !boxRef.current.contains(e.target) &&
+        searchRef.current &&
+        !searchRef.current.contains(e.target)
+      ) {
+        closeSearchBox()
+      }
+
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        closePopup()
+      }
+    }
+    document.addEventListener('mousedown', handler)
+
+    return () => {
+      document.removeEventListener('mousedown', handler)
+    }
+  })
+
+  return (
+    <Container>
+      <SearchBarWrapper ref={searchRef}>
+        <SearchBar
+          onClick={openSearchBox}
+          onChange={(e) => {
+            console.log('Input value:', e.target.value)
+            setCurrentProfiles(e.target.value)
+          }}
+        ></SearchBar>
+      </SearchBarWrapper>
+      {isSearchBoxOpen && (
+        <Box ref={boxRef}>
+          {profiles.map((profile) => (
+            <ProfileCard
+              key={profile.id}
+              profile={profile}
+              icon={TiPlus}
+            ></ProfileCard>
+          ))}
+        </Box>
+      )}
+      <Sheet>
+        {/* {items.map((item, index) => (
+          <ProfileCard nickname={item} key={index} icon={TiMinus}></ProfileCard>
+        ))} */}
+      </Sheet>
+      <TextButtonWrapper>
+        <TextButton
+          text="가족 구성원 모집 완료"
+          isPrimary={true}
+          onClick={openPopup}
+        ></TextButton>
+      </TextButtonWrapper>
+      {isPopupOpen && (
+        <Popup
+          text={'가족 구성원 모집을\n 완료 하시겠습니까?'}
+          onClick={closePopup}
+          ref={popupRef}
+        ></Popup>
+      )}
+    </Container>
+  )
+}
 
 const Container = styled.div`
   display: flex;
@@ -87,77 +170,5 @@ const TextButtonWrapper = styled.div`
   right: 0;
   z-index: 3;
 `
-
-const items = Array.from({ length: 30 }, (_, i) => `Name ${i + 1}`)
-
-const FaimlySheet = () => {
-  const isPopupOpen = usePopupStore((state) => state.isOpen)
-  const openPopup = usePopupStore((state) => state.openPopup)
-  const closePopup = usePopupStore((state) => state.closePopup)
-
-  const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
-  const openSearchBox = useSearchStore((state) => state.openSearchBox)
-  const closeSearchBox = useSearchStore((state) => state.closeSearchBox)
-
-  const boxRef = useRef<HTMLDivElement | null>(null)
-  const searchRef = useRef<HTMLDivElement | null>(null)
-  const popupRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    const handler = (e: { target: any }) => {
-      if (
-        boxRef.current &&
-        !boxRef.current.contains(e.target) &&
-        searchRef.current &&
-        !searchRef.current.contains(e.target)
-      ) {
-        closeSearchBox()
-      }
-
-      if (popupRef.current && !popupRef.current.contains(e.target)) {
-        closePopup()
-      }
-    }
-    document.addEventListener('mousedown', handler)
-
-    return () => {
-      document.removeEventListener('mousedown', handler)
-    }
-  })
-
-  return (
-    <Container>
-      <SearchBarWrapper ref={searchRef}>
-        <SearchBar onClick={openSearchBox}></SearchBar>
-      </SearchBarWrapper>
-      {isSearchBoxOpen && (
-        <Box ref={boxRef}>
-          {items.map((item, index) => (
-            <ListItem item={item} index={index} icon={TiPlus}></ListItem>
-          ))}
-        </Box>
-      )}
-      <Sheet>
-        {items.map((item, index) => (
-          <ListItem item={item} index={index} icon={TiMinus}></ListItem>
-        ))}
-      </Sheet>
-      <TextButtonWrapper>
-        <TextButton
-          text="가족 구성원 모집 완료"
-          isPrimary={true}
-          onClick={openPopup}
-        ></TextButton>
-      </TextButtonWrapper>
-      {isPopupOpen && (
-        <Popup
-          text={'가족 구성원 모집을\n 완료 하시겠습니까?'}
-          onClick={closePopup}
-          ref={popupRef}
-        ></Popup>
-      )}
-    </Container>
-  )
-}
 
 export default FaimlySheet
