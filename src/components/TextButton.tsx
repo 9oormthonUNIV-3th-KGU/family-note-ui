@@ -3,10 +3,20 @@ import styled from '@emotion/styled'
 interface Props {
   text: string
   isPrimary: boolean
+  position?: string
+  left?: string
+  top?: string
+  margin?: string
   onClick?: () => void
 }
 
-const Button = styled.button<{ isPrimary?: boolean }>`
+const Button = styled.button<{
+  isPrimary?: boolean
+  position?: string
+  left?: string
+  top?: string
+  margin?: string
+}>`
   display: inline-block;
   background-color: ${(props) => (props.isPrimary ? '#ffa800' : '#ffffff')};
   color: ${(props) => (props.isPrimary ? '#ffffff' : '#000000')};
@@ -17,14 +27,35 @@ const Button = styled.button<{ isPrimary?: boolean }>`
   border: none;
   border-radius: 9px;
   padding: 5px;
-  margin-bottom: 20px;
+  margin-bottom: ${(props) => (props.margin ? props.margin : '20px')};
   cursor: pointer;
   width: 417px;
+  height: 54px;
+
+  position: ${(props) => (props.position ? props.position : '')};
+  left: ${(props) => (props.left ? props.left : '')};
+  top: ${(props) => (props.top ? props.top : '')};
 `
 
-const TextButton = ({ text, isPrimary, onClick }: Props) => {
+const TextButton = ({
+  text,
+  isPrimary,
+  position,
+  left,
+  top,
+  margin,
+  onClick,
+}: Props) => {
   return (
-    <Button isPrimary={isPrimary} onClick={onClick} type="submit">
+    <Button
+      isPrimary={isPrimary}
+      position={position}
+      left={left}
+      top={top}
+      margin={margin}
+      onClick={onClick}
+      type="submit"
+    >
       {text}
     </Button>
   )

@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import Header from '../components/Header'
 import Background from '../components/Background'
 import FamilyListBox from '../components/FamilyListBox'
+import TextButton from '../components/TextButton'
 
 const Main = styled.div`
   display: flex;
@@ -32,6 +34,11 @@ const TitleText = styled.p`
 `
 
 function Select() {
+  const navigate = useNavigate()
+
+  const gotoSearch = () => {
+    navigate('/search')
+  }
   return (
     <>
       <Header></Header>
@@ -39,6 +46,15 @@ function Select() {
         <Background />
         <TitleText>어느 채팅방으로 들어가실 건가요?</TitleText>
         <FamilyListBox />
+        <TextButton
+          text="새 가족 구성원 모집하기"
+          isPrimary={true}
+          onClick={gotoSearch}
+          position={'absolute'}
+          left={'calc(50% - 417px / 2 + 0.5px)'}
+          top={'776px'}
+          margin={'0'}
+        />
       </Main>
     </>
   )
