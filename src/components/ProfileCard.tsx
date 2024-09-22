@@ -5,6 +5,7 @@ import { Content } from '../model/ProfileResponse'
 interface Props {
   profile: Content
   icon: IconType
+  onClick: () => void
 }
 
 const Container = styled.div`
@@ -46,11 +47,11 @@ const Icon = styled.div`
   cursor: pointer;
 `
 
-const ProfileCard = ({ profile, icon: IconComponent }: Props) => {
+const ProfileCard = ({ profile, icon: IconComponent, onClick }: Props) => {
   return (
     <Container key={profile.id}>
       <Text>{profile.nickname}</Text>
-      <Icon>
+      <Icon onClick={onClick}>
         <IconComponent size={24}></IconComponent>
       </Icon>
     </Container>

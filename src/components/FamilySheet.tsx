@@ -8,6 +8,8 @@ import { useEffect, useRef } from 'react'
 import { TiMinus, TiPlus } from 'react-icons/ti'
 import useProfiles from '../hooks/useProfiles'
 import ProfileCard from './ProfileCard'
+import useProfileIdState from '../stores/userProfileStore'
+import useProfileState from '../stores/userProfileStore'
 
 const FaimlySheet = () => {
   const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
@@ -21,6 +23,10 @@ const FaimlySheet = () => {
   const boxRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
   const popupRef = useRef<HTMLDivElement | null>(null)
+
+  const selectedProfiles = useProfileState((state) => state.contents)
+  const addProfile = useProfileState((state) => state.addProfile)
+  const removeProfile = useProfileState((state) => state.removeProfile)
 
   const { profiles, error, isLoading, setCurrentProfiles } = useProfiles()
 
@@ -52,7 +58,6 @@ const FaimlySheet = () => {
         <SearchBar
           onClick={openSearchBox}
           onChange={(e) => {
-            console.log('Input value:', e.target.value)
             setCurrentProfiles(e.target.value)
           }}
         ></SearchBar>
@@ -64,14 +69,24 @@ const FaimlySheet = () => {
               key={profile.id}
               profile={profile}
               icon={TiPlus}
+              onClick={() => {
+                addProfile(profile)
+              }}
             ></ProfileCard>
           ))}
         </Box>
       )}
       <Sheet>
-        {/* {items.map((item, index) => (
-          <ProfileCard nickname={item} key={index} icon={TiMinus}></ProfileCard>
-        ))} */}
+        {selectedProfiles.map((profile, index) => (
+          <ProfileCard
+            profile={profile}
+            key={index}
+            icon={TiMinus}
+            onClick={() => {
+              removeProfile(profile.id)
+            }}
+          ></ProfileCard>
+        ))}
       </Sheet>
       <TextButtonWrapper>
         <TextButton
