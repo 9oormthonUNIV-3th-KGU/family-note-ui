@@ -5,6 +5,7 @@ import { UseFamilyStore } from '../stores/UseFamilyStore'
 import { FetchFamilyList } from '../services/GetFamilyListApi'
 import { FetchFamilyData } from '../services/GetFamilyApi'
 import useQuestionStore from '../stores/UseQuestionStore'
+import { UseCursorStore } from '../stores/\bUseCursorStore'
 import SvgIcon from './SelectSvg'
 
 const FamilyBoxWrap = styled.div`
@@ -12,11 +13,32 @@ const FamilyBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 13px;
-  max-height: 511px;
+  max-height: 473px;
   width: 385px;
   top: 15px;
   left: 16px;
-  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(155, 155, 155, 0.5);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 155, 155, 0.8);
+  }
+
   overflow-x: hidden;
   box-sizing: border-box;
 `
@@ -36,7 +58,7 @@ const Row = styled.div<{ hoveredFamilyId: number | null; startIndex: number }>`
   gap: ${({ hoveredFamilyId }) => (hoveredFamilyId !== null ? '11px' : '13px')};
 `
 
-const FamilyBoxBtn = styled.button<{ isHovered: boolean }>`
+const FamilyBoxBtn = styled.button<{ isHovered: boolean; isLoading: boolean }>`
   box-sizing: border-box;
   height: 118px;
   padding: 0;
@@ -45,6 +67,7 @@ const FamilyBoxBtn = styled.button<{ isHovered: boolean }>`
   background: transparent;
   position: relative;
   flex-grow: ${({ isHovered }) => (isHovered ? 2 : 1)};
+  cursor: ${({ isLoading }) => (isLoading ? 'wait' : 'default')};
 `
 
 const FamilyHeader = styled.div`
@@ -101,15 +124,6 @@ const FamilyMemberCounts = styled.p`
   margin: 0;
 `
 
-const SelectSvg = styled.svg<{ isHovered: boolean }>`
-  position: absolute;
-  left: 168px;
-  top: 40px;
-  display: ${({ isHovered }) => (isHovered ? 'flex' : 'none')};
-  width: 29px;
-  height: 39px;
-`
-
 interface Family {
   familyId: number
   familyName: string
@@ -125,6 +139,7 @@ function FamilyBox() {
   const familyNameRefs = useRef<(HTMLParagraphElement | null)[]>([])
   const navigate = useNavigate()
   const { fetchQuestions } = useQuestionStore()
+  const { isLoading, setIsLoading } = UseCursorStore()
 
   useEffect(() => {
     const fetchFamilies = async () => {
@@ -152,11 +167,14 @@ function FamilyBox() {
 
     if (familyId) {
       try {
+        setIsLoading(true)
         await FetchFamilyData(familyId)
         await fetchQuestions(familyId, 0, 45)
         navigate('/home')
       } catch (error) {
         console.error('Error fetching family data before navigate:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
   }
@@ -180,6 +198,7 @@ function FamilyBox() {
                 onMouseLeave={() => setHoveredFamilyId(null)}
                 isHovered={isHovered}
                 onClick={() => handleFamilyClick(family.familyId)}
+                isLoading={isLoading}
               >
                 <FamilyHeader>
                   <FamilyName

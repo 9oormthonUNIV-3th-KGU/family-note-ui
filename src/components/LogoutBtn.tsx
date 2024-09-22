@@ -26,7 +26,6 @@ function LogoutBtn() {
   const navigate = useNavigate()
 
   const logout = () => {
-    localStorage.removeItem('user')
     localStorage.removeItem('familyId')
     navigate('/login')
     console.log('logout')

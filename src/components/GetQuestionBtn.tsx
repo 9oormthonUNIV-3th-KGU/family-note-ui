@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import useQuestionStore from '../stores/UseQuestionStore'
 import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
+import { UseCursorStore } from '../stores/\bUseCursorStore'
+
 import { loadFamilyId } from '../utils/UserToken'
 
-const GetQuestion = styled.button<{ activate: boolean }>`
+const GetQuestion = styled.button<{ activate: boolean; isLoading: boolean }>`
   position: absolute;
   width: 388px;
   height: 116px;
@@ -14,7 +17,10 @@ const GetQuestion = styled.button<{ activate: boolean }>`
   background: ${(props) => (props.activate ? '#ffa800' : '#ffffff')};
   border-radius: 20px;
   border: 5px solid #ffa800;
-  cursor: ${(props) => (props.activate ? 'pointer' : 'not-allowed')};
+  cursor: ${(props) => {
+    if (props.isLoading) return 'wait'
+    return props.activate ? 'pointer' : 'not-allowed'
+  }};
 `
 
 const GetSvg = styled.svg`
@@ -51,6 +57,7 @@ const GetQuestionTxt = styled.p<{ activate: boolean }>`
 `
 
 function GetQuestionBtn() {
+  const navigate = useNavigate()
   const { fetchNewQuestions, isFetching, setIsFetching } = useQuestionStore(
     (state) => ({
       fetchNewQuestions: state.fetchNewQuestions,
@@ -58,10 +65,10 @@ function GetQuestionBtn() {
       setIsFetching: state.setIsFetching,
     })
   )
-
   const { activate } = UseGetQuestionBtnStore((state) => ({
     activate: state.activate,
   }))
+  const { isLoading, setIsLoading } = UseCursorStore()
 
   const getQuestion = async () => {
     const familyId = loadFamilyId()
@@ -70,18 +77,24 @@ function GetQuestionBtn() {
     if (isFetching) return console.log('질문을 받아오는 중입니다.')
 
     try {
+      setIsLoading(true)
       const id = Number(familyId)
       await fetchNewQuestions(id)
-      location.reload()
+      navigate('/home')
     } catch (error) {
       console.error('새 질문을 받아오는 데 실패했습니다.', error)
     } finally {
       setIsFetching(false)
+      setIsLoading(false)
     }
   }
 
   return (
-    <GetQuestion onClick={getQuestion} activate={activate}>
+    <GetQuestion
+      onClick={getQuestion}
+      activate={activate}
+      isLoading={isLoading}
+    >
       <GetSvg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M21 4V38M4 21H38"
