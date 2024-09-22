@@ -9,8 +9,6 @@ import { TiMinus, TiPlus } from 'react-icons/ti'
 import useProfiles from '../hooks/useProfiles'
 import ProfileCard from './ProfileCard'
 import useProfileState from '../stores/userProfileStore'
-import useFamilyCreate from '../hooks/useFamilyCreate'
-import useCurrentUserStore from '../stores/useCurrentUserStore'
 
 const FaimlySheet = () => {
   const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
@@ -30,8 +28,6 @@ const FaimlySheet = () => {
   const removeProfile = useProfileState((state) => state.removeProfile)
 
   const { setCurrentProfiles, profiles, error, isLoading } = useProfiles()
-
-  const { familyName, setFamilyName, createFamily } = useFamilyCreate()
 
   useEffect(() => {
     const handler = (e: { target: any }) => {
@@ -101,14 +97,6 @@ const FaimlySheet = () => {
       {isPopupOpen && (
         <Popup
           text={'가족 구성원 이름'}
-          onChange={(familyName) => {
-            setFamilyName(familyName)
-            console.log(familyName)
-          }}
-          onClickYes={() => {
-            const userIds = selectedProfiles.map((profile) => profile.id)
-            createFamily({ userIds: userIds, familyName: familyName })
-          }}
           onClickNo={closePopup}
           ref={popupRef}
         ></Popup>

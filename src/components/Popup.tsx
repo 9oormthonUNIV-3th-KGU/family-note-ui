@@ -1,14 +1,16 @@
 import styled from '@emotion/styled'
 import { ChangeEvent, forwardRef } from 'react'
+import useFamilyCreate from '../hooks/useFamilyCreate'
+import { useFormik } from 'formik'
+import useProfileState from '../stores/userProfileStore'
+import familyNameValidationSchema from '../validation/familyNameValidationSchema'
 
 interface Props {
   text: string
-  onChange: (familyName: string) => void
-  onClickYes: () => void
   onClickNo: () => void
 }
 
-const PopupContainer = styled.div`
+const PopupForm = styled.form`
   position: fixed;
   top: 0;
   left: 0;
@@ -55,7 +57,7 @@ const Title = styled.p`
 `
 
 const RoundedButton = styled.button<{
-  onClick: () => void
+  onClick?: () => void
   isPrimary?: boolean
 }>`
   display: inline-block;
@@ -81,14 +83,15 @@ const ButtonContainer = styled.div`
   margin-bottom: 24px;
 `
 
-const Input = styled.input`
+const Input = styled.input<{ hasError: boolean }>`
   font-family: Inter;
   font-style: normal;
   font-size: 24px;
   width: 441px;
   padding: 10px 15px;
   line-height: 30px;
-  border: none;
+  border: ${({ hasError }) =>
+    hasError ? '1px solid #ff0000' : '1px solid #ededed'};
   border-radius: 5px;
   outline: none;
   background: #ededed;
@@ -102,29 +105,47 @@ const Input = styled.input`
   }
 `
 
-const Popup = forwardRef<HTMLDivElement, Props>(
-  ({ text, onChange, onClickNo, onClickYes }, ref) => {
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-      onChange(event.target.value)
-    }
-    return (
-      <PopupContainer>
-        <PopupContent ref={ref}>
-          <Title>{text}</Title>
-          <Input
-            placeholder="가족 구성원의 이름을 지어주세요"
-            onChange={handleInputChange}
-          ></Input>
-          <ButtonContainer>
-            <RoundedButton onClick={onClickNo}>아니요</RoundedButton>
-            <RoundedButton onClick={onClickYes} isPrimary={true}>
-              네
-            </RoundedButton>
-          </ButtonContainer>
-        </PopupContent>
-      </PopupContainer>
-    )
-  }
-)
+const Popup = forwardRef<HTMLDivElement, Props>(({ text, onClickNo }, ref) => {
+  const { createFamily } = useFamilyCreate()
+
+  const selectedProfiles = useProfileState((state) => state.contents)
+
+  const userIds = selectedProfiles.map((profile) => profile.id)
+
+  const formik = useFormik<{ familyName: string }>({
+    initialValues: {
+      familyName: '',
+    },
+    validationSchema: familyNameValidationSchema,
+    onSubmit: (value) => {
+      createFamily({ userIds: userIds, familyName: value.familyName })
+      console.log(`family created : ${value.familyName}, ${userIds}`)
+    },
+  })
+
+  return (
+    <PopupForm onSubmit={formik.handleSubmit}>
+      <PopupContent ref={ref}>
+        <Title>{text}</Title>
+        <Input
+          type="familyName"
+          id="familyName"
+          name="familyName"
+          placeholder="가족 구성원의 이름을 지어주세요"
+          value={formik.values.familyName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          hasError={!!(formik.touched.familyName && formik.errors.familyName)}
+        ></Input>
+        <ButtonContainer>
+          <RoundedButton onClick={onClickNo}>아니요</RoundedButton>
+          <RoundedButton type="submit" isPrimary={true}>
+            네
+          </RoundedButton>
+        </ButtonContainer>
+      </PopupContent>
+    </PopupForm>
+  )
+})
 
 export default Popup
