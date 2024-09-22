@@ -31,6 +31,12 @@ const QuestionListContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
 `
 
 const QuestionAnswerBox = styled.div`
