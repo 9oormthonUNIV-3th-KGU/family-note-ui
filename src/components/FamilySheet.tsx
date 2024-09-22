@@ -10,6 +10,7 @@ import useProfiles from '../hooks/useProfiles'
 import ProfileCard from './ProfileCard'
 import useProfileState from '../stores/userProfileStore'
 import useFamilyCreate from '../hooks/useFamilyCreate'
+import useCurrentUserStore from '../stores/useCurrentUserStore'
 
 const FaimlySheet = () => {
   const isSearchBoxOpen = useSearchStore((state) => state.isOpen)

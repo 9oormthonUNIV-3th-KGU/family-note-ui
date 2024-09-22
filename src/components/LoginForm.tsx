@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { AuthRequest } from '../model/AuthRequest'
 import { useLogin } from '../hooks/useLogin'
+import useCurrentUserStore from '../stores/useCurrentUserStore'
 
 const Form = styled.form`
   margin-bottom: 31px;
@@ -52,6 +53,8 @@ const LoginForm = () => {
   const navigate = useNavigate()
 
   const { login, isLoading, error } = useLogin()
+  const { setNickname } = useCurrentUserStore()
+
   const formik = useFormik<AuthRequest>({
     initialValues: {
       nickname: '',
@@ -60,6 +63,7 @@ const LoginForm = () => {
     onSubmit: (authRequest: AuthRequest) => {
       console.log('auth request', authRequest)
       login(authRequest)
+      setNickname(authRequest.nickname)
     },
   })
 

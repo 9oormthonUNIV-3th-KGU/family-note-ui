@@ -3,7 +3,7 @@ import apiClient from '../config/api-client'
 import { FamilyCreateRequest } from '../model/FamilyCreateRequest'
 import { FamilyCreateResponse } from '../model/FamilyCreateResponse'
 
-export const getProfiles = (nickname: string) => {
+export const fetchProfiles = (nickname: string) => {
   return apiClient.get<ProfileResponse>('/users', {
     params: { nickname: nickname },
   })
