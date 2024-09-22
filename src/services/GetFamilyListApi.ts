@@ -1,16 +1,8 @@
-import axios from 'axios'
-import { loadAuthToken } from '../utils/UserToken'
-
-const token = loadAuthToken()
+import apiClient from '../config/api-client'
 
 export const FetchFamilyList = async () => {
   try {
-    const response = await axios.get('/family/list', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        accept: 'application/json',
-      },
-    })
+    const response = await apiClient.get(`/family/list`)
     console.log(response.data)
     return response.data
   } catch (error) {

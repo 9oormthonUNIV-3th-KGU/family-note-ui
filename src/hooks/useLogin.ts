@@ -20,7 +20,7 @@ export const useLogin = () => {
       .then((response) => {
         setAccessToken(response.data.accessToken)
         updateAuth(true)
-        navigate('/search')
+        navigate('/select')
       })
       .catch((error) => {
         if (
