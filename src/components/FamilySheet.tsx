@@ -8,9 +8,8 @@ import { useEffect, useRef } from 'react'
 import { TiMinus, TiPlus } from 'react-icons/ti'
 import useProfiles from '../hooks/useProfiles'
 import ProfileCard from './ProfileCard'
-import useProfileIdState from '../stores/userProfileStore'
 import useProfileState from '../stores/userProfileStore'
-import { useNavigate } from 'react-router-dom'
+import useFamilyCreate from '../hooks/useFamilyCreate'
 
 const FaimlySheet = () => {
   const isSearchBoxOpen = useSearchStore((state) => state.isOpen)
@@ -29,9 +28,9 @@ const FaimlySheet = () => {
   const addProfile = useProfileState((state) => state.addProfile)
   const removeProfile = useProfileState((state) => state.removeProfile)
 
-  const { profiles, error, isLoading, setCurrentProfiles } = useProfiles()
+  const { setCurrentProfiles, profiles, error, isLoading } = useProfiles()
 
-  const navigate = useNavigate()
+  const { familyName, setFamilyName, createFamily } = useFamilyCreate()
 
   useEffect(() => {
     const handler = (e: { target: any }) => {
@@ -100,8 +99,15 @@ const FaimlySheet = () => {
       </TextButtonWrapper>
       {isPopupOpen && (
         <Popup
-          text={'가족 구성원 모집을\n 완료 하시겠습니까?'}
-          onClickYes={() => {}}
+          text={'가족 구성원 이름'}
+          onChange={(familyName) => {
+            setFamilyName(familyName)
+            console.log(familyName)
+          }}
+          onClickYes={() => {
+            const userIds = selectedProfiles.map((profile) => profile.id)
+            createFamily({ userIds: userIds, familyName: familyName })
+          }}
           onClickNo={closePopup}
           ref={popupRef}
         ></Popup>
@@ -127,7 +133,7 @@ const Sheet = styled.div`
   width: 417px;
   height: 493px;
   overflow-y: scroll;
-  border: 2px solid #cdcdcd;
+  border: 2px solid #ffa800;
   border-radius: 16px;
   background: #fff;
   margin-top: 16px;
@@ -150,9 +156,9 @@ const Box = styled.div`
   width: 479px;
   height: 494px;
   overflow-y: scroll;
-  border-left: 2px solid #cdcdcd;
-  border-right: 2px solid #cdcdcd;
-  border-bottom: 2px solid #cdcdcd;
+  border-left: 2px solid #ffa800;
+  border-right: 2px solid #ffa800;
+  border-bottom: 2px solid #ffa800;
   border-radius: 46px;
   background: #fff;
   margin-top: 16px;

@@ -1,8 +1,9 @@
 import styled from '@emotion/styled'
-import { forwardRef } from 'react'
+import { ChangeEvent, forwardRef } from 'react'
 
 interface Props {
   text: string
+  onChange: (familyName: string) => void
   onClickYes: () => void
   onClickNo: () => void
 }
@@ -45,10 +46,12 @@ const Title = styled.p`
   font-family: Pretendard Variable;
   font-size: 30px;
   font-weight: 600;
-  text-align: center;
+  text-align: left;
   white-space: pre-line;
   line-height: 150%;
   letter-spacing: -1.1%;
+  margin-left: 20px;
+  margin-bottom: 24px;
 `
 
 const RoundedButton = styled.button<{
@@ -72,18 +75,46 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 30px;
-  margin-top: 60px;
-  margin-left: 21px;
-  margin-right: 21px;
-  margin-bottom: 26px;
+  margin-top: 24px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 24px;
+`
+
+const Input = styled.input`
+  font-family: Inter;
+  font-style: normal;
+  font-size: 24px;
+  width: 441px;
+  padding: 10px 15px;
+  line-height: 30px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  background: #ededed;
+  caret-color: #ffa800;
+
+  &::placeholder {
+    color: #cdcdcd;
+    font-family: Inter;
+    font-style: light;
+    font-size: 20px;
+  }
 `
 
 const Popup = forwardRef<HTMLDivElement, Props>(
-  ({ text, onClickNo, onClickYes }, ref) => {
+  ({ text, onChange, onClickNo, onClickYes }, ref) => {
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value)
+    }
     return (
       <PopupContainer>
         <PopupContent ref={ref}>
           <Title>{text}</Title>
+          <Input
+            placeholder="가족 구성원의 이름을 지어주세요"
+            onChange={handleInputChange}
+          ></Input>
           <ButtonContainer>
             <RoundedButton onClick={onClickNo}>아니요</RoundedButton>
             <RoundedButton onClick={onClickYes} isPrimary={true}>

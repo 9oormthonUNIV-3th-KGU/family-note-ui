@@ -13,7 +13,7 @@ const Container = styled.div`
   padding: 18px;
   width: 381px;
   height: 18px;
-  border: 2px solid #cdcdcd;
+  border: 2px solid #ffa800;
   border-radius: 50px;
   background: #fff;
 `
@@ -27,6 +27,7 @@ const Input = styled.input`
   border: none;
   outline: none;
   background: none;
+  caret-color: #ffa800;
 
   &::placeholder {
     color: #cdcdcd;

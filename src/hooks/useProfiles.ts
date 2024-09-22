@@ -19,7 +19,7 @@ const useProfiles = () => {
       .catch((error) => setErrors(error.message))
       .finally(() => setLoader(false))
   }, [currentUser])
-  return { profiles, error, isLoading, setCurrentProfiles }
+  return { setCurrentProfiles, profiles, error, isLoading }
 }
 
 export default useProfiles
