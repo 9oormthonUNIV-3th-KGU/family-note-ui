@@ -101,9 +101,7 @@ const FaimlySheet = () => {
       {isPopupOpen && (
         <Popup
           text={'가족 구성원 모집을\n 완료 하시겠습니까?'}
-          onClickYes={() => {
-            navigate('/home', { state: { selectedProfiles } })
-          }}
+          onClickYes={() => {}}
           onClickNo={closePopup}
           ref={popupRef}
         ></Popup>

@@ -7,7 +7,9 @@ export const useRegister = () => {
   const [error, setError] = useState<string>('')
   const [isLoading, setLoader] = useState<boolean>(false)
   const [toast, setToast] = useState<string>('')
+
   const navigate = useNavigate()
+
   const signup = (profile: AuthRequest) => {
     setLoader(true)
     createProfile(profile)
