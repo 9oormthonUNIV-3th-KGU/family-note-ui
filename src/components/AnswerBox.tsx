@@ -21,7 +21,15 @@ const Box = styled.div<{
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  overflow-y: auto;
+  overflow-x: none;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+
   transition: opacity 0.5s, transform 0.5s;
 
   display: ${(props) => (props.isDisplayed ? 'flex' : 'none')};

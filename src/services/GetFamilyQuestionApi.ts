@@ -1,7 +1,5 @@
 import axios from 'axios'
-import { loadAuthToken } from '../utils/UserToken'
-
-const token = loadAuthToken()
+import apiClient from '../config/api-client'
 
 export const FetchFamilyQuestions = async (
   familyId: number,
@@ -9,14 +7,8 @@ export const FetchFamilyQuestions = async (
   size: number
 ) => {
   try {
-    const response = await axios.get(
-      `/family/question/${familyId}?page=${page}&size=${size}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accept: 'application/json',
-        },
-      }
+    const response = await apiClient.get(
+      `/family/question/${familyId}?page=${page}&size=${size}`
     )
     return response.data
   } catch (error) {
@@ -35,17 +27,7 @@ export const FetchFamilyQuestions = async (
 
 export const FetchFamilyNewQuestions = async (familyId: number) => {
   try {
-    const response = await axios.post(
-      `/family/question/${familyId}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    const response = await apiClient.post(`/family/question/${familyId}`, {})
     console.log(response.data)
     return response.data
   } catch (error) {
