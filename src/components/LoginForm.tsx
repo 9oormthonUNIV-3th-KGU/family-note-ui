@@ -56,7 +56,7 @@ const Error = styled.div`
 const LoginForm = () => {
   const navigate = useNavigate()
 
-  const { login, isLoading, error } = useLogin()
+  const { login, error } = useLogin()
   const { setNickname } = useCurrentUserStore()
 
   const formik = useFormik<AuthRequest>({

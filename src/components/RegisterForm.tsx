@@ -71,7 +71,7 @@ const ErrorIcon = styled(FaXmark)`
 
 const RegisterForm = () => {
   const navigate = useNavigate()
-  const { error, isLoading, signup, toast } = useRegister()
+  const { signup } = useRegister()
   const formik = useFormik<Profile>({
     initialValues: {
       nickname: '',

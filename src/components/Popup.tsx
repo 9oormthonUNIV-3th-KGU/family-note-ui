@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { ChangeEvent, forwardRef } from 'react'
+import { forwardRef } from 'react'
 import useFamilyCreate from '../hooks/useFamilyCreate'
 import { useFormik } from 'formik'
 import useProfileState from '../stores/userProfileStore'

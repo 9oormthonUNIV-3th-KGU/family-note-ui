@@ -27,7 +27,7 @@ const FaimlySheet = () => {
   const addProfile = useProfileState((state) => state.addProfile)
   const removeProfile = useProfileState((state) => state.removeProfile)
 
-  const { setCurrentProfiles, profiles, error, isLoading } = useProfiles()
+  const { setCurrentProfiles, profiles } = useProfiles()
 
   useEffect(() => {
     const handler = (e: { target: any }) => {
