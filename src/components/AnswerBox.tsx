@@ -21,7 +21,7 @@ const Box = styled.div<{
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  overflow-x: none;
+  overflow-x: hidden;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
