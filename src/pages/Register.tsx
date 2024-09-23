@@ -12,16 +12,24 @@ const FormWrapper = styled.div`
   width: 417px;
 `
 
+const StyledDiv = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`
+
 const Register = () => {
   return (
     <Container>
-      <Background children={undefined}></Background>
-      <div>
-        <img src="../src/assets/images/logo.svg"></img>
-        <FormWrapper>
-          <RegisterForm></RegisterForm>
-        </FormWrapper>
-      </div>
+      <Background>
+        <StyledDiv>
+          <img src="../src/assets/images/logo.svg"></img>
+          <FormWrapper>
+            <RegisterForm></RegisterForm>
+          </FormWrapper>
+        </StyledDiv>
+      </Background>
     </Container>
   )
 }
