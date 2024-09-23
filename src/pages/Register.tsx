@@ -15,7 +15,7 @@ const FormWrapper = styled.div`
 const Register = () => {
   return (
     <Container>
-      <Background></Background>
+      <Background children={undefined}></Background>
       <div>
         <img src="../src/assets/images/logo.svg"></img>
         <FormWrapper>
