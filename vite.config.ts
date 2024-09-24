@@ -10,11 +10,13 @@ export default defineConfig({
         target: '//211.188.49.236:5252/api/v1',
         changeOrigin: true,
         secure: false,
+        ws: true,
       },
       '/users': {
         target: '//211.188.49.236:5252/api/v1',
         changeOrigin: true,
         secure: false,
+        ws: true,
       },
     },
     hmr: {
