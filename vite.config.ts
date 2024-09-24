@@ -18,7 +18,7 @@ export default defineConfig({
       },
     },
     hmr: {
-      host: 'https://familynote.ezbooks.kr/',
+      host: 'familynote.ezbooks.kr/',
       protocol: 'wss',
       clientPort: 5173,
     },
