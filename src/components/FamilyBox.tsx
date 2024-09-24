@@ -17,30 +17,16 @@ const FamilyBoxWrap = styled.div`
   width: 385px;
   top: 15px;
   left: 16px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(155, 155, 155, 0.5);
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(155, 155, 155, 0.8);
-  }
 
   overflow-x: hidden;
+  overflow-y: scroll;
   box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `
 
 const Row = styled.div<{ hoveredFamilyId: number | null; startIndex: number }>`
@@ -67,7 +53,7 @@ const FamilyBoxBtn = styled.button<{ isHovered: boolean; isLoading: boolean }>`
   background: transparent;
   position: relative;
   flex-grow: ${({ isHovered }) => (isHovered ? 2 : 1)};
-  cursor: ${({ isLoading }) => (isLoading ? 'wait' : 'default')};
+  cursor: ${({ isLoading }) => (isLoading ? 'wait' : '')};
 `
 
 const FamilyHeader = styled.div`
@@ -216,7 +202,7 @@ function FamilyBox() {
                     .slice(0, 6)
                     .map((member, memberIndex) => (
                       <MemberNickname
-                        key={`${member.familyMemberId}-${memberIndex}`}
+                        key={`${family.familyId}-${member.familyMemberId}-${memberIndex}`}
                       >
                         {member.nickName}
                       </MemberNickname>
