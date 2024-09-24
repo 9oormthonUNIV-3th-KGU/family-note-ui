@@ -20,7 +20,7 @@ export default defineConfig({
     hmr: {
       host: 'familynote.ezbooks.kr',
       protocol: 'wss',
-      port : 5173,
+      port : 443,
     },
   },
   plugins: [react({ jsxImportSource: '@emotion/react' })],
