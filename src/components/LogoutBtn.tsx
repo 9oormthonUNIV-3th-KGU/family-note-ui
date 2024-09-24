@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
+import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
+import useQuestionStore from '../stores/UseQuestionStore'
 
 const LogoutButton = styled.button`
   position: absolute;
@@ -24,8 +26,18 @@ const LogoutButton = styled.button`
 
 function LogoutBtn() {
   const navigate = useNavigate()
+  const { setActivate } = UseGetQuestionBtnStore((state) => ({
+    setActivate: state.setActivate,
+  }))
+
+  const { resetQuestionState } = useQuestionStore((state) => ({
+    resetQuestionState: state.resetQuestionState,
+  }))
 
   const logout = () => {
+    location.reload()
+    setActivate()
+    resetQuestionState()
     localStorage.removeItem('familyId')
     navigate('/login')
     console.log('logout')

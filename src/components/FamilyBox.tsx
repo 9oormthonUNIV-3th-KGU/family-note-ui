@@ -183,7 +183,7 @@ function FamilyBox() {
     <FamilyBoxWrap>
       {rows.map((rowFamilies, rowIndex) => (
         <Row
-          key={rowIndex}
+          key={`row-${rowIndex}-${rowFamilies[0].familyId}`}
           hoveredFamilyId={hoveredFamilyId}
           startIndex={rowIndex * 2}
         >
@@ -212,11 +212,15 @@ function FamilyBox() {
                 </FamilyHeader>
                 <SvgIcon isHovered={isHovered} />
                 <FamilyMembers>
-                  {family.familyMembers.slice(0, 6).map((member) => (
-                    <MemberNickname key={member.familyMemberId}>
-                      {member.nickName}
-                    </MemberNickname>
-                  ))}
+                  {family.familyMembers
+                    .slice(0, 6)
+                    .map((member, memberIndex) => (
+                      <MemberNickname
+                        key={`${member.familyMemberId}-${memberIndex}`}
+                      >
+                        {member.nickName}
+                      </MemberNickname>
+                    ))}
                 </FamilyMembers>
               </FamilyBoxBtn>
             )

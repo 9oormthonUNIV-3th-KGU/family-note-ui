@@ -14,7 +14,6 @@ export const FetchFamilyQuestions = async (
       console.log('가족에게 할당된 질문이 없습니다.')
       return 'no question'
     }
-    console.log(response.data)
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {

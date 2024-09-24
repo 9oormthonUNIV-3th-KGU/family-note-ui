@@ -46,6 +46,7 @@ interface QuestionState {
   fetchQuestions: (familyId: number, page: number, size: number) => void
   fetchNewQuestions: (familyId: number) => void
   setIsFetching: (value: boolean) => void
+  resetQuestionState: () => void
 }
 
 const useQuestionStore = create<QuestionState>((set) => ({
@@ -96,15 +97,12 @@ const useQuestionStore = create<QuestionState>((set) => ({
     try {
       const result = await FetchFamilyQuestions(familyId, page, size)
 
-      // result가 'no question'이거나 undefined이면 버튼을 activate하고 종료
       if (result === 'no question' || !result) {
         const { setActivate } = UseGetQuestionBtnStore.getState()
-        console.log('Activating GetQuestionBtn due to no question')
         setActivate()
         return
       }
 
-      // contents가 배열로 존재하는지 확인
       if (result.contents && result.contents.length > 0) {
         const response: QuestionApiResponse = result
         const questions: QuestionBox[] = response.contents.map((item) => ({
@@ -118,11 +116,6 @@ const useQuestionStore = create<QuestionState>((set) => ({
         set({
           questionBoxes: questions,
         })
-      } else {
-        // contents가 빈 배열인 경우
-        console.log('Activating GetQuestionBtn due to empty contents')
-        const { setActivate } = UseGetQuestionBtnStore.getState()
-        setActivate() // 빈 배열일 경우 버튼 활성화
       }
     } catch (error) {
       console.error('질문을 가져오는 중 오류 발생:', error)
@@ -144,6 +137,7 @@ const useQuestionStore = create<QuestionState>((set) => ({
   },
 
   setIsFetching: (value) => set({ isFetching: value }),
+  resetQuestionState: () => set({ questionBoxes: [], selectedQuestion: null }),
 }))
 
 export default useQuestionStore

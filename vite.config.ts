@@ -7,13 +7,22 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/family': {
-        target: 'http://211.188.49.236:5252/api/v1',
+        target: '//211.188.49.236:5252/api/v1',
         changeOrigin: true,
+        secure: false,
+        ws: true,
       },
       '/users': {
-        target: 'http://211.188.49.236:5252/api/v1',
+        target: '//211.188.49.236:5252/api/v1',
         changeOrigin: true,
+        secure: false,
+        ws: true,
       },
+    },
+    hmr: {
+      host: 'familynote.ezbooks.kr',
+      protocol: 'wss',
+      port: 5173,
     },
   },
   plugins: [react({ jsxImportSource: '@emotion/react' })],
