@@ -5,7 +5,7 @@ import { UseFamilyStore } from '../stores/UseFamilyStore'
 import { FetchFamilyList } from '../services/GetFamilyListApi'
 import { FetchFamilyData } from '../services/GetFamilyApi'
 import useQuestionStore from '../stores/UseQuestionStore'
-import { UseCursorStore } from '../stores/\bUseCursorStore'
+import { UseCursorStore } from '../stores/UseCursorStore'
 import SvgIcon from './SelectSvg'
 
 const FamilyBoxWrap = styled.div`

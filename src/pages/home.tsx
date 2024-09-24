@@ -118,7 +118,12 @@ function Home() {
               answeredNicknames.includes(member.nickName)
             )
 
+            console.log('activate before check:', activate)
+            console.log('allMembersAnswered:', allMembersAnswered)
+
+            // 이 부분에서 activate가 true인 상황을 확인
             if (allMembersAnswered && !activate) {
+              console.log('Activating GetQuestionBtn')
               setActivate()
             }
           }

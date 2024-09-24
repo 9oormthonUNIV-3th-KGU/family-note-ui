@@ -10,16 +10,18 @@ export const FetchFamilyQuestions = async (
     const response = await apiClient.get(
       `/family/question/${familyId}?page=${page}&size=${size}`
     )
+    if (response.data.pageable.totalElements === 0) {
+      console.log('가족에게 할당된 질문이 없습니다.')
+      return 'no question'
+    }
+    console.log(response.data)
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('HTTP Status Code:', error.response?.status)
-      if (error.response?.status === 500) {
-        alert('가족에게 할당된 질문이 없습니다.')
-        return 'no question'
+      if (error) {
+        console.error('An unexpected error occurred:', error)
       }
-    } else {
-      console.error('An unexpected error occurred:', error)
     }
     throw error
   }

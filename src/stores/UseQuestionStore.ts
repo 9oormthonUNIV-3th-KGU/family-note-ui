@@ -96,24 +96,34 @@ const useQuestionStore = create<QuestionState>((set) => ({
     try {
       const result = await FetchFamilyQuestions(familyId, page, size)
 
-      if (result === 'no question') {
+      // result가 'no question'이거나 undefined이면 버튼을 activate하고 종료
+      if (result === 'no question' || !result) {
         const { setActivate } = UseGetQuestionBtnStore.getState()
+        console.log('Activating GetQuestionBtn due to no question')
         setActivate()
         return
       }
 
-      const response: QuestionApiResponse = result
-      const questions: QuestionBox[] = response.contents.map((item) => ({
-        id: item.familyQuestionId,
-        content: item.content,
-        createdAt: new Date(item.createdAt),
-        isAnswerVisible: false,
-        animationState: 'none',
-      }))
+      // contents가 배열로 존재하는지 확인
+      if (result.contents && result.contents.length > 0) {
+        const response: QuestionApiResponse = result
+        const questions: QuestionBox[] = response.contents.map((item) => ({
+          id: item.familyQuestionId,
+          content: item.content,
+          createdAt: new Date(item.createdAt),
+          isAnswerVisible: false,
+          animationState: 'none',
+        }))
 
-      set({
-        questionBoxes: questions,
-      })
+        set({
+          questionBoxes: questions,
+        })
+      } else {
+        // contents가 빈 배열인 경우
+        console.log('Activating GetQuestionBtn due to empty contents')
+        const { setActivate } = UseGetQuestionBtnStore.getState()
+        setActivate() // 빈 배열일 경우 버튼 활성화
+      }
     } catch (error) {
       console.error('질문을 가져오는 중 오류 발생:', error)
     }
