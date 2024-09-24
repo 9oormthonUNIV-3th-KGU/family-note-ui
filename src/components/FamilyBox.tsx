@@ -13,7 +13,7 @@ const FamilyBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 13px;
-  max-height: 473px;
+  max-height: 462px;
   width: 385px;
   top: 15px;
   left: 16px;

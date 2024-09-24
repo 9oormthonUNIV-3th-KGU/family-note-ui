@@ -23,12 +23,11 @@ const Box = styled.div<{
   gap: 20px;
   overflow-x: hidden;
   overflow-y: scroll;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-
   &::-webkit-scrollbar {
-    width: 0px;
+    display: none;
   }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   transition: opacity 0.5s, transform 0.5s;
 
