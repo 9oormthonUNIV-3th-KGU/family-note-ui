@@ -9,12 +9,12 @@ export default defineConfig({
       '/family': {
         target: '//211.188.49.236:5252/api/v1',
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
       '/users': {
         target: '//211.188.49.236:5252/api/v1',
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
     },
     hmr: {
