@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import useQuestionStore from '../stores/UseQuestionStore'
 import UseGetQuestionBtnStore from '../stores/UseGetQuestionBtnStore'
-import { UseCursorStore } from '../stores/\bUseCursorStore'
+import { UseCursorStore } from '../stores/UseCursorStore'
 
 import { loadFamilyId } from '../utils/UserToken'
 

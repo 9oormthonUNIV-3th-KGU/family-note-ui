@@ -46,6 +46,7 @@ interface QuestionState {
   fetchQuestions: (familyId: number, page: number, size: number) => void
   fetchNewQuestions: (familyId: number) => void
   setIsFetching: (value: boolean) => void
+  resetQuestionState: () => void
 }
 
 const useQuestionStore = create<QuestionState>((set) => ({
@@ -96,24 +97,26 @@ const useQuestionStore = create<QuestionState>((set) => ({
     try {
       const result = await FetchFamilyQuestions(familyId, page, size)
 
-      if (result === 'no question') {
+      if (result === 'no question' || !result) {
         const { setActivate } = UseGetQuestionBtnStore.getState()
         setActivate()
         return
       }
 
-      const response: QuestionApiResponse = result
-      const questions: QuestionBox[] = response.contents.map((item) => ({
-        id: item.familyQuestionId,
-        content: item.content,
-        createdAt: new Date(item.createdAt),
-        isAnswerVisible: false,
-        animationState: 'none',
-      }))
+      if (result.contents && result.contents.length > 0) {
+        const response: QuestionApiResponse = result
+        const questions: QuestionBox[] = response.contents.map((item) => ({
+          id: item.familyQuestionId,
+          content: item.content,
+          createdAt: new Date(item.createdAt),
+          isAnswerVisible: false,
+          animationState: 'none',
+        }))
 
-      set({
-        questionBoxes: questions,
-      })
+        set({
+          questionBoxes: questions,
+        })
+      }
     } catch (error) {
       console.error('질문을 가져오는 중 오류 발생:', error)
     }
@@ -134,6 +137,7 @@ const useQuestionStore = create<QuestionState>((set) => ({
   },
 
   setIsFetching: (value) => set({ isFetching: value }),
+  resetQuestionState: () => set({ questionBoxes: [], selectedQuestion: null }),
 }))
 
 export default useQuestionStore

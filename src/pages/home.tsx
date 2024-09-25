@@ -64,13 +64,14 @@ const QuestionAnswerBox = styled.div`
 
 function Home() {
   const hasFetched = useRef(false)
-  const { fetchQuestions, questionBoxes, selectedQuestion, animationState } =
-    useQuestionStore((state) => ({
+  const { questionBoxes, selectedQuestion, animationState } = useQuestionStore(
+    (state) => ({
       fetchQuestions: state.fetchQuestions,
       questionBoxes: state.questionBoxes,
       selectedQuestion: state.selectedQuestion,
       animationState: state.animationState,
-    }))
+    })
+  )
 
   const { answers } = UseAnswerStore()
   const { familyMembers, setMyName, setFamilyMembers } = UseFamilyStore()
@@ -92,8 +93,6 @@ function Home() {
         .catch((error) => {
           console.error('Error fetching family data:', error)
         })
-
-      fetchQuestions(Number(familyId), 0, 45)
 
       hasFetched.current = true
     }
@@ -118,7 +117,11 @@ function Home() {
               answeredNicknames.includes(member.nickName)
             )
 
-            if (allMembersAnswered && !activate) {
+            console.log('activate before check:', activate)
+            console.log('allMembersAnswered:', allMembersAnswered)
+
+            if (allMembersAnswered) {
+              console.log('Activating GetQuestionBtn')
               setActivate()
             }
           }
@@ -147,7 +150,7 @@ function Home() {
         <GetQuestionBtn />
         <QuestionListContainer>
           {questionBoxes.reverse().map((question, index) => (
-            <QuestionAnswerBox key={question.id}>
+            <QuestionAnswerBox key={`${question.id}-${index}`}>
               <QuestionBox
                 content={question.content}
                 id={question.id}

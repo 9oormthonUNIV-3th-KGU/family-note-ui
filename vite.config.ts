@@ -24,11 +24,12 @@ export default defineConfig({
         secure: false,
         ws: true,
       },
-    },
-    hmr: {
-      host: 'familynote.ezbooks.kr',
-      protocol: 'wss',
-      port: 5173,
+      '/login': {
+        target: 'http://211.188.49.236:5252/api/v1',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
     },
   },
   plugins: [react({ jsxImportSource: '@emotion/react' })],
