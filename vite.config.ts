@@ -7,13 +7,19 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/family': {
-        target: '//211.188.49.236:5252/api/v1',
+        target: 'http://211.188.49.236:5252/api/v1',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/users': {
-        target: '//211.188.49.236:5252/api/v1',
+        target: 'http://211.188.49.236:5252/api/v1',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/login': {
+        target: 'http://211.188.49.236:5252/api/v1',
         changeOrigin: true,
         secure: false,
         ws: true,
